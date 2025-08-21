@@ -131,6 +131,7 @@
       <path value="$PROJECT_DIR$/citasApi/vendor/symfony/yaml" />
       <path value="$PROJECT_DIR$/citasApi/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/citasApi/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/_laravel_idea" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.4" />
