@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CitasController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\DoctoresController;
 use Illuminate\Http\Request;
@@ -20,5 +21,11 @@ Route::get('doctor/{id}', [DoctoresController::class, 'show']);
 Route::post('crearDoctor', [DoctoresController::class, 'store']);
 Route::put('actualizarDoctor/{id}', [DoctoresController::class, 'update']);
 Route::delete('eliminarDoctor/{id}', [DoctoresController::class, 'destroy']);
+
+Route::get('listarCitas', [CitasController::class, 'index']);
+Route::get('cita/{id}', [CitasController::class, 'show']);
+Route::post('crearCita', [CitasController::class, 'store']);
+Route::put('actualizarCita/{id}', [CitasController::class, 'update']);
+Route::delete('eliminarCita/{id}', [CitasController::class, 'destroy']);
 
 
