@@ -122,6 +122,8 @@
       <excludeFolder url="file://$MODULE_DIR$/citasApi/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/citasApi/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/citasApi/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/citasApi/storage/app" />
+      <excludeFolder url="file://$MODULE_DIR$/citasApi/storage/framework" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
