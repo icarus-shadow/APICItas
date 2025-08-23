@@ -19,7 +19,7 @@ class DoctoresController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'id_especialidad' => 'exists:especialidades,id',
+            'id_especialidades' => 'exists:especialidades,id',
             'lugar_trabajo' => 'required|string|max:255',
         ]);
 
@@ -50,7 +50,7 @@ class DoctoresController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'string|max:255',
             'apellido' => 'string|max:255',
-            'id_especialidad' => 'exists:especialidades,id',
+            'id_especialidades' => 'exists:especialidades,id',
             'lugar_trabajo' => 'string|max:255',
         ]);
 

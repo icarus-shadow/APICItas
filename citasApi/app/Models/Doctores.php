@@ -9,7 +9,7 @@ class Doctores extends Model
     protected $fillable = [
         'nombre',
         'apellido',
-        'id_especialidad',
+        'id_especialidades',
         'lugar_trabajo'
     ];
     public function citas(){
@@ -22,6 +22,6 @@ class Doctores extends Model
 
     public function Especialidades()
     {
-        return $this->belongsTo(Especialidades::class, 'id_especialidad');
+        return $this->belongsTo(Especialidades::class, 'id_especialidades');
     }
 }
