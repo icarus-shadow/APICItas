@@ -21,7 +21,6 @@ class HorariosController extends Controller
             'dia' => 'required|integer|between:1,7',
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
-            'estado' => 'required|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -53,7 +52,6 @@ class HorariosController extends Controller
             'dia' => 'integer|between:1,7',
             'hora_inicio' => 'date_format:H:i',
             'hora_fin' => 'date_format:H:i|after:hora_inicio',
-            'estado' => 'boolean',
         ]);
 
         if ($validator->fails()) {
