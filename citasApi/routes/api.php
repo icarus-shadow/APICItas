@@ -3,6 +3,8 @@
 use App\Http\Controllers\CitasController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\DoctoresController;
+use App\Http\Controllers\EspecialidadesController;
+use App\Http\Controllers\HorariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +29,17 @@ Route::get('cita/{id}', [CitasController::class, 'show']);
 Route::post('crearCita', [CitasController::class, 'store']);
 Route::put('actualizarCita/{id}', [CitasController::class, 'update']);
 Route::delete('eliminarCita/{id}', [CitasController::class, 'destroy']);
+
+Route::get('listarEspecialidades', [EspecialidadesController::class, 'index']);
+Route::get('especialidad/{id}', [EspecialidadesController::class, 'show']);
+Route::post('crearEspecialidad', [EspecialidadesController::class, 'store']);
+Route::put('actualizarEspecialidad/{id}', [EspecialidadesController::class, 'update']);
+Route::delete('eliminarEspecialidad/{id}', [EspecialidadesController::class, 'destroy']);
+
+Route::get('listarHorarios', [HorariosController::class, 'index']);
+Route::get('horario/{id}', [HorariosController::class, 'show']);
+Route::post('crearHorario', [HorariosController::class, 'store']);
+Route::put('actualizarHorario/{id}', [HorariosController::class, 'update']);
+Route::delete('eliminarHorario/{id}', [HorariosController::class, 'destroy']);
 
 

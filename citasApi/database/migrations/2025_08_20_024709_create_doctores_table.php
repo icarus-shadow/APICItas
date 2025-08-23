@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
-            $table->string('especialidad');
+            $table->foreignId('id_especialidades')->constrained('especialidades')->onDelete('cascade');
             $table->string('horario')->nullable();
             $table->string('lugar_trabajo')->nullable();
             $table->timestamps();
