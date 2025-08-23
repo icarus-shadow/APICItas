@@ -10,7 +10,6 @@ class Doctores extends Model
         'nombre',
         'apellido',
         'id_especialidad',
-        'horario',
         'lugar_trabajo'
     ];
     public function citas(){
