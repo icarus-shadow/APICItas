@@ -18,7 +18,8 @@ class HorariosController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_doctor' => 'required|exists:doctores,id',
-            'dia' => 'required|integer|between:1,7',
+            'dias' => 'required|array|min:1',
+            'dias.*' => 'integer|between:1,7',
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
         ]);
@@ -27,8 +28,40 @@ class HorariosController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $horario = Horarios::create($validator->validated());
-        return response()->json($horario, 201);
+        $data = $validator->validated();
+
+        $id_doctor = $data['id_doctor'];
+        $dias = $data['dias'];
+        $hora_inicio_str = $data['hora_inicio'];
+        $hora_fin_str = $data['hora_fin'];
+
+        $hora_inicio = \DateTime::createFromFormat('H:i', $hora_inicio_str);
+        $hora_fin = \DateTime::createFromFormat('H:i', $hora_fin_str);
+
+        $createdHorarios = [];
+
+        $interval = new \DateInterval('PT30M');
+
+        foreach ($dias as $dia) {
+            $period = new \DatePeriod($hora_inicio, $interval, $hora_fin);
+
+            foreach ($period as $start) {
+                $end = clone $start;
+                $end->add($interval);
+
+                $horario = Horarios::create([
+                    'id_doctor' => $id_doctor,
+                    'dia' => $dia,
+                    'hora_inicio' => $start->format('H:i'),
+                    'hora_fin' => $end->format('H:i'),
+                    'disponible' => true,
+                ]);
+
+                $createdHorarios[] = $horario;
+            }
+        }
+
+        return response()->json($createdHorarios, 201);
     }
 
     public function show($id)
@@ -40,27 +73,56 @@ class HorariosController extends Controller
         return response()->json($horario);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id_doctor)
     {
-        $horario = Horarios::find($id);
-        if (!$horario) {
-            return response()->json(['message' => 'Horario no encontrado'], 404);
-        }
-
         $validator = Validator::make($request->all(), [
-            'id_doctor' => 'exists:doctores,id',
-            'dia' => 'integer|between:1,7',
-            'hora_inicio' => 'date_format:H:i',
-            'hora_fin' => 'date_format:H:i|after:hora_inicio',
+            'dias' => 'required|array|min:1',
+            'dias.*' => 'integer|between:1,7',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $horario->update($validator->validated());
+        $data = $validator->validated();
 
-        return response()->json($horario);
+        Horarios::where('id_doctor', $id_doctor)->delete();
+
+        $dias = $data['dias'];
+        $hora_inicio_str = $data['hora_inicio'];
+        $hora_fin_str = $data['hora_fin'];
+
+        $hora_inicio = \DateTime::createFromFormat('H:i', $hora_inicio_str);
+        $hora_fin = \DateTime::createFromFormat('H:i', $hora_fin_str);
+
+        $createdHorarios = [];
+        $interval = new \DateInterval('PT30M');
+
+        foreach ($dias as $dia) {
+            $period = new \DatePeriod($hora_inicio, $interval, $hora_fin);
+
+            foreach ($period as $start) {
+                $end = clone $start;
+                $end->add($interval);
+
+                $horario = Horarios::create([
+                    'id_doctor' => $id_doctor,
+                    'dia' => $dia,
+                    'hora_inicio' => $start->format('H:i'),
+                    'hora_fin' => $end->format('H:i'),
+                    'disponible' => true,
+                ]);
+
+                $createdHorarios[] = $horario;
+            }
+        }
+
+        return response()->json([
+            'message' => 'Horarios actualizados correctamente',
+            'horarios' => $createdHorarios
+        ], 200);
     }
 
     public function destroy(string $id)

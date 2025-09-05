@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('doctores', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('apellido');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('cedula')->unique();
+            $table->string('nombres');
+            $table->string('apellidos');
             $table->foreignId('id_especialidades')->constrained('especialidades')->onDelete('cascade');
             $table->string('horario')->nullable();
             $table->string('lugar_trabajo')->nullable();

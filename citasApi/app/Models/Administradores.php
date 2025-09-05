@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pacientes extends Model
+class Administradores extends Model
 {
     use HasFactory;
 
@@ -13,23 +13,12 @@ class Pacientes extends Model
         'user_id',
         'nombres',
         'apellidos',
-        'documento',
-        'rh',
-        'fecha_nacimiento',
-        'genero',
-        'edad',
-        'telefono',
-        'alergias',
-        'comentarios'
+        'cedula',
+        'telefono'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function citas(): Pacientes|\Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Citas::class, 'id_paciente');
     }
 }

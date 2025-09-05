@@ -4,6 +4,7 @@ use App\Http\Controllers\CitasController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\DoctoresController;
 use App\Http\Controllers\EspecialidadesController;
+use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\HorariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,3 +44,14 @@ Route::put('actualizarHorario/{id}', [HorariosController::class, 'update']);
 Route::delete('eliminarHorario/{id}', [HorariosController::class, 'destroy']);
 
 
+
+Route::get('doctoresEspecialidad', [ConsultaController::class, 'doctoresConEspecialidad']);
+Route::get('pacientesCitas', [ConsultaController::class, 'pacientesConCitas']);
+Route::get('proximaCita', [ConsultaController::class, 'proximaCitaPorPaciente']);
+Route::get('cantidadDoctoresEspecialidad', [ConsultaController::class, 'cantidadDoctoresPorEspecialidad']);
+Route::get('horariosDoctor/{id}', [ConsultaController::class, 'horariosPorDoctor']);
+Route::get('doctoresMasCitas', [ConsultaController::class, 'doctoresConMasDeCincoCitas']);
+Route::get('pacientesGenero', [ConsultaController::class, 'pacientesPorGenero']);
+Route::get('ultimaCita', [ConsultaController::class, 'ultimaCitaPorPaciente']);
+Route::get('especialidadMasSolicitada', [ConsultaController::class, 'especialidadMasSolicitada']);
+Route::get('citasPorDiaDoctor/{id}', [ConsultaController::class, 'citasPorDiaDoctor']);

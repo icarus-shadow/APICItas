@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Especialidades extends Model
+class Roles extends Model
 {
     use HasFactory;
 
@@ -14,8 +14,8 @@ class Especialidades extends Model
         'descripcion'
     ];
 
-    public function doctores()
+    public function users()
     {
-        return $this->hasMany(Doctores::class, 'id_especialidades');
+        return $this->hasMany(User::class, 'id_rol');
     }
 }
