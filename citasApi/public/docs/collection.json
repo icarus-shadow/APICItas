@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel - Documentaci\u00f3n de la API",
-        "_postman_id": "bac92f0e-8392-4297-af32-fa251d2e36ae",
+        "_postman_id": "26ecb8ea-70d6-49f1-bba4-04a85b529dd3",
         "description": "API de Citas M\u00e9dicas - Una API RESTful para la gesti\u00f3n de citas m\u00e9dicas, doctores, pacientes y horarios.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },

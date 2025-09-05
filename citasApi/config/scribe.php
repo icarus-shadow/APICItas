@@ -16,10 +16,10 @@ return [
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<INTRO
-        Esta documentación proporciona toda la información necesaria para trabajar con nuestra API.
+    Esta documentación proporciona toda la información necesaria para trabajar con nuestra API.
 
-        <aside>Mientras navegas, verás ejemplos de código para trabajar con la API en diferentes lenguajes de programación en el área oscura a la derecha (o como parte del contenido en móviles).
-        Puedes cambiar el lenguaje utilizado con las pestañas en la parte superior derecha (o desde el menú de navegación en la parte superior izquierda en móviles).</aside>
+    <aside>Mientras navegas, verás ejemplos de código para trabajar con la API en diferentes lenguajes de programación en el área oscura a la derecha (o como parte del contenido en móviles).
+    Puedes cambiar el lenguaje utilizado con las pestañas en la parte superior derecha.</aside>
     INTRO,
 
     // The base URL displayed in the docs.
