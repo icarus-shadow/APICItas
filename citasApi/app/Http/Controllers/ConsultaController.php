@@ -9,7 +9,7 @@ use App\Models\Especialidades;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ConsultasController extends Controller
+class ConsultaController extends Controller
 {
     /**
      * @group Consultas
@@ -122,7 +122,7 @@ class ConsultasController extends Controller
     {
         $data = Citas::selectRaw('especialidades.nombre as especialidad, COUNT(citas.id) as total_citas')
             ->join('doctores', 'citas.id_doctor', '=', 'doctores.id')
-            ->join('especialidades', 'doctores.id_especialidad', '=', 'especialidades.id')
+            ->join('especialidades', 'doctores.id_especialidades', '=', 'especialidades.id')
             ->groupBy('especialidades.nombre')
             ->get();
 

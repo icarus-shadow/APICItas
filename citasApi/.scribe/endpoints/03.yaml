@@ -1,0 +1,149 @@
+name: Administradores
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/registrar-administrador
+    metadata:
+      groupName: Administradores
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Registrar un nuevo administrador
+
+        Este endpoint permite crear un administrador y su usuario asociado en el sistema. Se ejecuta dentro de
+        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de administrador (id_rol = 3).
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Correo electrónico único del usuario.'
+        required: true
+        example: admin@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Contraseña del usuario, mínimo 6 caracteres.'
+        required: true
+        example: secret123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      nombres:
+        name: nombres
+        description: 'Nombres completos del administrador.'
+        required: true
+        example: María
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      apellidos:
+        name: apellidos
+        description: 'Apellidos completos del administrador.'
+        required: true
+        example: 'Rodríguez López'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      cedula:
+        name: cedula
+        description: 'Cédula única del administrador.'
+        required: true
+        example: '987654321'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      telefono:
+        name: telefono
+        description: 'Teléfono de contacto del administrador.'
+        required: true
+        example: '3109876543'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: admin@example.com
+      password: secret123
+      nombres: María
+      apellidos: 'Rodríguez López'
+      cedula: '987654321'
+      telefono: '3109876543'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "message": "Administrador registrado correctamente",
+            "user": {
+                "id": 12,
+                "email": "admin@example.com",
+                "id_rol": 3,
+                "created_at": "2025-09-05T10:00:00.000000Z"
+            },
+            "administrador": {
+                "id": 3,
+                "user_id": 12,
+                "nombres": "María",
+                "apellidos": "Rodríguez López",
+                "cedula": "987654321",
+                "telefono": "3109876543"
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+                "email": ["El campo email es obligatorio."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Error al registrar administrador",
+            "error": "Detalle del error interno"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

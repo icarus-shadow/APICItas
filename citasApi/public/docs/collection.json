@@ -1,0 +1,2166 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/127.0.0.1:8000"
+        }
+    ],
+    "info": {
+        "name": "Laravel - Documentaci\u00f3n de la API",
+        "_postman_id": "bac92f0e-8392-4297-af32-fa251d2e36ae",
+        "description": "API de Citas M\u00e9dicas - Una API RESTful para la gesti\u00f3n de citas m\u00e9dicas, doctores, pacientes y horarios.",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Administradores",
+            "description": "",
+            "item": [
+                {
+                    "name": "Registrar un nuevo administrador\n\nEste endpoint permite crear un administrador y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacci\u00f3n para garantizar la integridad de los datos. El usuario se crea con el rol de administrador (id_rol = 3).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/registrar-administrador",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/registrar-administrador"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"admin@example.com\",\"password\":\"secret123\",\"nombres\":\"Mar\u00eda\",\"apellidos\":\"Rodr\u00edguez L\u00f3pez\",\"cedula\":\"987654321\",\"telefono\":\"3109876543\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"message\": \"Administrador registrado correctamente\",\n  \"user\": {\n      \"id\": 12,\n      \"email\": \"admin@example.com\",\n      \"id_rol\": 3,\n      \"created_at\": \"2025-09-05T10:00:00.000000Z\"\n  },\n  \"administrador\": {\n      \"id\": 3,\n      \"user_id\": 12,\n      \"nombres\": \"Mar\u00eda\",\n      \"apellidos\": \"Rodr\u00edguez L\u00f3pez\",\n      \"cedula\": \"987654321\",\n      \"telefono\": \"3109876543\"\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n      \"email\": [\"El campo email es obligatorio.\"]\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"message\": \"Error al registrar administrador\",\n  \"error\": \"Detalle del error interno\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Administradores [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Listar administradores\n\nDevuelve una lista de todos los administradores registrados.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/administradores",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/administradores"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"id\": 1,\n     \"nombres\": \"Carlos\",\n     \"apellidos\": \"P\u00e9rez\",\n     \"cedula\": \"12345678\",\n     \"telefono\": \"3001234567\",\n     \"user_id\": 5\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Ver administrador\n\nDevuelve los datos de un administrador espec\u00edfico.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/administradores\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/administradores\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del administrador."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Carlos\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"cedula\": \"12345678\",\n   \"telefono\": \"3001234567\",\n   \"user_id\": 5\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar administrador\n\nPermite modificar los datos de un administrador.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/administradores\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/administradores\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del administrador."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombres\":\"Carlos\",\"apellidos\":\"P\u00e9rez\",\"cedula\":\"12345678\",\"telefono\":\"3001234567\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Carlos\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"cedula\": \"12345678\",\n   \"telefono\": \"3001234567\",\n   \"user_id\": 5\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar administrador\n\nPermite eliminar un administrador del sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/administradores\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/administradores\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del administrador."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Administrador eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Citas [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Listar todas las citas\n\nDevuelve todas las citas registradas en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/citas",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/citas"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"id\": 1,\n     \"id_paciente\": 3,\n     \"id_doctor\": 2,\n     \"id_horario\": 5,\n     \"motivo\": \"Consulta general\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Ver una cita\n\nDevuelve los detalles de una cita espec\u00edfica.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/citas\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/citas\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID de la cita."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"id_paciente\": 3,\n   \"id_doctor\": 2,\n   \"id_horario\": 5,\n   \"motivo\": \"Consulta general\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar una cita\n\nPermite al administrador eliminar una cita y liberar el horario.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/citas\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/citas\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID de la cita."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Cita eliminada con \u00e9xito\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Editar cualquier cita\n\nPermite al administrador modificar el motivo de una cita.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/citas\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/citas\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID de la cita."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"motivo\":\"Revisi\u00f3n general\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"motivo\": \"Revisi\u00f3n general\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Consultas",
+            "description": "",
+            "item": [
+                {
+                    "name": "Doctores por especialidad\n\nLista todos los doctores que pertenecen a una especialidad espec\u00edfica.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctores\/especialidad\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctores\/especialidad\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "3",
+                                    "description": "ID de la especialidad."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"id\": 1, \"nombres\": \"Juan\", \"apellidos\": \"L\u00f3pez\", \"especialidad\": \"Cardiolog\u00eda\" }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Disponibilidad de un doctor\n\nDevuelve los horarios disponibles (disponible = true) de un doctor para agendar cita.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctor\/:id\/disponibilidad",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctor\/:id\/disponibilidad",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "2",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"dia\": 1, \"hora_inicio\": \"08:00\", \"hora_fin\": \"08:30\", \"disponible\": true }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mis citas\n\nMuestra el historial de citas del usuario autenticado (paciente o doctor).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/citas\/mis-citas",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/citas\/mis-citas"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"fecha\": \"2025-09-10\", \"estado\": \"pendiente\", \"doctor\": \"Juan P\u00e9rez\" }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Pacientes atendidos por doctor\n\nDevuelve un listado de pacientes que el doctor autenticado ha atendido, con filtro opcional por fechas.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctor\/mis-pacientes",
+                            "query": [
+                                {
+                                    "key": "fecha_inicio",
+                                    "value": "2025-09-01",
+                                    "description": "date Fecha inicial del filtro.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "fecha_fin",
+                                    "value": "2025-09-30",
+                                    "description": "date Fecha final del filtro.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/doctor\/mis-pacientes?fecha_inicio=2025-09-01&fecha_fin=2025-09-30"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"paciente\": \"Mar\u00eda G\u00f3mez\", \"fecha\": \"2025-09-05\" }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios\/compactados\/:id_doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios\/compactados\/:id_doctor",
+                            "variable": [
+                                {
+                                    "id": "id_doctor",
+                                    "key": "id_doctor",
+                                    "value": "2",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"dia\": 1, \"rango\": \"08:00 - 12:00\" }\n]",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Consultas [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Reporte de citas por especialidad\n\nDevuelve el total de citas agrupadas por especialidad.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/reportes\/citas-por-especialidad",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/reportes\/citas-por-especialidad"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"especialidad\": \"Cardiolog\u00eda\", \"total_citas\": 15 }\n]",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Doctores",
+            "description": "",
+            "item": [
+                {
+                    "name": "Registrar un nuevo doctor\n\nEste endpoint permite crear un doctor y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacci\u00f3n para garantizar la integridad de los datos. El usuario se crea con el rol de doctor (id_rol = 2).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/registrar-doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/registrar-doctor"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"doctor@example.com\",\"password\":\"secret123\",\"nombres\":\"Andr\u00e9s\",\"apellidos\":\"Garc\u00eda L\u00f3pez\",\"cedula\":\"1122334455\",\"id_especialidades\":1,\"horario\":\"Lunes a Viernes 8:00 AM - 4:00 PM\",\"lugar_trabajo\":\"Hospital Central\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"message\": \"Doctor registrado correctamente\",\n  \"user\": {\n      \"id\": 15,\n      \"email\": \"doctor@example.com\",\n      \"id_rol\": 2,\n      \"created_at\": \"2025-09-05T10:00:00.000000Z\"\n  },\n  \"doctor\": {\n      \"id\": 7,\n      \"user_id\": 15,\n      \"nombres\": \"Andr\u00e9s\",\n      \"apellidos\": \"Garc\u00eda L\u00f3pez\",\n      \"cedula\": \"1122334455\",\n      \"id_especialidades\": 1,\n      \"horario\": \"Lunes a Viernes 8:00 AM - 4:00 PM\",\n      \"lugar_trabajo\": \"Hospital Central\"\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n      \"email\": [\"El campo email es obligatorio.\"]\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"message\": \"Error al registrar doctor\",\n  \"error\": \"Detalle del error interno\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Doctores [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Ver un doctor\n\nDevuelve los datos de un doctor espec\u00edfico por su ID.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctor\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctor\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Pedro\",\n   \"apellidos\": \"L\u00f3pez\",\n   \"especialidad\": \"Cardiolog\u00eda\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar un doctor\n\nPermite al administrador actualizar los datos de un doctor por ID.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctor\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctor\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombres\":\"Pedro\",\"apellidos\":\"L\u00f3pez\",\"telefono\":\"3012345678\",\"especialidad_id\":17}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Pedro\",\n   \"apellidos\": \"L\u00f3pez\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctor\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctor\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Doctor eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Listar doctores\n\nDevuelve la lista completa de doctores registrados en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctores",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctores"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"id\": 1,\n     \"nombres\": \"Pedro\",\n     \"apellidos\": \"L\u00f3pez\",\n     \"especialidad\": \"Cardiolog\u00eda\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Doctores [AUTENTICADO]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Ver mi informaci\u00f3n (Doctor)\n\nDevuelve los datos del doctor autenticado.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil-doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil-doctor"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Pedro\",\n   \"apellidos\": \"L\u00f3pez\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar mi informaci\u00f3n (Doctor)\n\nPermite al doctor autenticado actualizar sus propios datos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil-doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil-doctor"
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombres\":\"Pedro\",\"apellidos\":\"L\u00f3pez\",\"telefono\":\"3012345678\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Pedro\",\n   \"apellidos\": \"L\u00f3pez\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n   \"errors\": {\n      \"nombres\": [\"El campo nombres debe ser una cadena de texto\"]\n   }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar mi cuenta (Doctor)\n\nPermite al doctor autenticado eliminar su cuenta del sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil-doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil-doctor"
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Doctor eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "GET api\/user",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "POST api\/logout",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/logout",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/logout"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET api\/perfil",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/perfil",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/perfil"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "POST api\/login",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"qkunze@example.com\",\"password\":\"consequatur\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Especialidades [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Crear especialidad\n\nPermite al administrador registrar una nueva especialidad.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/especialidades",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/especialidades"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombre\":\"Cardiolog\u00eda\",\"descripcion\":\"Tratamiento del coraz\u00f3n\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n   \"id\": 1,\n   \"nombre\": \"Cardiolog\u00eda\",\n   \"descripcion\": \"Especialidad del coraz\u00f3n\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n   \"errors\": {\n      \"nombre\": [\"El campo nombre es obligatorio\"]\n   }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar especialidad\n\nPermite al administrador actualizar los datos de una especialidad.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/especialidades\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/especialidades\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID de la especialidad."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombre\":\"Cardiolog\u00eda\",\"descripcion\":\"Tratamiento del coraz\u00f3n\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombre\": \"Cardiolog\u00eda\",\n   \"descripcion\": \"Especialidad actualizada\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Especialidad no encontrada\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar especialidad\n\nPermite al administrador eliminar una especialidad del sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/especialidades\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/especialidades\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID de la especialidad."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Especialidad eliminada con \u00e9xito\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Especialidad no encontrada\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Especialidades [PUBLICO AUTENTICADO]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Listar todas las especialidades\n\nDevuelve una lista de todas las especialidades registradas en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/especialidades",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/especialidades"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"id\": 1,\n     \"nombre\": \"Cardiolog\u00eda\",\n     \"descripcion\": \"Especialidad del coraz\u00f3n\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Ver una especialidad\n\nDevuelve los detalles de una especialidad espec\u00edfica.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/especialidades\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/especialidades\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID de la especialidad."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombre\": \"Cardiolog\u00eda\",\n   \"descripcion\": \"Especialidad del coraz\u00f3n\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Especialidad no encontrada\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Horarios [ADMIN\/DOCTOR]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Ver un horario\n\nDevuelve la informaci\u00f3n de un intervalo de 30 minutos espec\u00edfico.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del horario."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"id_doctor\": 1,\n   \"dia\": 1,\n   \"hora_inicio\": \"08:00\",\n   \"hora_fin\": \"08:30\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Crear horarios\n\nCrea horarios para un doctor a partir de un rango amplio, dividi\u00e9ndolos en intervalos de 30 minutos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"dias\":[1,3,5],\"hora_inicio\":\"08:00\",\"hora_fin\":\"12:00\",\"id_doctor\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "[\n  {\n     \"id_doctor\": 1,\n     \"dia\": 1,\n     \"hora_inicio\": \"08:00\",\n     \"hora_fin\": \"08:30\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Editar un intervalo\n\nPermite editar un intervalo de 30 minutos espec\u00edfico.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del horario."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"hora_inicio\":\"09:00\",\"hora_fin\":\"09:30\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"hora_inicio\": \"09:00\",\n   \"hora_fin\": \"09:30\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar un intervalo\n\nPermite eliminar un intervalo de 30 minutos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del horario."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Horario eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Crear horarios\n\nCrea horarios para un doctor a partir de un rango amplio, dividi\u00e9ndolos en intervalos de 30 minutos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mis-horarios",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mis-horarios"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"dias\":[1,3,5],\"hora_inicio\":\"08:00\",\"hora_fin\":\"12:00\",\"id_doctor\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "[\n  {\n     \"id_doctor\": 1,\n     \"dia\": 1,\n     \"hora_inicio\": \"08:00\",\n     \"hora_fin\": \"08:30\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Editar un intervalo\n\nPermite editar un intervalo de 30 minutos espec\u00edfico.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mis-horarios\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mis-horarios\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del horario."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"hora_inicio\":\"09:00\",\"hora_fin\":\"09:30\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"hora_inicio\": \"09:00\",\n   \"hora_fin\": \"09:30\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar un intervalo\n\nPermite eliminar un intervalo de 30 minutos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mis-horarios\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mis-horarios\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del horario."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Horario eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Horarios [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Listar todos los horarios (compacto)\n\nDevuelve todos los horarios del sistema agrupados por rango grande (no por intervalos de 30 minutos).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"id_doctor\": 1,\n     \"nombre_doctor\": \"Juan P\u00e9rez\",\n     \"dia\": 1,\n     \"rango\": \"08:00 - 12:00\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Listar horarios por doctor\n\nDevuelve todos los intervalos de 30 minutos de un doctor espec\u00edfico.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios-doctor\/:id_doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios-doctor\/:id_doctor",
+                            "variable": [
+                                {
+                                    "id": "id_doctor",
+                                    "key": "id_doctor",
+                                    "value": "1",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"dia\": 1,\n     \"hora_inicio\": \"08:00\",\n     \"hora_fin\": \"08:30\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Horarios [DOCTOR]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Listar mis horarios\n\nDevuelve todos los intervalos de 30 minutos del doctor autenticado.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mis-horarios",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mis-horarios"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n  {\n     \"dia\": 1,\n     \"hora_inicio\": \"08:00\",\n     \"hora_fin\": \"08:30\"\n  }\n]",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Pacientes",
+            "description": "",
+            "item": [
+                {
+                    "name": "Registrar un nuevo paciente\n\nEste endpoint permite crear un paciente y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacci\u00f3n para garantizar la integridad de los datos. El usuario se crea con el rol de paciente (id_rol = 1).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/registrar-paciente",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/registrar-paciente"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"paciente@example.com\",\"password\":\"secret123\",\"nombres\":\"Juan\",\"apellidos\":\"P\u00e9rez G\u00f3mez\",\"documento\":\"123456789\",\"rh\":\"O+\",\"fecha_nacimiento\":\"1990-05-15\",\"genero\":\"M\",\"edad\":\"33\",\"telefono\":\"3201234567\",\"alergias\":\"Penicilina\",\"comentarios\":\"Ninguno\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"message\": \"Paciente registrado correctamente\",\n  \"user\": {\n      \"id\": 10,\n      \"email\": \"paciente@example.com\",\n      \"id_rol\": 1,\n      \"created_at\": \"2025-09-05T10:00:00.000000Z\"\n  },\n  \"paciente\": {\n      \"id\": 5,\n      \"user_id\": 10,\n      \"nombres\": \"Juan\",\n      \"apellidos\": \"P\u00e9rez G\u00f3mez\",\n      \"documento\": \"123456789\",\n      \"rh\": \"O+\",\n      \"fecha_nacimiento\": \"1990-05-15\",\n      \"genero\": \"M\",\n      \"edad\": \"33\",\n      \"telefono\": \"3201234567\",\n      \"alergias\": \"Penicilina\",\n      \"comentarios\": \"Ninguno\"\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n      \"email\": [\"El campo email es obligatorio.\"]\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"message\": \"Error al registrar paciente\",\n  \"error\": \"Detalle del error interno\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Pacientes [ADMIN]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Listar todos los pacientes\n\nDevuelve la lista completa de pacientes registrados en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pacientes",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pacientes"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n {\n   \"id\": 1,\n   \"nombres\": \"Juan\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"documento\": \"12345678\",\n   \"telefono\": \"3001234567\"\n }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Ver un paciente espec\u00edfico\n\nObtiene los datos completos de un paciente a partir de su ID.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pacientes\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pacientes\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del paciente a consultar."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Juan\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"documento\": \"12345678\",\n   \"telefono\": \"3001234567\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar un paciente\n\nPermite al administrador modificar los datos de un paciente espec\u00edfico.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pacientes\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pacientes\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del paciente a actualizar."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombres\":\"Juan\",\"apellidos\":\"P\u00e9rez\",\"documento\":\"12345678\",\"rh\":\"O+\",\"fecha_nacimiento\":\"1990-05-12\",\"genero\":\"M\",\"edad\":30,\"telefono\":\"3001234567\",\"alergias\":\"Ninguna\",\"comentarios\":\"Paciente estable\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Juan\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"telefono\": \"3001234567\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n   \"errors\": {\n      \"nombres\": [\"El campo nombres es obligatorio\"]\n   }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar un paciente\n\nPermite al administrador eliminar un paciente del sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pacientes\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pacientes\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del paciente a eliminar."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Paciente eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Pacientes [AUTENTICADO]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Ver mi informaci\u00f3n\n\nDevuelve los datos del paciente autenticado.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Juan\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"documento\": \"12345678\",\n   \"telefono\": \"3001234567\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar mi informaci\u00f3n\n\nPermite al paciente autenticado actualizar sus datos personales.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil"
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombres\":\"Juan\",\"apellidos\":\"P\u00e9rez\",\"telefono\":\"3001234567\",\"alergias\":\"Ninguna\",\"comentarios\":\"Paciente estable\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Juan\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"telefono\": \"3001234567\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n   \"errors\": {\n      \"nombres\": [\"El campo nombres es obligatorio\"]\n   }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar mi cuenta\n\nPermite al paciente autenticado eliminar su cuenta del sistema junto con todos sus datos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil"
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Paciente eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "key",
+                "type": "string"
+            }
+        ]
+    }
+}

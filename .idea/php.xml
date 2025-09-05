@@ -137,6 +137,13 @@
       <path value="$PROJECT_DIR$/citasApi/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/citasApi/vendor/laravel/sanctum" />
       <path value="$PROJECT_DIR$/citasApi/vendor/_laravel_idea" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/mpociot/reflection-docblock" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/erusev/parsedown" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/shalvah/clara" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/shalvah/upgrader" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/spatie/data-transfer-object" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/knuckleswtf/scribe" />
+      <path value="$PROJECT_DIR$/citasApi/vendor/symfony/var-exporter" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.4" />

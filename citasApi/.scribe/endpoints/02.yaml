@@ -1,0 +1,173 @@
+name: Doctores
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/registrar-doctor
+    metadata:
+      groupName: Doctores
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Registrar un nuevo doctor
+
+        Este endpoint permite crear un doctor y su usuario asociado en el sistema. Se ejecuta dentro de
+        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de doctor (id_rol = 2).
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Correo electrónico único del usuario.'
+        required: true
+        example: doctor@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Contraseña del usuario, mínimo 6 caracteres.'
+        required: true
+        example: secret123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      nombres:
+        name: nombres
+        description: 'Nombres completos del doctor.'
+        required: true
+        example: Andrés
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      apellidos:
+        name: apellidos
+        description: 'Apellidos completos del doctor.'
+        required: true
+        example: 'García López'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      cedula:
+        name: cedula
+        description: 'Cédula única del doctor.'
+        required: true
+        example: '1122334455'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_especialidades:
+        name: id_especialidades
+        description: 'ID de la especialidad a la que pertenece el doctor.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      horario:
+        name: horario
+        description: 'Horario de atención del doctor.'
+        required: false
+        example: 'Lunes a Viernes 8:00 AM - 4:00 PM'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      lugar_trabajo:
+        name: lugar_trabajo
+        description: 'Lugar donde atiende el doctor.'
+        required: false
+        example: 'Hospital Central'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      email: doctor@example.com
+      password: secret123
+      nombres: Andrés
+      apellidos: 'García López'
+      cedula: '1122334455'
+      id_especialidades: 1
+      horario: 'Lunes a Viernes 8:00 AM - 4:00 PM'
+      lugar_trabajo: 'Hospital Central'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "message": "Doctor registrado correctamente",
+            "user": {
+                "id": 15,
+                "email": "doctor@example.com",
+                "id_rol": 2,
+                "created_at": "2025-09-05T10:00:00.000000Z"
+            },
+            "doctor": {
+                "id": 7,
+                "user_id": 15,
+                "nombres": "Andrés",
+                "apellidos": "García López",
+                "cedula": "1122334455",
+                "id_especialidades": 1,
+                "horario": "Lunes a Viernes 8:00 AM - 4:00 PM",
+                "lugar_trabajo": "Hospital Central"
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+                "email": ["El campo email es obligatorio."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Error al registrar doctor",
+            "error": "Detalle del error interno"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
