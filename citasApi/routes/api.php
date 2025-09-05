@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdministradoresController;
 use App\Http\Controllers\CitasController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\DoctoresController;
@@ -8,50 +9,102 @@ use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\HorariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\auth\authcontroller;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('listarPacientes', [PacientesController::class, 'index']);
-Route::get('paciente/{id}', [PacientesController::class, 'show']);
-Route::post('crearPaciente', [PacientesController::class, 'store']);
-Route::put('actualizarPaciente/{id}', [PacientesController::class, 'update']);
-Route::delete('eliminarPaciente/{id}', [PacientesController::class, 'destroy']);
-
-Route::get('listarDoctores', [DoctoresController::class, 'index']);
-Route::get('doctor/{id}', [DoctoresController::class, 'show']);
-Route::post('crearDoctor', [DoctoresController::class, 'store']);
-Route::put('actualizarDoctor/{id}', [DoctoresController::class, 'update']);
-Route::delete('eliminarDoctor/{id}', [DoctoresController::class, 'destroy']);
-
-Route::get('listarCitas', [CitasController::class, 'index']);
-Route::get('cita/{id}', [CitasController::class, 'show']);
-Route::post('crearCita', [CitasController::class, 'store']);
-Route::put('actualizarCita/{id}', [CitasController::class, 'update']);
-Route::delete('eliminarCita/{id}', [CitasController::class, 'destroy']);
-
-Route::get('listarEspecialidades', [EspecialidadesController::class, 'index']);
-Route::get('especialidad/{id}', [EspecialidadesController::class, 'show']);
-Route::post('crearEspecialidad', [EspecialidadesController::class, 'store']);
-Route::put('actualizarEspecialidad/{id}', [EspecialidadesController::class, 'update']);
-Route::delete('eliminarEspecialidad/{id}', [EspecialidadesController::class, 'destroy']);
-
-Route::get('listarHorarios', [HorariosController::class, 'index']);
-Route::get('horario/{id}', [HorariosController::class, 'show']);
-Route::post('crearHorario', [HorariosController::class, 'store']);
-Route::put('actualizarHorario/{id}', [HorariosController::class, 'update']);
-Route::delete('eliminarHorario/{id}', [HorariosController::class, 'destroy']);
 
 
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);
+    Route::post('/registrar-doctor', [authController::class, 'registerDoctor']);
+    Route::post('/registrar-administrador', [authController::class, 'registerAdministrador']);
 
-Route::get('doctoresEspecialidad', [ConsultaController::class, 'doctoresConEspecialidad']);
-Route::get('pacientesCitas', [ConsultaController::class, 'pacientesConCitas']);
-Route::get('proximaCita', [ConsultaController::class, 'proximaCitaPorPaciente']);
-Route::get('cantidadDoctoresEspecialidad', [ConsultaController::class, 'cantidadDoctoresPorEspecialidad']);
-Route::get('horariosDoctor/{id}', [ConsultaController::class, 'horariosPorDoctor']);
-Route::get('doctoresMasCitas', [ConsultaController::class, 'doctoresConMasDeCincoCitas']);
-Route::get('pacientesGenero', [ConsultaController::class, 'pacientesPorGenero']);
-Route::get('ultimaCita', [ConsultaController::class, 'ultimaCitaPorPaciente']);
-Route::get('especialidadMasSolicitada', [ConsultaController::class, 'especialidadMasSolicitada']);
-Route::get('citasPorDiaDoctor/{id}', [ConsultaController::class, 'citasPorDiaDoctor']);
+    // CRUD de pacientes
+    Route::get('/pacientes', [PacientesController::class, 'index']);           // Listar todos los pacientes
+    Route::get('/pacientes/{id}', [PacientesController::class, 'show']);      // Ver un paciente específico
+    Route::put('/pacientes/{id}', [PacientesController::class, 'update']);    // Actualizar un paciente
+    Route::delete('/pacientes/{id}', [PacientesController::class, 'destroy']); // Eliminar un paciente
+
+
+    // crud de doctores
+    Route::get('/doctor/{id}', [DoctoresController::class, 'show']);     // Ver un doctor específico
+    Route::put('/doctor/{id}', [DoctoresController::class, 'update']);   // Actualizar doctor
+    Route::delete('/doctor/{id}', [DoctoresController::class, 'destroy']); // Eliminar doctor
+
+
+    // crud de especialidades para admin
+    Route::post('/especialidades', [EspecialidadesController::class, 'store']);    // Crear
+    Route::put('/especialidades/{id}', [EspecialidadesController::class, 'update']); // Actualizar
+    Route::delete('/especialidades/{id}', [EspecialidadesController::class, 'destroy']); // Eliminar
+
+    // endpoints para la administracion de horarios
+    Route::get('/horarios', [HorariosController::class, 'indexCompact']); // Listar todos compactos
+    Route::get('/horarios/{id}', [HorariosController::class, 'show']);    // Ver un horario
+    Route::post('/horarios', [HorariosController::class, 'store']);       // Crear bloques de horarios
+    Route::put('/horarios/{id}', [HorariosController::class, 'update']);  // Editar un bloque específico
+    Route::delete('/horarios/{id}', [HorariosController::class, 'destroy']); // Eliminar un bloque
+    Route::get('/horarios-doctor/{id_doctor}', [HorariosController::class, 'listByDoctor']); // Listar por doctor
+
+    // administacion de citas
+    Route::get('/citas', [CitasController::class, 'index']); // Ver todas
+    Route::get('/citas/{id}', [CitasController::class, 'show']); // Ver una cita
+    Route::delete('/citas/{id}', [CitasController::class, 'destroy']); // Eliminar cualquier cita
+    Route::put('/citas/{id}', [CitasController::class, 'update']); // Editar cualquier cita
+
+    Route::get('/administradores', [AdministradoresController::class, 'index']);
+    Route::get('/administradores/{id}', [AdministradoresController::class, 'show']);
+    Route::put('/administradores/{id}', [AdministradoresController::class, 'update']);
+    Route::delete('/administradores/{id}', [AdministradoresController::class, 'destroy']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [authController::class, 'logout']);
+    Route::get('/perfil', fn (Request $request) => $request->user());
+
+    // CRUD para pacientes (solo puede acceder a su propia información)
+    Route::get('/mi-perfil', [PacientesController::class, 'showOwn']);       // Ver su información
+    Route::put('/mi-perfil', [PacientesController::class, 'updateOwn']);     // Actualizar su información
+    Route::delete('/mi-perfil', [PacientesController::class, 'destroyOwn']); // Eliminar su cuenta
+
+    // Pacientes y Doctores
+    Route::get('/doctores/especialidad/{id}', [ConsultaController::class, 'doctoresPorEspecialidad']);
+    Route::get('/doctor/{id}/disponibilidad', [ConsultaController::class, 'disponibilidadDoctor']);
+
+    // Paciente autenticado
+    Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
+
+    // Doctor autenticado
+    Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);
+
+    // Admin
+    Route::middleware('admin')->group(function () {
+        Route::get('/reportes/citas-por-especialidad', [ConsultaController::class, 'reporteCitasPorEspecialidad']);
+    });
+
+    // Horarios
+    Route::get('/horarios/compactados/{id_doctor}', [ConsultaController::class, 'horariosCompactados']);
+});
+
+
+
+Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
+    Route::get('/mi-perfil-doctor', [DoctoresController::class, 'showOwn']);       // Ver su perfil
+    Route::put('/mi-perfil-doctor', [DoctoresController::class, 'updateOwn']);     // Actualizar su perfil
+    Route::delete('/mi-perfil-doctor', [DoctoresController::class, 'destroyOwn']); // Eliminar su cuenta
+
+    // manejo de horarios disponibles por el doctor
+    Route::get('/mis-horarios', [HorariosController::class, 'listOwn']);   // Listar mis horarios completos
+    Route::post('/mis-horarios', [HorariosController::class, 'store']);    // Crear bloques para mí
+    Route::put('/mis-horarios/{id}', [HorariosController::class, 'update']); // Editar un bloque mío
+    Route::delete('/mis-horarios/{id}', [HorariosController::class, 'destroy']); // Eliminar un bloque mío
+});
+
+
+Route::post('/login', [authController::class, 'login']);
+Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar doctores
+Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Listar
+Route::get('/especialidades/{id}', [EspecialidadesController::class, 'show']); // Ver detalle

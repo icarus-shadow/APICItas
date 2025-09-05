@@ -2,110 +2,161 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Citas;
+use App\Models\Doctores;
+use App\Models\Horarios;
+use App\Models\Especialidades;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
-class ConsultaController extends Controller
+class ConsultasController extends Controller
 {
-    // 1. Doctores con su especialidad
-    public function doctoresConEspecialidad() {
-        $data = DB::table('doctores')
-            ->join('especialidades', 'doctores.id_especialidades', '=', 'especialidades.id')
-            ->select('doctores.id','doctores.nombre','doctores.apellido','especialidades.nombre as especialidad')
-            ->get();
-        return response()->json($data, 200);
+    /**
+     * @group Consultas
+     *
+     * Doctores por especialidad
+     *
+     * Lista todos los doctores que pertenecen a una especialidad específica.
+     *
+     * @authenticated
+     * @urlParam id integer ID de la especialidad. Example: 3
+     *
+     * @response 200 [
+     *    { "id": 1, "nombres": "Juan", "apellidos": "López", "especialidad": "Cardiología" }
+     * ]
+     */
+    public function doctoresPorEspecialidad($id)
+    {
+        $doctores = Doctores::where('id_especialidad', $id)->get();
+        return response()->json($doctores);
     }
 
-    // 2. Pacientes con sus citas
-    public function pacientesConCitas() {
-        $data = DB::table('pacientes')
-            ->join('citas', 'pacientes.id', '=', 'citas.id_paciente')
-            ->select('pacientes.nombres','pacientes.apellidos','citas.fecha_cita','citas.hora_cita','citas.lugar')
-            ->get();
-        return response()->json($data, 200);
+    /**
+     * @group Consultas
+     *
+     * Disponibilidad de un doctor
+     *
+     * Devuelve los horarios disponibles (disponible = true) de un doctor para agendar cita.
+     *
+     * @authenticated
+     * @urlParam id integer ID del doctor. Example: 2
+     *
+     * @response 200 [
+     *    { "dia": 1, "hora_inicio": "08:00", "hora_fin": "08:30", "disponible": true }
+     * ]
+     */
+    public function disponibilidadDoctor($id)
+    {
+        $horarios = Horarios::where('id_doctor', $id)->where('disponible', true)->get();
+        return response()->json($horarios);
     }
 
-    // 3. Próxima cita por paciente
-    public function proximaCitaPorPaciente() {
-        $data = DB::table('pacientes')
-            ->join('citas', 'pacientes.id', '=', 'citas.id_paciente')
-            ->where('citas.fecha_cita', '>=', DB::raw('CURDATE()'))
-            ->select('pacientes.nombres','pacientes.apellidos', DB::raw('MIN(citas.fecha_cita) as proxima_cita'))
-            ->groupBy('pacientes.id','pacientes.nombres','pacientes.apellidos')
-            ->get();
-        return response()->json($data, 200);
+    /**
+     * @group Consultas
+     *
+     * Mis citas
+     *
+     * Muestra el historial de citas del usuario autenticado (paciente o doctor).
+     *
+     * @authenticated
+     *
+     * @response 200 [
+     *    { "fecha": "2025-09-10", "estado": "pendiente", "doctor": "Juan Pérez" }
+     * ]
+     */
+    public function misCitas()
+    {
+        $user = Auth::user();
+        if ($user->rol_id == 1) {
+            $citas = Citas::where('id_paciente', $user->paciente->id)->get();
+        } elseif ($user->rol_id == 2) {
+            $citas = Citas::where('id_doctor', $user->doctor->id)->get();
+        } else {
+            $citas = [];
+        }
+        return response()->json($citas);
     }
 
-    // 4. Cantidad de doctores por especialidad
-    public function cantidadDoctoresPorEspecialidad() {
-        $data = DB::table('especialidades')
-            ->join('doctores', 'especialidades.id', '=', 'doctores.id_especialidades')
-            ->select('especialidades.nombre', DB::raw('COUNT(doctores.id) as total_doctores'))
-            ->groupBy('especialidades.nombre')
-            ->get();
-        return response()->json($data, 200);
+    /**
+     * @group Consultas
+     *
+     * Pacientes atendidos por doctor
+     *
+     * Devuelve un listado de pacientes que el doctor autenticado ha atendido, con filtro opcional por fechas.
+     *
+     * @authenticated
+     * @queryParam fecha_inicio date Fecha inicial del filtro. Example: 2025-09-01
+     * @queryParam fecha_fin date Fecha final del filtro. Example: 2025-09-30
+     *
+     * @response 200 [
+     *    { "paciente": "María Gómez", "fecha": "2025-09-05" }
+     * ]
+     */
+    public function pacientesPorDoctor(Request $request)
+    {
+        $user = Auth::user();
+        $query = Citas::where('id_doctor', $user->doctor->id);
+
+        if ($request->has('fecha_inicio') && $request->has('fecha_fin')) {
+            $query->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin]);
+        }
+
+        $citas = $query->with('paciente')->get();
+        return response()->json($citas);
     }
 
-    // 5. Horarios de un doctor específico
-    public function horariosPorDoctor($doctorId) {
-        $data = DB::table('horarios')
-            ->where('horarios.id_doctor', $doctorId)
-            ->select('horarios.dia','horarios.hora_inicio','horarios.hora_fin')
-            ->get();
-        return response()->json($data, 200);
-    }
-
-    // 6. Doctores con más de 5 citas
-    public function doctoresConMasDeCincoCitas() {
-        $data = DB::table('doctores')
-            ->join('citas', 'doctores.id', '=', 'citas.id_doctor')
-            ->select('doctores.nombre','doctores.apellido', DB::raw('COUNT(citas.id) as total_citas'))
-            ->groupBy('doctores.id','doctores.nombre','doctores.apellido')
-            ->havingRaw('COUNT(citas.id) > 5')
-            ->get();
-        return response()->json($data, 200);
-    }
-
-    // 7. Pacientes por género
-    public function pacientesPorGenero() {
-        $data = DB::table('pacientes')
-            ->select('genero', DB::raw('COUNT(*) as total'))
-            ->groupBy('genero')
-            ->get();
-        return response()->json($data, 200);
-    }
-
-    // 8. Última cita de cada paciente
-    public function ultimaCitaPorPaciente() {
-        $data = DB::table('pacientes')
-            ->join('citas', 'pacientes.id', '=', 'citas.id_paciente')
-            ->select('pacientes.nombres','pacientes.apellidos', DB::raw('MAX(citas.fecha_cita) as ultima_cita'))
-            ->groupBy('pacientes.id','pacientes.nombres','pacientes.apellidos')
-            ->get();
-        return response()->json($data, 200);
-    }
-
-    // 9. Especialidad más solicitada
-    public function especialidadMasSolicitada() {
-        $data = DB::table('citas')
+    /**
+     * @group Consultas [ADMIN]
+     *
+     * Reporte de citas por especialidad
+     *
+     * Devuelve el total de citas agrupadas por especialidad.
+     *
+     * @authenticated
+     *
+     * @response 200 [
+     *    { "especialidad": "Cardiología", "total_citas": 15 }
+     * ]
+     */
+    public function reporteCitasPorEspecialidad()
+    {
+        $data = Citas::selectRaw('especialidades.nombre as especialidad, COUNT(citas.id) as total_citas')
             ->join('doctores', 'citas.id_doctor', '=', 'doctores.id')
-            ->join('especialidades', 'doctores.id_especialidades', '=', 'especialidades.id')
-            ->select('especialidades.nombre', DB::raw('COUNT(citas.id) as total_citas'))
+            ->join('especialidades', 'doctores.id_especialidad', '=', 'especialidades.id')
             ->groupBy('especialidades.nombre')
-            ->orderByDesc('total_citas')
-            ->limit(1)
             ->get();
-        return response()->json($data, 200);
+
+        return response()->json($data);
     }
 
-    // 10. Citas por día para un doctor
-    public function citasPorDiaDoctor($doctorId) {
-        $data = DB::table('citas')
-            ->where('citas.id_doctor', $doctorId)
-            ->select('fecha_cita', DB::raw('COUNT(*) as total_citas'))
-            ->groupBy('fecha_cita')
-            ->orderBy('fecha_cita', 'asc')
-            ->get();
-        return response()->json($data, 200);
+    /**
+     * @group Consultas
+     *
+     * Horarios compactados por doctor
+     *
+     * Devuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos.
+     *
+     * @authenticated
+     * @urlParam id_doctor integer ID del doctor. Example: 2
+     *
+     * @response 200 [
+     *    { "dia": 1, "rango": "08:00 - 12:00" }
+     * ]
+     */
+    public function horariosCompactados($id_doctor)
+    {
+        $horarios = Horarios::where('id_doctor', $id_doctor)->orderBy('dia')->orderBy('hora_inicio')->get();
+
+        $compactados = [];
+        foreach ($horarios->groupBy('dia') as $dia => $items) {
+            $primero = $items->first();
+            $ultimo = $items->last();
+            $compactados[] = [
+                'dia' => $dia,
+                'rango' => $primero->hora_inicio . ' - ' . $ultimo->hora_fin
+            ];
+        }
+
+        return response()->json($compactados);
     }
 }
