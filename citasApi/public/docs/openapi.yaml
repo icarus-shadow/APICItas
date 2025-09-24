@@ -522,6 +522,42 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  '/api/horarios/compactados/{id_doctor}':
+    get:
+      summary: "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos."
+      operationId: horariosCompactadosPorDoctorDevuelveLosHorariosDelDoctorAgrupadosEnRangosGrandesEnLugarDeIntervalosDe30Minutos
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    dia: 1
+                    rango: '08:00 - 12:00'
+      tags:
+        - Consultas
+    parameters:
+      -
+        in: path
+        name: id_doctor
+        description: 'Optional parameter. ID del doctor.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 2
   '/api/doctores/especialidad/{id}':
     get:
       summary: "Doctores por especialidad\n\nLista todos los doctores que pertenecen a una especialidad específica."
@@ -663,42 +699,6 @@ paths:
                     fecha: '2025-09-05'
       tags:
         - Consultas
-  '/api/horarios/compactados/{id_doctor}':
-    get:
-      summary: "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos."
-      operationId: horariosCompactadosPorDoctorDevuelveLosHorariosDelDoctorAgrupadosEnRangosGrandesEnLugarDeIntervalosDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    dia: 1
-                    rango: '08:00 - 12:00'
-      tags:
-        - Consultas
-    parameters:
-      -
-        in: path
-        name: id_doctor
-        description: 'Optional parameter. ID del doctor.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 2
   /api/reportes/citas-por-especialidad:
     get:
       summary: "Reporte de citas por especialidad\n\nDevuelve el total de citas agrupadas por especialidad."
@@ -1229,28 +1229,6 @@ paths:
                     example: 'Doctor no encontrado'
       tags:
         - 'Doctores [AUTENTICADO]'
-  /api/user:
-    get:
-      summary: ''
-      operationId: getApiUser
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-      security: []
   /api/logout:
     post:
       summary: ''
@@ -1258,28 +1236,6 @@ paths:
       description: ''
       parameters: []
       responses: {  }
-      tags:
-        - Endpoints
-      security: []
-  /api/perfil:
-    get:
-      summary: ''
-      operationId: getApiPerfil
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
       tags:
         - Endpoints
       security: []

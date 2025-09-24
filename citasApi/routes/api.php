@@ -11,14 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\authcontroller;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);
     Route::post('/registrar-doctor', [authController::class, 'registerDoctor']);
     Route::post('/registrar-administrador', [authController::class, 'registerAdministrador']);
 
@@ -58,15 +52,19 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/administradores/{id}', [AdministradoresController::class, 'show']);
     Route::put('/administradores/{id}', [AdministradoresController::class, 'update']);
     Route::delete('/administradores/{id}', [AdministradoresController::class, 'destroy']);
+
+    Route::get('/reportes/citas-por-especialidad', [ConsultaController::class, 'reporteCitasPorEspecialidad']);
+
+    // Horarios
+    Route::get('/horarios/compactados/{id_doctor}', [ConsultaController::class, 'horariosCompactados']);
 });
 
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [authController::class, 'logout']);
-    Route::get('/perfil', fn (Request $request) => $request->user());
 
     // CRUD para pacientes (solo puede acceder a su propia información)
-    Route::get('/mi-perfil', [PacientesController::class, 'showOwn']);       // Ver su información
+    Route::get('/mi-perfil', [PacientesController::class, 'showOwn']);        // Ver su información
     Route::put('/mi-perfil', [PacientesController::class, 'updateOwn']);     // Actualizar su información
     Route::delete('/mi-perfil', [PacientesController::class, 'destroyOwn']); // Eliminar su cuenta
 
@@ -77,16 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Paciente autenticado
     Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
 
-    // Doctor autenticado
-    Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);
 
-    // Admin
-    Route::middleware('admin')->group(function () {
-        Route::get('/reportes/citas-por-especialidad', [ConsultaController::class, 'reporteCitasPorEspecialidad']);
-    });
-
-    // Horarios
-    Route::get('/horarios/compactados/{id_doctor}', [ConsultaController::class, 'horariosCompactados']);
 });
 
 
@@ -100,7 +89,10 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/mis-horarios', [HorariosController::class, 'listOwn']);   // Listar mis horarios completos
     Route::post('/mis-horarios', [HorariosController::class, 'store']);    // Crear bloques para mí
     Route::put('/mis-horarios/{id}', [HorariosController::class, 'update']); // Editar un bloque mío
-    Route::delete('/mis-horarios/{id}', [HorariosController::class, 'destroy']); // Eliminar un bloque mío
+    Route::delete('/mis-horarios/{id}', [HorariosController::class, 'destroy']);
+
+    // Doctor autenticado
+    Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);// Eliminar un bloque mío
 });
 
 
@@ -108,3 +100,4 @@ Route::post('/login', [authController::class, 'login']);
 Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar doctores
 Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Listar
 Route::get('/especialidades/{id}', [EspecialidadesController::class, 'show']); // Ver detalle
+Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);

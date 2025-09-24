@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel - Documentaci\u00f3n de la API",
-        "_postman_id": "26ecb8ea-70d6-49f1-bba4-04a85b529dd3",
+        "_postman_id": "9d6ca543-e35e-4d59-81c3-26945f05e5c6",
         "description": "API de Citas M\u00e9dicas - Una API RESTful para la gesti\u00f3n de citas m\u00e9dicas, doctores, pacientes y horarios.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -398,6 +398,46 @@
             "description": "",
             "item": [
                 {
+                    "name": "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/horarios\/compactados\/:id_doctor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/horarios\/compactados\/:id_doctor",
+                            "variable": [
+                                {
+                                    "id": "id_doctor",
+                                    "key": "id_doctor",
+                                    "value": "2",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "[\n   { \"dia\": 1, \"rango\": \"08:00 - 12:00\" }\n]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "Doctores por especialidad\n\nLista todos los doctores que pertenecen a una especialidad espec\u00edfica.",
                     "request": {
                         "url": {
@@ -550,46 +590,6 @@
                             "header": [],
                             "code": 200,
                             "body": "[\n   { \"paciente\": \"Mar\u00eda G\u00f3mez\", \"fecha\": \"2025-09-05\" }\n]",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos.",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/horarios\/compactados\/:id_doctor",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/horarios\/compactados\/:id_doctor",
-                            "variable": [
-                                {
-                                    "id": "id_doctor",
-                                    "key": "id_doctor",
-                                    "value": "2",
-                                    "description": "ID del doctor."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "[\n   { \"dia\": 1, \"rango\": \"08:00 - 12:00\" }\n]",
                             "name": ""
                         }
                     ]
@@ -1003,54 +1003,6 @@
             "description": "",
             "item": [
                 {
-                    "name": "GET api\/user",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/user",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/user"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
                     "name": "POST api\/logout",
                     "request": {
                         "url": {
@@ -1077,54 +1029,6 @@
                         }
                     },
                     "response": []
-                },
-                {
-                    "name": "GET api\/perfil",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/perfil",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/perfil"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
-                            "name": ""
-                        }
-                    ]
                 },
                 {
                     "name": "POST api\/login",

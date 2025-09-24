@@ -1,19 +1,19 @@
-name: 'Doctores [ADMIN]'
+name: 'Especialidades [ADMIN]'
 description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: 'api/doctor/{id}'
+      - POST
+    uri: api/especialidades
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Especialidades [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Ver un doctor
+        Crear especialidad
 
-        Devuelve los datos de un doctor específico por su ID.
+        Permite al administrador registrar una nueva especialidad.
       description: ''
       authenticated: true
       deprecated: false
@@ -22,42 +22,54 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID del doctor.'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombre:
+        name: nombre
+        description: 'Nombre de la especialidad.'
         required: false
-        example: 1
-        type: integer
+        example: Cardiología
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      descripcion:
+        name: descripcion
+        description: 'Descripción de la especialidad.'
+        required: false
+        example: 'Tratamiento del corazón'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombre: Cardiología
+      descripcion: 'Tratamiento del corazón'
     fileParameters: []
     responses:
       -
-        status: 200
+        status: 201
         content: |-
           {
              "id": 1,
-             "nombres": "Pedro",
-             "apellidos": "López",
-             "especialidad": "Cardiología"
+             "nombre": "Cardiología",
+             "descripcion": "Especialidad del corazón"
           }
         headers: []
         description: ''
         custom: []
       -
-        status: 404
+        status: 422
         content: |-
           {
-             "message": "Doctor no encontrado"
+             "errors": {
+                "nombre": ["El campo nombre es obligatorio"]
+             }
           }
         headers: []
         description: ''
@@ -74,16 +86,16 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/doctor/{id}'
+    uri: 'api/especialidades/{id}'
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Especialidades [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Actualizar un doctor
+        Actualizar especialidad
 
-        Permite al administrador actualizar los datos de un doctor por ID.
+        Permite al administrador actualizar los datos de una especialidad.
       description: ''
       authenticated: true
       deprecated: false
@@ -95,7 +107,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID del doctor.'
+        description: 'ID de la especialidad.'
         required: false
         example: 1
         type: integer
@@ -108,51 +120,29 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      nombres:
-        name: nombres
-        description: 'Nombre del doctor.'
+      nombre:
+        name: nombre
+        description: 'Nombre de la especialidad.'
         required: false
-        example: Pedro
+        example: Cardiología
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      apellidos:
-        name: apellidos
-        description: 'Apellido del doctor.'
+      descripcion:
+        name: descripcion
+        description: 'Descripción de la especialidad.'
         required: false
-        example: López
+        example: 'Tratamiento del corazón'
         type: string
         enumValues: []
         exampleWasSpecified: true
-        nullable: false
-        custom: []
-      telefono:
-        name: telefono
-        description: 'Número telefónico.'
-        required: false
-        example: '3012345678'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      especialidad_id:
-        name: especialidad_id
-        description: 'The <code>id</code> of an existing record in the especialidades table.'
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      nombres: Pedro
-      apellidos: López
-      telefono: '3012345678'
-      especialidad_id: 17
+      nombre: Cardiología
+      descripcion: 'Tratamiento del corazón'
     fileParameters: []
     responses:
       -
@@ -160,8 +150,8 @@ endpoints:
         content: |-
           {
              "id": 1,
-             "nombres": "Pedro",
-             "apellidos": "López"
+             "nombre": "Cardiología",
+             "descripcion": "Especialidad actualizada"
           }
         headers: []
         description: ''
@@ -170,7 +160,7 @@ endpoints:
         status: 404
         content: |-
           {
-             "message": "Doctor no encontrado"
+             "message": "Especialidad no encontrada"
           }
         headers: []
         description: ''
@@ -187,16 +177,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/doctor/{id}'
+    uri: 'api/especialidades/{id}'
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Especialidades [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Eliminar un doctor
+        Eliminar especialidad
 
-        Permite al administrador eliminar un doctor por ID.
+        Permite al administrador eliminar una especialidad del sistema.
       description: ''
       authenticated: true
       deprecated: false
@@ -208,7 +198,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID del doctor.'
+        description: 'ID de la especialidad.'
         required: false
         example: 1
         type: integer
@@ -228,7 +218,7 @@ endpoints:
         status: 200
         content: |-
           {
-             "message": "Doctor eliminado con éxito"
+             "message": "Especialidad eliminada con éxito"
           }
         headers: []
         description: ''
@@ -237,60 +227,8 @@ endpoints:
         status: 404
         content: |-
           {
-             "message": "Doctor no encontrado"
+             "message": "Especialidad no encontrada"
           }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/doctores
-    metadata:
-      groupName: 'Doctores [ADMIN]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Listar doctores
-
-        Devuelve la lista completa de doctores registrados en el sistema.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          [
-            {
-               "id": 1,
-               "nombres": "Pedro",
-               "apellidos": "López",
-               "especialidad": "Cardiología"
-            }
-          ]
         headers: []
         description: ''
         custom: []

@@ -1,20 +1,20 @@
-name: Doctores
+name: Administradores
 description: ''
 endpoints:
   -
     httpMethods:
       - POST
-    uri: api/registrar-doctor
+    uri: api/registrar-administrador
     metadata:
-      groupName: Doctores
+      groupName: Administradores
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Registrar un nuevo doctor
+        Registrar un nuevo administrador
 
-        Este endpoint permite crear un doctor y su usuario asociado en el sistema. Se ejecuta dentro de
-        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de doctor (id_rol = 2).
+        Este endpoint permite crear un administrador y su usuario asociado en el sistema. Se ejecuta dentro de
+        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de administrador (id_rol = 3).
       description: ''
       authenticated: false
       deprecated: false
@@ -31,7 +31,7 @@ endpoints:
         name: email
         description: 'Correo electrónico único del usuario.'
         required: true
-        example: doctor@example.com
+        example: admin@example.com
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -49,9 +49,9 @@ endpoints:
         custom: []
       nombres:
         name: nombres
-        description: 'Nombres completos del doctor.'
+        description: 'Nombres completos del administrador.'
         required: true
-        example: Andrés
+        example: María
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -59,9 +59,9 @@ endpoints:
         custom: []
       apellidos:
         name: apellidos
-        description: 'Apellidos completos del doctor.'
+        description: 'Apellidos completos del administrador.'
         required: true
-        example: 'García López'
+        example: 'Rodríguez López'
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -69,75 +69,51 @@ endpoints:
         custom: []
       cedula:
         name: cedula
-        description: 'Cédula única del doctor.'
+        description: 'Cédula única del administrador.'
         required: true
-        example: '1122334455'
+        example: '987654321'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      id_especialidades:
-        name: id_especialidades
-        description: 'ID de la especialidad a la que pertenece el doctor.'
+      telefono:
+        name: telefono
+        description: 'Teléfono de contacto del administrador.'
         required: true
-        example: 1
-        type: integer
+        example: '3109876543'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
-        custom: []
-      horario:
-        name: horario
-        description: 'Horario de atención del doctor.'
-        required: false
-        example: 'Lunes a Viernes 8:00 AM - 4:00 PM'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      lugar_trabajo:
-        name: lugar_trabajo
-        description: 'Lugar donde atiende el doctor.'
-        required: false
-        example: 'Hospital Central'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
         custom: []
     cleanBodyParameters:
-      email: doctor@example.com
+      email: admin@example.com
       password: secret123
-      nombres: Andrés
-      apellidos: 'García López'
-      cedula: '1122334455'
-      id_especialidades: 1
-      horario: 'Lunes a Viernes 8:00 AM - 4:00 PM'
-      lugar_trabajo: 'Hospital Central'
+      nombres: María
+      apellidos: 'Rodríguez López'
+      cedula: '987654321'
+      telefono: '3109876543'
     fileParameters: []
     responses:
       -
         status: 201
         content: |-
           {
-            "message": "Doctor registrado correctamente",
+            "message": "Administrador registrado correctamente",
             "user": {
-                "id": 15,
-                "email": "doctor@example.com",
-                "id_rol": 2,
+                "id": 12,
+                "email": "admin@example.com",
+                "id_rol": 3,
                 "created_at": "2025-09-05T10:00:00.000000Z"
             },
-            "doctor": {
-                "id": 7,
-                "user_id": 15,
-                "nombres": "Andrés",
-                "apellidos": "García López",
-                "cedula": "1122334455",
-                "id_especialidades": 1,
-                "horario": "Lunes a Viernes 8:00 AM - 4:00 PM",
-                "lugar_trabajo": "Hospital Central"
+            "administrador": {
+                "id": 3,
+                "user_id": 12,
+                "nombres": "María",
+                "apellidos": "Rodríguez López",
+                "cedula": "987654321",
+                "telefono": "3109876543"
             }
           }
         headers: []
@@ -159,7 +135,7 @@ endpoints:
         status: 500
         content: |-
           {
-            "message": "Error al registrar doctor",
+            "message": "Error al registrar administrador",
             "error": "Detalle del error interno"
           }
         headers: []
