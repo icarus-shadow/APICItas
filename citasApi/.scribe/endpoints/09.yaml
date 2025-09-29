@@ -1,19 +1,19 @@
-name: 'Administradores [ADMIN]'
+name: 'Citas [ADMIN]'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/administradores
+    uri: api/citas
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: 'Citas [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Listar administradores
+        Listar todas las citas
 
-        Devuelve una lista de todos los administradores registrados.
+        Devuelve todas las citas registradas en el sistema.
       description: ''
       authenticated: true
       deprecated: false
@@ -36,11 +36,10 @@ endpoints:
           [
             {
                "id": 1,
-               "nombres": "Carlos",
-               "apellidos": "Pérez",
-               "cedula": "12345678",
-               "telefono": "3001234567",
-               "user_id": 5
+               "id_paciente": 3,
+               "id_doctor": 2,
+               "id_horario": 5,
+               "motivo": "Consulta general"
             }
           ]
         headers: []
@@ -58,16 +57,16 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/administradores/{id}'
+    uri: 'api/citas/{id}'
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: 'Citas [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Ver administrador
+        Ver una cita
 
-        Devuelve los datos de un administrador específico.
+        Devuelve los detalles de una cita específica.
       description: ''
       authenticated: true
       deprecated: false
@@ -79,7 +78,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID del administrador.'
+        description: 'ID de la cita.'
         required: false
         example: 1
         type: integer
@@ -99,119 +98,7 @@ endpoints:
         status: 200
         content: |-
           {
-             "id": 1,
-             "nombres": "Carlos",
-             "apellidos": "Pérez",
-             "cedula": "12345678",
-             "telefono": "3001234567",
-             "user_id": 5
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/administradores/{id}'
-    metadata:
-      groupName: 'Administradores [ADMIN]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Actualizar administrador
 
-        Permite modificar los datos de un administrador.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID del administrador.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      nombres:
-        name: nombres
-        description: 'Nombres del administrador.'
-        required: false
-        example: Carlos
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      apellidos:
-        name: apellidos
-        description: 'Apellidos del administrador.'
-        required: false
-        example: Pérez
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      cedula:
-        name: cedula
-        description: 'Cédula del administrador.'
-        required: false
-        example: '12345678'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      telefono:
-        name: telefono
-        description: 'Teléfono del administrador.'
-        required: false
-        example: '3001234567'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      nombres: Carlos
-      apellidos: Pérez
-      cedula: '12345678'
-      telefono: '3001234567'
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-             "id": 1,
-             "nombres": "Carlos",
-             "apellidos": "Pérez",
-             "cedula": "12345678",
-             "telefono": "3001234567",
-             "user_id": 5
           }
         headers: []
         description: ''
@@ -228,16 +115,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/administradores/{id}'
+    uri: 'api/citas/{id}'
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: 'Citas [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Eliminar administrador
+        Eliminar una cita
 
-        Permite eliminar un administrador del sistema.
+        Permite al administrador eliminar una cita y liberar el horario.
       description: ''
       authenticated: true
       deprecated: false
@@ -249,7 +136,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID del administrador.'
+        description: 'ID de la cita.'
         required: false
         example: 1
         type: integer
@@ -269,7 +156,168 @@ endpoints:
         status: 200
         content: |-
           {
-             "message": "Administrador eliminado con éxito"
+             "message": "Cita eliminada con éxito"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/citas/{id}'
+    metadata:
+      groupName: 'Citas [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Editar cualquier cita
+
+        Permite al administrador modificar el motivo de una cita.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la cita.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id_doctor:
+        name: id_doctor
+        description: 'The <code>id</code> of an existing record in the doctores table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      fecha_cita:
+        name: fecha_cita
+        description: 'Must be a valid date. Must be a date after <code>today</code>.'
+        required: true
+        example: '2106-10-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      hora_cita:
+        name: hora_cita
+        description: 'Must be a valid date in the format <code>H:i</code>.'
+        required: true
+        example: '05:39'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      lugar:
+        name: lugar
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      motivo:
+        name: motivo
+        description: 'Nuevo motivo.'
+        required: false
+        example: 'Revisión general'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      id_doctor: consequatur
+      fecha_cita: '2106-10-28'
+      hora_cita: '05:39'
+      lugar: mqeopfuudtdsufvyvddqa
+      motivo: 'Revisión general'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "motivo": "Revisión general"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/countCitas
+    metadata:
+      groupName: 'Citas [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Contar citas
+
+        Devuelve el número total de citas registradas en el sistema.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "total": 150
           }
         headers: []
         description: ''

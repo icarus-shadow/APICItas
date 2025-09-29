@@ -84,7 +84,17 @@ una transacción para garantizar la integridad de los datos. El usuario se crea 
                     <a href="#administradores-admin">Administradores [ADMIN]</a>
                 </li>
                                     <ul id="tocify-subheader-administradores-admin" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="administradores-admin-GETapi-administradores">
+                                                    <li class="tocify-item level-2" data-unique="administradores-admin-GETapi-mi-perfil-admin">
+                                <a href="#administradores-admin-GETapi-mi-perfil-admin">Ver mi perfil
+
+Devuelve los datos del administrador autenticado.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="administradores-admin-PUTapi-mi-perfil-admin">
+                                <a href="#administradores-admin-PUTapi-mi-perfil-admin">Actualizar mi perfil
+
+Permite al administrador autenticado modificar sus propios datos.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="administradores-admin-GETapi-administradores">
                                 <a href="#administradores-admin-GETapi-administradores">Listar administradores
 
 Devuelve una lista de todos los administradores registrados.</a>
@@ -103,6 +113,24 @@ Permite modificar los datos de un administrador.</a>
                                 <a href="#administradores-admin-DELETEapi-administradores--id-">Eliminar administrador
 
 Permite eliminar un administrador del sistema.</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-authentication" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="authentication">
+                    <a href="#authentication">Authentication</a>
+                </li>
+                                    <ul id="tocify-subheader-authentication" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="authentication-POSTapi-change-password">
+                                <a href="#authentication-POSTapi-change-password">Cambiar contraseña del usuario
+
+Este endpoint permite que un usuario autenticado cambie su propia contraseña.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="authentication-DELETEapi-delete-account">
+                                <a href="#authentication-DELETEapi-delete-account">Eliminar cuenta de usuario
+
+Este endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.
+Se ejecuta dentro de una transacción para garantizar la integridad de los datos.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -130,6 +158,23 @@ Permite al administrador eliminar una cita y liberar el horario.</a>
                                 <a href="#citas-admin-PUTapi-citas--id-">Editar cualquier cita
 
 Permite al administrador modificar el motivo de una cita.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="citas-admin-GETapi-countCitas">
+                                <a href="#citas-admin-GETapi-countCitas">Contar citas
+
+Devuelve el número total de citas registradas en el sistema.</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-citas-paciente" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="citas-paciente">
+                    <a href="#citas-paciente">Citas [PACIENTE]</a>
+                </li>
+                                    <ul id="tocify-subheader-citas-paciente" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="citas-paciente-POSTapi-citas">
+                                <a href="#citas-paciente-POSTapi-citas">Crear cita
+
+Crea una cita en un horario disponible para el doctor seleccionado.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -205,11 +250,6 @@ Devuelve los datos de un doctor específico por su ID.</a>
 
 Permite al administrador actualizar los datos de un doctor por ID.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="doctores-admin-DELETEapi-doctor--id-">
-                                <a href="#doctores-admin-DELETEapi-doctor--id-">Eliminar un doctor
-
-Permite al administrador eliminar un doctor por ID.</a>
-                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="doctores-admin-GETapi-doctores">
                                 <a href="#doctores-admin-GETapi-doctores">Listar doctores
 
@@ -232,11 +272,6 @@ Devuelve los datos del doctor autenticado.</a>
 
 Permite al doctor autenticado actualizar sus propios datos.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="doctores-autenticado-DELETEapi-mi-perfil-doctor">
-                                <a href="#doctores-autenticado-DELETEapi-mi-perfil-doctor">Eliminar mi cuenta (Doctor)
-
-Permite al doctor autenticado eliminar su cuenta del sistema.</a>
-                            </li>
                                                                         </ul>
                             </ul>
                     <ul id="tocify-header-endpoints" class="tocify-header">
@@ -244,7 +279,10 @@ Permite al doctor autenticado eliminar su cuenta del sistema.</a>
                     <a href="#endpoints">Endpoints</a>
                 </li>
                                     <ul id="tocify-subheader-endpoints" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-logout">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user">
+                                <a href="#endpoints-GETapi-user">GET api/user</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-logout">
                                 <a href="#endpoints-POSTapi-logout">POST api/logout</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-login">
@@ -417,11 +455,6 @@ Devuelve los datos del paciente autenticado.</a>
 
 Permite al paciente autenticado actualizar sus datos personales.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="pacientes-autenticado-DELETEapi-mi-perfil">
-                                <a href="#pacientes-autenticado-DELETEapi-mi-perfil">Eliminar mi cuenta
-
-Permite al paciente autenticado eliminar su cuenta del sistema junto con todos sus datos.</a>
-                            </li>
                                                                         </ul>
                             </ul>
             </div>
@@ -433,7 +466,7 @@ Permite al paciente autenticado eliminar su cuenta del sistema junto con todos s
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Última actualización: 23 de September de 2025</li>
+        <li>Última actualización: 29 de September de 2025</li>
     </ul>
 </div>
 
@@ -706,7 +739,343 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     
 
-                                <h2 id="administradores-admin-GETapi-administradores">Listar administradores
+                                <h2 id="administradores-admin-GETapi-mi-perfil-admin">Ver mi perfil
+
+Devuelve los datos del administrador autenticado.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-mi-perfil-admin">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/mi-perfil-admin" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/mi-perfil-admin"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-mi-perfil-admin">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;nombres&quot;: &quot;Carlos&quot;,
+    &quot;apellidos&quot;: &quot;P&eacute;rez&quot;,
+    &quot;cedula&quot;: &quot;12345678&quot;,
+    &quot;telefono&quot;: &quot;3001234567&quot;,
+    &quot;user_id&quot;: 5
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-mi-perfil-admin" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-mi-perfil-admin"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-mi-perfil-admin"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-mi-perfil-admin" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-mi-perfil-admin">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-mi-perfil-admin" data-method="GET"
+      data-path="api/mi-perfil-admin"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-mi-perfil-admin', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-mi-perfil-admin"
+                    onclick="tryItOut('GETapi-mi-perfil-admin');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-mi-perfil-admin"
+                    onclick="cancelTryOut('GETapi-mi-perfil-admin');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-mi-perfil-admin"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/mi-perfil-admin</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-mi-perfil-admin"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-mi-perfil-admin"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-mi-perfil-admin"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="administradores-admin-PUTapi-mi-perfil-admin">Actualizar mi perfil
+
+Permite al administrador autenticado modificar sus propios datos.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PUTapi-mi-perfil-admin">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://127.0.0.1:8000/api/mi-perfil-admin" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"nombres\": \"Carlos\",
+    \"apellidos\": \"Pérez\",
+    \"cedula\": \"12345678\",
+    \"telefono\": \"3001234567\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/mi-perfil-admin"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "nombres": "Carlos",
+    "apellidos": "Pérez",
+    "cedula": "12345678",
+    "telefono": "3001234567"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-mi-perfil-admin">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;nombres&quot;: &quot;Carlos&quot;,
+    &quot;apellidos&quot;: &quot;P&eacute;rez&quot;,
+    &quot;cedula&quot;: &quot;12345678&quot;,
+    &quot;telefono&quot;: &quot;3001234567&quot;,
+    &quot;user_id&quot;: 5
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-mi-perfil-admin" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-mi-perfil-admin"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-mi-perfil-admin"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-mi-perfil-admin" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-mi-perfil-admin">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-mi-perfil-admin" data-method="PUT"
+      data-path="api/mi-perfil-admin"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-mi-perfil-admin', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-mi-perfil-admin"
+                    onclick="tryItOut('PUTapi-mi-perfil-admin');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-mi-perfil-admin"
+                    onclick="cancelTryOut('PUTapi-mi-perfil-admin');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-mi-perfil-admin"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/mi-perfil-admin</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-mi-perfil-admin"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-mi-perfil-admin"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-mi-perfil-admin"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>nombres</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="nombres"                data-endpoint="PUTapi-mi-perfil-admin"
+               value="Carlos"
+               data-component="body">
+    <br>
+<p>Nombres del administrador. Example: <code>Carlos</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>apellidos</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="apellidos"                data-endpoint="PUTapi-mi-perfil-admin"
+               value="Pérez"
+               data-component="body">
+    <br>
+<p>Apellidos del administrador. Example: <code>Pérez</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>cedula</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="cedula"                data-endpoint="PUTapi-mi-perfil-admin"
+               value="12345678"
+               data-component="body">
+    <br>
+<p>Cédula del administrador. Example: <code>12345678</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>telefono</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="telefono"                data-endpoint="PUTapi-mi-perfil-admin"
+               value="3001234567"
+               data-component="body">
+    <br>
+<p>Teléfono del administrador. Example: <code>3001234567</code></p>
+        </div>
+        </form>
+
+                    <h2 id="administradores-admin-GETapi-administradores">Listar administradores
 
 Devuelve una lista de todos los administradores registrados.</h2>
 
@@ -1351,6 +1720,359 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                <h1 id="authentication">Authentication</h1>
+
+    
+
+                                <h2 id="authentication-POSTapi-change-password">Cambiar contraseña del usuario
+
+Este endpoint permite que un usuario autenticado cambie su propia contraseña.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-change-password">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://127.0.0.1:8000/api/change-password" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"current_password\": \"oldpassword123\",
+    \"new_password\": \"newpassword123\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/change-password"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "current_password": "oldpassword123",
+    "new_password": "newpassword123"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-change-password">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;Message&quot;: &quot;Contrase&ntilde;a actualizada correctamente&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;La contrase&ntilde;a actual es incorrecta&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-change-password" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-change-password"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-change-password"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-change-password" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-change-password">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-change-password" data-method="POST"
+      data-path="api/change-password"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-change-password', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-change-password"
+                    onclick="tryItOut('POSTapi-change-password');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-change-password"
+                    onclick="cancelTryOut('POSTapi-change-password');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-change-password"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/change-password</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-change-password"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-change-password"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-change-password"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>current_password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="current_password"                data-endpoint="POSTapi-change-password"
+               value="oldpassword123"
+               data-component="body">
+    <br>
+<p>Contraseña actual del usuario. Example: <code>oldpassword123</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>new_password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="new_password"                data-endpoint="POSTapi-change-password"
+               value="newpassword123"
+               data-component="body">
+    <br>
+<p>Nueva contraseña del usuario, mínimo 6 caracteres. Example: <code>newpassword123</code></p>
+        </div>
+        </form>
+
+                    <h2 id="authentication-DELETEapi-delete-account">Eliminar cuenta de usuario
+
+Este endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.
+Se ejecuta dentro de una transacción para garantizar la integridad de los datos.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-delete-account">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://127.0.0.1:8000/api/delete-account" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"password\": \"mypassword123\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/delete-account"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "password": "mypassword123"
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-delete-account">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Cuenta eliminada correctamente&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Usuario no autenticado&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;La contrase&ntilde;a es incorrecta&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-delete-account" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-delete-account"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-delete-account"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-delete-account" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-delete-account">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-delete-account" data-method="DELETE"
+      data-path="api/delete-account"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-delete-account', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-delete-account"
+                    onclick="tryItOut('DELETEapi-delete-account');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-delete-account"
+                    onclick="cancelTryOut('DELETEapi-delete-account');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-delete-account"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/delete-account</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-delete-account"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-delete-account"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-delete-account"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="DELETEapi-delete-account"
+               value="mypassword123"
+               data-component="body">
+    <br>
+<p>Contraseña actual del usuario para confirmar la eliminación. Example: <code>mypassword123</code></p>
+        </div>
+        </form>
+
                 <h1 id="citas-admin">Citas [ADMIN]</h1>
 
     
@@ -1540,13 +2262,7 @@ fetch(url, {
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;id_paciente&quot;: 3,
-    &quot;id_doctor&quot;: 2,
-    &quot;id_horario&quot;: 5,
-    &quot;motivo&quot;: &quot;Consulta general&quot;
-}</code>
+<code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-citas--id-" hidden>
@@ -1809,6 +2525,10 @@ Permite al administrador modificar el motivo de una cita.</h2>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
+    \"id_doctor\": \"consequatur\",
+    \"fecha_cita\": \"2106-10-28\",
+    \"hora_cita\": \"05:39\",
+    \"lugar\": \"mqeopfuudtdsufvyvddqa\",
     \"motivo\": \"Revisión general\"
 }"
 </code></pre></div>
@@ -1826,6 +2546,10 @@ const headers = {
 };
 
 let body = {
+    "id_doctor": "consequatur",
+    "fecha_cita": "2106-10-28",
+    "hora_cita": "05:39",
+    "lugar": "mqeopfuudtdsufvyvddqa",
     "motivo": "Revisión general"
 };
 
@@ -1943,6 +2667,50 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id_doctor</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="id_doctor"                data-endpoint="PUTapi-citas--id-"
+               value="consequatur"
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the doctores table. Example: <code>consequatur</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>fecha_cita</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="fecha_cita"                data-endpoint="PUTapi-citas--id-"
+               value="2106-10-28"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Must be a date after <code>today</code>. Example: <code>2106-10-28</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>hora_cita</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="hora_cita"                data-endpoint="PUTapi-citas--id-"
+               value="05:39"
+               data-component="body">
+    <br>
+<p>Must be a valid date in the format <code>H:i</code>. Example: <code>05:39</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>lugar</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="lugar"                data-endpoint="PUTapi-citas--id-"
+               value="mqeopfuudtdsufvyvddqa"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>mqeopfuudtdsufvyvddqa</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>motivo</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -1952,6 +2720,355 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="body">
     <br>
 <p>Nuevo motivo. Example: <code>Revisión general</code></p>
+        </div>
+        </form>
+
+                    <h2 id="citas-admin-GETapi-countCitas">Contar citas
+
+Devuelve el número total de citas registradas en el sistema.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-countCitas">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/countCitas" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/countCitas"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-countCitas">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;total&quot;: 150
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-countCitas" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-countCitas"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-countCitas"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-countCitas" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-countCitas">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-countCitas" data-method="GET"
+      data-path="api/countCitas"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-countCitas', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-countCitas"
+                    onclick="tryItOut('GETapi-countCitas');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-countCitas"
+                    onclick="cancelTryOut('GETapi-countCitas');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-countCitas"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/countCitas</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-countCitas"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-countCitas"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-countCitas"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                <h1 id="citas-paciente">Citas [PACIENTE]</h1>
+
+    
+
+                                <h2 id="citas-paciente-POSTapi-citas">Crear cita
+
+Crea una cita en un horario disponible para el doctor seleccionado.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-citas">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://127.0.0.1:8000/api/citas" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"id_doctor\": 2,
+    \"fecha_cita\": \"2025-10-01\",
+    \"hora_cita\": \"14:30\",
+    \"lugar\": \"Consultorio 101\",
+    \"motivo\": \"Dolor de cabeza\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/citas"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "id_doctor": 2,
+    "fecha_cita": "2025-10-01",
+    "hora_cita": "14:30",
+    "lugar": "Consultorio 101",
+    "motivo": "Dolor de cabeza"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-citas">
+            <blockquote>
+            <p>Example response (201):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 10,
+    &quot;id_paciente&quot;: 3,
+    &quot;id_doctor&quot;: 2,
+    &quot;fecha_cita&quot;: &quot;2025-10-01&quot;,
+    &quot;hora_cita&quot;: &quot;14:30&quot;,
+    &quot;lugar&quot;: &quot;Consultorio 101&quot;,
+    &quot;motivo&quot;: &quot;Dolor de cabeza&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-citas" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-citas"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-citas"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-citas" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-citas">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-citas" data-method="POST"
+      data-path="api/citas"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-citas', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-citas"
+                    onclick="tryItOut('POSTapi-citas');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-citas"
+                    onclick="cancelTryOut('POSTapi-citas');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-citas"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/citas</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-citas"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-citas"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-citas"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id_doctor</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id_doctor"                data-endpoint="POSTapi-citas"
+               value="2"
+               data-component="body">
+    <br>
+<p>ID del doctor. Example: <code>2</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>fecha_cita</code></b>&nbsp;&nbsp;
+<small>date</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="fecha_cita"                data-endpoint="POSTapi-citas"
+               value="2025-10-01"
+               data-component="body">
+    <br>
+<p>Fecha de la cita (YYYY-MM-DD). Example: <code>2025-10-01</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>hora_cita</code></b>&nbsp;&nbsp;
+<small>time</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="hora_cita"                data-endpoint="POSTapi-citas"
+               value="14:30"
+               data-component="body">
+    <br>
+<p>Hora de la cita (HH:MM). Example: <code>14:30</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>lugar</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="lugar"                data-endpoint="POSTapi-citas"
+               value="Consultorio 101"
+               data-component="body">
+    <br>
+<p>Lugar de la cita. Example: <code>Consultorio 101</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>motivo</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="motivo"                data-endpoint="POSTapi-citas"
+               value="Dolor de cabeza"
+               data-component="body">
+    <br>
+<p>Motivo de la cita. Example: <code>Dolor de cabeza</code></p>
         </div>
         </form>
 
@@ -3503,160 +4620,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="doctores-admin-DELETEapi-doctor--id-">Eliminar un doctor
-
-Permite al administrador eliminar un doctor por ID.</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-DELETEapi-doctor--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request DELETE \
-    "http://127.0.0.1:8000/api/doctor/1" \
-    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/doctor/1"
-);
-
-const headers = {
-    "Authorization": "Bearer {YOUR_AUTH_KEY}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-DELETEapi-doctor--id-">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Doctor eliminado con &eacute;xito&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (404):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Doctor no encontrado&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-DELETEapi-doctor--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-doctor--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-doctor--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-DELETEapi-doctor--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-doctor--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-DELETEapi-doctor--id-" data-method="DELETE"
-      data-path="api/doctor/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-doctor--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-doctor--id-"
-                    onclick="tryItOut('DELETEapi-doctor--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-doctor--id-"
-                    onclick="cancelTryOut('DELETEapi-doctor--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-doctor--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-red">DELETE</small>
-            <b><code>api/doctor/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-doctor--id-"
-               value="Bearer {YOUR_AUTH_KEY}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-doctor--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-doctor--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="DELETEapi-doctor--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>ID del doctor. Example: <code>1</code></p>
-            </div>
-                    </form>
-
                     <h2 id="doctores-admin-GETapi-doctores">Listar doctores
 
 Devuelve la lista completa de doctores registrados en el sistema.</h2>
@@ -4147,130 +5110,116 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="doctores-autenticado-DELETEapi-mi-perfil-doctor">Eliminar mi cuenta (Doctor)
+                <h1 id="endpoints">Endpoints</h1>
 
-Permite al doctor autenticado eliminar su cuenta del sistema.</h2>
+    
+
+                                <h2 id="endpoints-GETapi-user">GET api/user</h2>
 
 <p>
-<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
 
-<span id="example-requests-DELETEapi-mi-perfil-doctor">
+<span id="example-requests-GETapi-user">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
-    <pre><code class="language-bash">curl --request DELETE \
-    "http://127.0.0.1:8000/api/mi-perfil-doctor" \
-    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/user" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/mi-perfil-doctor"
+    "http://127.0.0.1:8000/api/user"
 );
 
 const headers = {
-    "Authorization": "Bearer {YOUR_AUTH_KEY}",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
 
 fetch(url, {
-    method: "DELETE",
+    method: "GET",
     headers,
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
 
-<span id="example-responses-DELETEapi-mi-perfil-doctor">
+<span id="example-responses-GETapi-user">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (401):</p>
         </blockquote>
-                <pre>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Doctor eliminado con &eacute;xito&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (404):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Doctor no encontrado&quot;
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
     </span>
-<span id="execution-results-DELETEapi-mi-perfil-doctor" hidden>
+<span id="execution-results-GETapi-user" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-mi-perfil-doctor"></span>:
+                id="execution-response-status-GETapi-user"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-mi-perfil-doctor"
+    <pre class="json"><code id="execution-response-content-GETapi-user"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-mi-perfil-doctor" hidden>
+<span id="execution-error-GETapi-user" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-mi-perfil-doctor">
+    <pre><code id="execution-error-message-GETapi-user">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-mi-perfil-doctor" data-method="DELETE"
-      data-path="api/mi-perfil-doctor"
-      data-authed="1"
+<form id="form-GETapi-user" data-method="GET"
+      data-path="api/user"
+      data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-mi-perfil-doctor', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-user', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-mi-perfil-doctor"
-                    onclick="tryItOut('DELETEapi-mi-perfil-doctor');">Try it out ⚡
+                    id="btn-tryout-GETapi-user"
+                    onclick="tryItOut('GETapi-user');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-mi-perfil-doctor"
-                    onclick="cancelTryOut('DELETEapi-mi-perfil-doctor');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-user"
+                    onclick="cancelTryOut('GETapi-user');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-mi-perfil-doctor"
+                    id="btn-executetryout-GETapi-user"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
             </button>
             </h3>
             <p>
-            <small class="badge badge-red">DELETE</small>
-            <b><code>api/mi-perfil-doctor</code></b>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/user</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-mi-perfil-doctor"
-               value="Bearer {YOUR_AUTH_KEY}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
-            </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-mi-perfil-doctor"
+                              name="Content-Type"                data-endpoint="GETapi-user"
                value="application/json"
                data-component="header">
     <br>
@@ -4281,7 +5230,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-mi-perfil-doctor"
+                              name="Accept"                data-endpoint="GETapi-user"
                value="application/json"
                data-component="header">
     <br>
@@ -4289,11 +5238,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                <h1 id="endpoints">Endpoints</h1>
-
-    
-
-                                <h2 id="endpoints-POSTapi-logout">POST api/logout</h2>
+                    <h2 id="endpoints-POSTapi-logout">POST api/logout</h2>
 
 <p>
 </p>
@@ -8498,148 +9443,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Comentarios adicionales. Example: <code>Paciente estable</code></p>
         </div>
         </form>
-
-                    <h2 id="pacientes-autenticado-DELETEapi-mi-perfil">Eliminar mi cuenta
-
-Permite al paciente autenticado eliminar su cuenta del sistema junto con todos sus datos.</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-DELETEapi-mi-perfil">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request DELETE \
-    "http://127.0.0.1:8000/api/mi-perfil" \
-    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/mi-perfil"
-);
-
-const headers = {
-    "Authorization": "Bearer {YOUR_AUTH_KEY}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-DELETEapi-mi-perfil">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Paciente eliminado con &eacute;xito&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (404):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Paciente no encontrado&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-DELETEapi-mi-perfil" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-mi-perfil"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-mi-perfil"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-DELETEapi-mi-perfil" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-mi-perfil">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-DELETEapi-mi-perfil" data-method="DELETE"
-      data-path="api/mi-perfil"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-mi-perfil', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-mi-perfil"
-                    onclick="tryItOut('DELETEapi-mi-perfil');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-mi-perfil"
-                    onclick="cancelTryOut('DELETEapi-mi-perfil');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-mi-perfil"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-red">DELETE</small>
-            <b><code>api/mi-perfil</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-mi-perfil"
-               value="Bearer {YOUR_AUTH_KEY}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-mi-perfil"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-mi-perfil"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
 
             
 

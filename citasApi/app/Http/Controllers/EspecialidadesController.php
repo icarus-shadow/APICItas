@@ -168,4 +168,23 @@ class EspecialidadesController extends Controller
         $especialidad->delete();
         return response()->json(['message' => 'Especialidad eliminada con éxito']);
     }
+
+    /**
+     * @group Especialidades [PUBLICO AUTENTICADO]
+     *
+     * Contar especialidades
+     *
+     * Devuelve el número total de especialidades registradas en el sistema.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "total": 10
+     * }
+     */
+    public function count()
+    {
+        $total = Especialidades::count();
+        return response()->json(['total' => $total]);
+    }
 }

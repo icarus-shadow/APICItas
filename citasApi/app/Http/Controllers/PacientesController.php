@@ -36,6 +36,26 @@ class PacientesController extends Controller
     /**
      * @group Pacientes [ADMIN]
      *
+     * Contar total de pacientes
+     *
+     * Devuelve el número total de pacientes registrados en el sistema.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "total": 10
+     * }
+     */
+    public function count()
+    {
+        $total = Pacientes::count();
+        return response()->json(['total' => $total]);
+    }
+
+
+    /**
+     * @group Pacientes [ADMIN]
+     *
      * Ver un paciente específico
      *
      * Obtiene los datos completos de un paciente a partir de su ID.
@@ -238,31 +258,5 @@ class PacientesController extends Controller
         $paciente->update($validator->validated());
 
         return response()->json($paciente);
-    }
-
-    /**
-     * @group Pacientes [AUTENTICADO]
-     *
-     * Eliminar mi cuenta
-     *
-     * Permite al paciente autenticado eliminar su cuenta del sistema junto con todos sus datos.
-     *
-     * @authenticated
-     *
-     * @response 200 {
-     *    "message": "Paciente eliminado con éxito"
-     * }
-     * @response 404 {
-     *    "message": "Paciente no encontrado"
-     * }
-     */
-    public function destroyOwn()
-    {
-        $paciente = Pacientes::where('user_id', auth()->id())->first();
-        if (!$paciente) {
-            return response()->json(['message' => 'Paciente no encontrado'], 404);
-        }
-        $paciente->delete();
-        return response()->json(['message' => 'Paciente eliminado con éxito']);
     }
 }

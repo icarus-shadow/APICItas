@@ -11,8 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\authcontroller;
 
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::get('/mi-perfil-admin', [AdministradoresController::class, 'showOwn']);
+    Route::put('/mi-perfil-admin', [AdministradoresController::class, 'updateOwn']);
+
     Route::post('/registrar-doctor', [authController::class, 'registerDoctor']);
     Route::post('/registrar-administrador', [authController::class, 'registerAdministrador']);
 
@@ -21,18 +27,19 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/pacientes/{id}', [PacientesController::class, 'show']);      // Ver un paciente específico
     Route::put('/pacientes/{id}', [PacientesController::class, 'update']);    // Actualizar un paciente
     Route::delete('/pacientes/{id}', [PacientesController::class, 'destroy']); // Eliminar un paciente
-
+    Route::get('/countPacientes', [PacientesController::class, 'count']);
 
     // crud de doctores
     Route::get('/doctor/{id}', [DoctoresController::class, 'show']);     // Ver un doctor específico
     Route::put('/doctor/{id}', [DoctoresController::class, 'update']);   // Actualizar doctor
-    Route::delete('/doctor/{id}', [DoctoresController::class, 'destroy']); // Eliminar doctor
-
+    Route::delete('/doctor/{id}', [DoctoresController::class, 'destroy']);
+    Route::get('/countDoctores', [DoctoresController::class, 'count']);
 
     // crud de especialidades para admin
     Route::post('/especialidades', [EspecialidadesController::class, 'store']);    // Crear
     Route::put('/especialidades/{id}', [EspecialidadesController::class, 'update']); // Actualizar
     Route::delete('/especialidades/{id}', [EspecialidadesController::class, 'destroy']); // Eliminar
+    Route::get('/countEspecialidades', [EspecialidadesController::class, 'count']);
 
     // endpoints para la administracion de horarios
     Route::get('/horarios', [HorariosController::class, 'indexCompact']); // Listar todos compactos
@@ -46,12 +53,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/citas', [CitasController::class, 'index']); // Ver todas
     Route::get('/citas/{id}', [CitasController::class, 'show']); // Ver una cita
     Route::delete('/citas/{id}', [CitasController::class, 'destroy']); // Eliminar cualquier cita
-    Route::put('/citas/{id}', [CitasController::class, 'update']); // Editar cualquier cita
+    Route::put('/citas/{id}', [CitasController::class, 'update']);// Editar cualquier cita
+    Route::get('/countCitas', [CitasController::class, 'countCitas']);
 
     Route::get('/administradores', [AdministradoresController::class, 'index']);
     Route::get('/administradores/{id}', [AdministradoresController::class, 'show']);
     Route::put('/administradores/{id}', [AdministradoresController::class, 'update']);
     Route::delete('/administradores/{id}', [AdministradoresController::class, 'destroy']);
+    Route::get('/countAdministradores', [AdministradoresController::class, 'count']);
 
     Route::get('/reportes/citas-por-especialidad', [ConsultaController::class, 'reporteCitasPorEspecialidad']);
 
@@ -59,14 +68,15 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/horarios/compactados/{id_doctor}', [ConsultaController::class, 'horariosCompactados']);
 });
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [authController::class, 'logout']);
+    Route::post('/change-password', [authController::class, 'changePassword']);
+    Route::delete('/delete-account', [authController::class, 'deleteAccount']);
+
 
     // CRUD para pacientes (solo puede acceder a su propia información)
     Route::get('/mi-perfil', [PacientesController::class, 'showOwn']);        // Ver su información
     Route::put('/mi-perfil', [PacientesController::class, 'updateOwn']);     // Actualizar su información
-    Route::delete('/mi-perfil', [PacientesController::class, 'destroyOwn']); // Eliminar su cuenta
 
     // Pacientes y Doctores
     Route::get('/doctores/especialidad/{id}', [ConsultaController::class, 'doctoresPorEspecialidad']);
@@ -74,11 +84,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Paciente autenticado
     Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
+    Route::post('/citas', [CitasController::class, 'store']);
 
 
 });
-
-
 
 Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/mi-perfil-doctor', [DoctoresController::class, 'showOwn']);       // Ver su perfil
@@ -94,7 +103,6 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     // Doctor autenticado
     Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);// Eliminar un bloque mío
 });
-
 
 Route::post('/login', [authController::class, 'login']);
 Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar doctores

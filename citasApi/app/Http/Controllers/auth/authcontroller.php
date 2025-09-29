@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 
 class authcontroller extends Controller
@@ -72,7 +73,7 @@ class authcontroller extends Controller
      *   "message": "Error al registrar paciente",
      *   "error": "Detalle del error interno"
      * }
-     * @throws \Throwable
+     * @throws Throwable
      */
 
     public function registerPaciente(Request $request)
@@ -98,7 +99,7 @@ class authcontroller extends Controller
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'id_rol' => 3
+                'id_rol' => 1
             ]);
 
             $paciente = Pacientes::create([
@@ -177,7 +178,7 @@ class authcontroller extends Controller
      *   "message": "Error al registrar administrador",
      *   "error": "Detalle del error interno"
      * }
-     * @throws \Throwable
+     * @throws Throwable
      */
 
     public function registerAdministrador(Request $request)
@@ -273,7 +274,7 @@ class authcontroller extends Controller
      *   "message": "Error al registrar doctor",
      *   "error": "Detalle del error interno"
      * }
-     * @throws \Throwable
+     * @throws Throwable
      */
 
 
@@ -357,5 +358,131 @@ class authcontroller extends Controller
         $request->user()->tokens()->delete();
 
         return response()->json(['message' => 'Sesión cerrada correctamente']);
+    }
+
+    /**
+     * @group Authentication
+     *
+     * Cambiar contraseña del usuario
+     *
+     * Este endpoint permite que un usuario autenticado cambie su propia contraseña.
+     *
+     * @bodyParam current_password string required Contraseña actual del usuario. Example: oldpassword123
+     * @bodyParam new_password string required Nueva contraseña del usuario, mínimo 6 caracteres. Example: newpassword123
+     *
+     * @response 200 {
+     *   "Message": "Contraseña actualizada correctamente"
+     * }
+     *
+     * @response 422 {
+     *   "message": "La contraseña actual es incorrecta"
+     * }
+     *
+     * @authenticated
+     */
+
+
+    public function changePassword(Request $request)
+    {
+        if (!$request->user()) {
+            return response()->json([
+                'message' => 'Usuario no autenticado'
+            ], 401);
+        }
+
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6'
+        ]);
+
+        $user = $request->user();
+
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'message' => 'La contraseña actual es incorrecta'
+            ], 409);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+
+        return response()->json([
+            'message' => 'Contraseña actualizada correctamente'
+        ]);
+    }
+
+    /**
+     * @group Authentication
+     *
+     * Eliminar cuenta de usuario
+     *
+     * Este endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.
+     * Se ejecuta dentro de una transacción para garantizar la integridad de los datos.
+     *
+     * @bodyParam password string required Contraseña actual del usuario para confirmar la eliminación. Example: mypassword123
+     *
+     * @response 200 {
+     *   "message": "Cuenta eliminada correctamente"
+     * }
+     *
+     * @response 401 {
+     *   "message": "Usuario no autenticado"
+     * }
+     *
+     * @response 422 {
+     *   "message": "La contraseña es incorrecta"
+     * }
+     *
+     * @authenticated
+     * @throws Throwable
+     */
+    public function deleteAccount(Request $request)
+    {
+        if (!$request->user()) {
+            return response()->json([
+                'message' => 'Usuario no autenticado'
+            ], 401);
+        }
+
+        $request->validate([
+            'password' => 'required'
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'La contraseña es incorrecta'
+            ], 422);
+        }
+
+        DB::beginTransaction();
+        try {
+            if ($user->id_rol === 1) {
+                Pacientes::where('user_id', $user->id)->delete();
+            } else if ($user->id_rol === 2) {
+                Doctores::where('user_id', $user->id)->delete();
+            } else if ($user->id_rol === 3) {
+                Administradores::where('user_id', $user->id)->delete();
+            }
+
+            $user->delete();
+            $user->tokens()->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Cuenta eliminada correctamente'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Error al eliminar la cuenta',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

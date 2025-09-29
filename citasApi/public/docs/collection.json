@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel - Documentaci\u00f3n de la API",
-        "_postman_id": "9d6ca543-e35e-4d59-81c3-26945f05e5c6",
+        "_postman_id": "7ac1cc13-32cf-4f3c-ae79-919916b1d8f6",
         "description": "API de Citas M\u00e9dicas - Una API RESTful para la gesti\u00f3n de citas m\u00e9dicas, doctores, pacientes y horarios.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -75,6 +75,73 @@
             "name": "Administradores [ADMIN]",
             "description": "",
             "item": [
+                {
+                    "name": "Ver mi perfil\n\nDevuelve los datos del administrador autenticado.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil-admin",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil-admin"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Carlos\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"cedula\": \"12345678\",\n   \"telefono\": \"3001234567\",\n   \"user_id\": 5\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Actualizar mi perfil\n\nPermite al administrador autenticado modificar sus propios datos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mi-perfil-admin",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mi-perfil-admin"
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"nombres\":\"Carlos\",\"apellidos\":\"P\u00e9rez\",\"cedula\":\"12345678\",\"telefono\":\"3001234567\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"id\": 1,\n   \"nombres\": \"Carlos\",\n   \"apellidos\": \"P\u00e9rez\",\n   \"cedula\": \"12345678\",\n   \"telefono\": \"3001234567\",\n   \"user_id\": 5\n}",
+                            "name": ""
+                        }
+                    ]
+                },
                 {
                     "name": "Listar administradores\n\nDevuelve una lista de todos los administradores registrados.",
                     "request": {
@@ -233,6 +300,100 @@
             ]
         },
         {
+            "name": "Authentication",
+            "description": "",
+            "item": [
+                {
+                    "name": "Cambiar contrase\u00f1a del usuario\n\nEste endpoint permite que un usuario autenticado cambie su propia contrase\u00f1a.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/change-password",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/change-password"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"current_password\":\"oldpassword123\",\"new_password\":\"newpassword123\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"Message\": \"Contrase\u00f1a actualizada correctamente\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"message\": \"La contrase\u00f1a actual es incorrecta\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Eliminar cuenta de usuario\n\nEste endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.\nSe ejecuta dentro de una transacci\u00f3n para garantizar la integridad de los datos.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/delete-account",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/delete-account"
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"password\":\"mypassword123\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"message\": \"Cuenta eliminada correctamente\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 401,
+                            "body": "{\n  \"message\": \"Usuario no autenticado\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"message\": \"La contrase\u00f1a es incorrecta\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Citas [ADMIN]",
             "description": "",
             "item": [
@@ -303,7 +464,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n   \"id\": 1,\n   \"id_paciente\": 3,\n   \"id_doctor\": 2,\n   \"id_horario\": 5,\n   \"motivo\": \"Consulta general\"\n}",
+                            "body": "{\n\n}",
                             "name": ""
                         }
                     ]
@@ -378,7 +539,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"motivo\":\"Revisi\u00f3n general\"}"
+                            "raw": "{\"id_doctor\":\"consequatur\",\"fecha_cita\":\"2106-10-28\",\"hora_cita\":\"05:39\",\"lugar\":\"mqeopfuudtdsufvyvddqa\",\"motivo\":\"Revisi\u00f3n general\"}"
                         },
                         "description": ""
                     },
@@ -387,6 +548,79 @@
                             "header": [],
                             "code": 200,
                             "body": "{\n   \"id\": 1,\n   \"motivo\": \"Revisi\u00f3n general\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Contar citas\n\nDevuelve el n\u00famero total de citas registradas en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/countCitas",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/countCitas"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"total\": 150\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Citas [PACIENTE]",
+            "description": "",
+            "item": [
+                {
+                    "name": "Crear cita\n\nCrea una cita en un horario disponible para el doctor seleccionado.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/citas",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/citas"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"id_doctor\":2,\"fecha_cita\":\"2025-10-01\",\"hora_cita\":\"14:30\",\"lugar\":\"Consultorio 101\",\"motivo\":\"Dolor de cabeza\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n   \"id\": 10,\n   \"id_paciente\": 3,\n   \"id_doctor\": 2,\n   \"fecha_cita\": \"2025-10-01\",\n   \"hora_cita\": \"14:30\",\n   \"lugar\": \"Consultorio 101\",\n   \"motivo\": \"Dolor de cabeza\"\n}",
                             "name": ""
                         }
                     ]
@@ -790,52 +1024,6 @@
                     ]
                 },
                 {
-                    "name": "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID.",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/doctor\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/doctor\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "ID del doctor."
-                                }
-                            ]
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{\n   \"message\": \"Doctor eliminado con \u00e9xito\"\n}",
-                            "name": ""
-                        },
-                        {
-                            "header": [],
-                            "code": 404,
-                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
                     "name": "Listar doctores\n\nDevuelve la lista completa de doctores registrados en el sistema.",
                     "request": {
                         "url": {
@@ -957,17 +1145,23 @@
                             "name": ""
                         }
                     ]
-                },
+                }
+            ]
+        },
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
                 {
-                    "name": "Eliminar mi cuenta (Doctor)\n\nPermite al doctor autenticado eliminar su cuenta del sistema.",
+                    "name": "GET api\/user",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/mi-perfil-doctor",
+                            "path": "api\/user",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/mi-perfil-doctor"
+                            "raw": "{{baseUrl}}\/api\/user"
                         },
-                        "method": "DELETE",
+                        "method": "GET",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -979,29 +1173,33 @@
                             }
                         ],
                         "body": null,
-                        "description": ""
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
                     },
                     "response": [
                         {
-                            "header": [],
-                            "code": 200,
-                            "body": "{\n   \"message\": \"Doctor eliminado con \u00e9xito\"\n}",
-                            "name": ""
-                        },
-                        {
-                            "header": [],
-                            "code": 404,
-                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Endpoints",
-            "description": "",
-            "item": [
+                },
                 {
                     "name": "POST api\/logout",
                     "request": {
@@ -2013,44 +2211,6 @@
                             "header": [],
                             "code": 422,
                             "body": "{\n   \"errors\": {\n      \"nombres\": [\"El campo nombres es obligatorio\"]\n   }\n}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "Eliminar mi cuenta\n\nPermite al paciente autenticado eliminar su cuenta del sistema junto con todos sus datos.",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/mi-perfil",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/mi-perfil"
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{\n   \"message\": \"Paciente eliminado con \u00e9xito\"\n}",
-                            "name": ""
-                        },
-                        {
-                            "header": [],
-                            "code": 404,
-                            "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
                             "name": ""
                         }
                     ]

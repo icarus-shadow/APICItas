@@ -46,11 +46,7 @@ class CitasController extends Controller
      * @urlParam id integer ID de la cita. Example: 1
      *
      * @response 200 {
-     *    "id": 1,
-     *    "id_paciente": 3,
-     *    "id_doctor": 2,
-     *    "id_horario": 5,
-     *    "motivo": "Consulta general"
+     *
      * }
      */
     public function show($id)
@@ -71,21 +67,30 @@ class CitasController extends Controller
      *
      * @authenticated
      *
-     * @bodyParam id_horario integer ID del horario disponible. Example: 5
-     * @bodyParam motivo string Motivo de la cita. Example: Dolor de cabeza
+     * @bodyParam id_doctor integer required ID del doctor. Example: 2
+     * @bodyParam fecha_cita date required Fecha de la cita (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time required Hora de la cita (HH:MM). Example: 14:30
+     * @bodyParam lugar string required Lugar de la cita. Example: Consultorio 101
+     * @bodyParam motivo string required Motivo de la cita. Example: Dolor de cabeza
      *
      * @response 201 {
      *    "id": 10,
      *    "id_paciente": 3,
      *    "id_doctor": 2,
-     *    "id_horario": 5,
+     *    "fecha_cita": "2025-10-01",
+     *    "hora_cita": "14:30",
+     *    "lugar": "Consultorio 101",
      *    "motivo": "Dolor de cabeza"
      * }
      */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_horario' => 'required|exists:horarios,id',
+            'id_paciente' => 'required|exists:pacientes,id',
+            'id_doctor' => 'required|exists:doctores,id',
+            'fecha_cita' => 'required|date|after:today',
+            'hora_cita' => 'required|date_format:H:i',
+            'lugar' => 'required|string|max:255',
             'motivo' => 'required|string|max:255'
         ]);
 
@@ -93,23 +98,13 @@ class CitasController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $horario = Horarios::find($request->id_horario);
-
-        if (!$horario->disponible) {
-            return response()->json(['message' => 'Este horario no está disponible'], 400);
-        }
-
-        $id_doctor = $horario->id_doctor;
-
         $cita = Citas::create([
-            'id_paciente' => auth()->user()->paciente->id,
-            'id_doctor' => $id_doctor,
-            'id_horario' => $horario->id,
-            'motivo' => $request->motivo
+            'id_paciente' => $request->id_paciente,
+            'id_doctor' => $request->id_doctor,
+            'fecha_cita' => $request->fecha_cita,
+            'hora_cita' => $request->hora_cita,
+            'lugar' => $request->lugar,
         ]);
-
-        // Marcar el horario como no disponible
-        $horario->update(['disponible' => false]);
 
         return response()->json($cita, 201);
     }
@@ -190,6 +185,9 @@ class CitasController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'fecha_cita' => 'required|date|after:today',
+            'hora_cita' => 'required|date_format:H:i',
+            'lugar' => 'required|string|max:255',
             'motivo' => 'required|string|max:255'
         ]);
 
@@ -197,7 +195,7 @@ class CitasController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $cita->update(['motivo' => $request->motivo]);
+        $cita->update($request->only(['fecha_cita', 'hora_cita', 'lugar', 'motivo']));
 
         return response()->json($cita);
     }
@@ -225,11 +223,6 @@ class CitasController extends Controller
 
         if (!$cita) {
             return response()->json(['message' => 'Cita no encontrada o no autorizada'], 404);
-        }
-
-        $horario = Horarios::find($cita->id_horario);
-        if ($horario) {
-            $horario->update(['disponible' => true]);
         }
 
         $cita->delete();
@@ -262,6 +255,10 @@ class CitasController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'id_doctor' => 'required|exists:doctores,id',
+            'fecha_cita' => 'required|date|after:today',
+            'hora_cita' => 'required|date_format:H:i',
+            'lugar' => 'required|string|max:255',
             'motivo' => 'required|string|max:255'
         ]);
 
@@ -269,7 +266,7 @@ class CitasController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $cita->update(['motivo' => $request->motivo]);
+        $cita->update($request->only(['id_doctor', 'fecha_cita', 'hora_cita', 'lugar', 'motivo']));
 
         return response()->json($cita);
     }
@@ -304,5 +301,24 @@ class CitasController extends Controller
         $cita->delete();
 
         return response()->json(['message' => 'Cita eliminada con éxito']);
+    }
+
+    /**
+     * @group Citas [ADMIN]
+     *
+     * Contar citas
+     *
+     * Devuelve el número total de citas registradas en el sistema.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "total": 150
+     * }
+     */
+    public function countCitas()
+    {
+        $total = Citas::count();
+        return response()->json(['total' => $total]);
     }
 }

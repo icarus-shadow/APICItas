@@ -1,77 +1,19 @@
-name: 'Doctores [AUTENTICADO]'
+name: 'Citas [PACIENTE]'
 description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: api/mi-perfil-doctor
+      - POST
+    uri: api/citas
     metadata:
-      groupName: 'Doctores [AUTENTICADO]'
+      groupName: 'Citas [PACIENTE]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Ver mi información (Doctor)
+        Crear cita
 
-        Devuelve los datos del doctor autenticado.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-             "id": 1,
-             "nombres": "Pedro",
-             "apellidos": "López"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-             "message": "Doctor no encontrado"
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: api/mi-perfil-doctor
-    metadata:
-      groupName: 'Doctores [AUTENTICADO]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Actualizar mi información (Doctor)
-
-        Permite al doctor autenticado actualizar sus propios datos.
+        Crea una cita en un horario disponible para el doctor seleccionado.
       description: ''
       authenticated: true
       deprecated: false
@@ -85,125 +27,75 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      nombres:
-        name: nombres
-        description: 'Nombre del doctor.'
-        required: false
-        example: Pedro
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor.'
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      fecha_cita:
+        name: fecha_cita
+        description: 'Fecha de la cita (YYYY-MM-DD).'
+        required: true
+        example: '2025-10-01'
+        type: date
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_cita:
+        name: hora_cita
+        description: 'Hora de la cita (HH:MM).'
+        required: true
+        example: '14:30'
+        type: time
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      lugar:
+        name: lugar
+        description: 'Lugar de la cita.'
+        required: true
+        example: 'Consultorio 101'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      apellidos:
-        name: apellidos
-        description: 'Apellido del doctor.'
-        required: false
-        example: López
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      telefono:
-        name: telefono
-        description: 'Número telefónico.'
-        required: false
-        example: '3012345678'
+      motivo:
+        name: motivo
+        description: 'Motivo de la cita.'
+        required: true
+        example: 'Dolor de cabeza'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanBodyParameters:
-      nombres: Pedro
-      apellidos: López
-      telefono: '3012345678'
+      id_doctor: 2
+      fecha_cita: '2025-10-01'
+      hora_cita: '14:30'
+      lugar: 'Consultorio 101'
+      motivo: 'Dolor de cabeza'
     fileParameters: []
     responses:
       -
-        status: 200
+        status: 201
         content: |-
           {
-             "id": 1,
-             "nombres": "Pedro",
-             "apellidos": "López"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-             "message": "Doctor no encontrado"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 422
-        content: |-
-          {
-             "errors": {
-                "nombres": ["El campo nombres debe ser una cadena de texto"]
-             }
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: api/mi-perfil-doctor
-    metadata:
-      groupName: 'Doctores [AUTENTICADO]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Eliminar mi cuenta (Doctor)
-
-        Permite al doctor autenticado eliminar su cuenta del sistema.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-             "message": "Doctor eliminado con éxito"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-             "message": "Doctor no encontrado"
+             "id": 10,
+             "id_paciente": 3,
+             "id_doctor": 2,
+             "fecha_cita": "2025-10-01",
+             "hora_cita": "14:30",
+             "lugar": "Consultorio 101",
+             "motivo": "Dolor de cabeza"
           }
         headers: []
         description: ''

@@ -109,6 +109,8 @@ class DoctoresController extends Controller
         return response()->json($doctor);
     }
 
+
+
     /**
      * @group Doctores [ADMIN]
      *
@@ -214,28 +216,21 @@ class DoctoresController extends Controller
     }
 
     /**
-     * @group Doctores [AUTENTICADO]
+     * @group Doctores [ADMIN]
      *
-     * Eliminar mi cuenta (Doctor)
+     * Contar doctores
      *
-     * Permite al doctor autenticado eliminar su cuenta del sistema.
+     * Devuelve el número total de doctores registrados en el sistema.
      *
      * @authenticated
      *
      * @response 200 {
-     *    "message": "Doctor eliminado con éxito"
-     * }
-     * @response 404 {
-     *    "message": "Doctor no encontrado"
+     *    "total": 10
      * }
      */
-    public function destroyOwn()
+    public function count()
     {
-        $doctor = Doctores::where('user_id', auth()->id())->first();
-        if (!$doctor) {
-            return response()->json(['message' => 'Doctor no encontrado'], 404);
-        }
-        $doctor->delete();
-        return response()->json(['message' => 'Doctor eliminado con éxito']);
+        $total = Doctores::count();
+        return response()->json(['total' => $total]);
     }
 }

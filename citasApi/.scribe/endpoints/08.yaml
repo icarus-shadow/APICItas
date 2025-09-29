@@ -1,19 +1,81 @@
-name: 'Citas [ADMIN]'
+name: 'Horarios [ADMIN/DOCTOR]'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/citas
+    uri: 'api/horarios/{id}'
     metadata:
-      groupName: 'Citas [ADMIN]'
+      groupName: 'Horarios [ADMIN/DOCTOR]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Listar todas las citas
+        Ver un horario
 
-        Devuelve todas las citas registradas en el sistema.
+        Devuelve la información de un intervalo de 30 minutos específico.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del horario.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "id_doctor": 1,
+             "dia": 1,
+             "hora_inicio": "08:00",
+             "hora_fin": "08:30"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/horarios
+    metadata:
+      groupName: 'Horarios [ADMIN/DOCTOR]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Crear horarios
+
+        Crea horarios para un doctor a partir de un rango amplio, dividiéndolos en intervalos de 30 minutos.
       description: ''
       authenticated: true
       deprecated: false
@@ -26,20 +88,69 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      dias:
+        name: dias
+        description: 'Lista de días (1=Lunes, 7=Domingo).'
+        required: false
+        example:
+          - 1
+          - 3
+          - 5
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_inicio:
+        name: hora_inicio
+        description: 'Hora de inicio (HH:mm).'
+        required: false
+        example: '08:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_fin:
+        name: hora_fin
+        description: 'Hora de fin (HH:mm).'
+        required: false
+        example: '12:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor (requerido para admin).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      dias:
+        - 1
+        - 3
+        - 5
+      hora_inicio: '08:00'
+      hora_fin: '12:00'
+      id_doctor: 1
     fileParameters: []
     responses:
       -
-        status: 200
+        status: 201
         content: |-
           [
             {
-               "id": 1,
-               "id_paciente": 3,
-               "id_doctor": 2,
-               "id_horario": 5,
-               "motivo": "Consulta general"
+               "id_doctor": 1,
+               "dia": 1,
+               "hora_inicio": "08:00",
+               "hora_fin": "08:30"
             }
           ]
         headers: []
@@ -56,17 +167,17 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: 'api/citas/{id}'
+      - PUT
+    uri: 'api/horarios/{id}'
     metadata:
-      groupName: 'Citas [ADMIN]'
+      groupName: 'Horarios [ADMIN/DOCTOR]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Ver una cita
+        Editar un intervalo
 
-        Devuelve los detalles de una cita específica.
+        Permite editar un intervalo de 30 minutos específico.
       description: ''
       authenticated: true
       deprecated: false
@@ -78,7 +189,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID de la cita.'
+        description: 'ID del horario.'
         required: false
         example: 1
         type: integer
@@ -90,8 +201,30 @@ endpoints:
       id: 1
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      hora_inicio:
+        name: hora_inicio
+        description: 'Hora de inicio.'
+        required: false
+        example: '09:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_fin:
+        name: hora_fin
+        description: 'Hora de fin.'
+        required: false
+        example: '09:30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      hora_inicio: '09:00'
+      hora_fin: '09:30'
     fileParameters: []
     responses:
       -
@@ -99,10 +232,8 @@ endpoints:
         content: |-
           {
              "id": 1,
-             "id_paciente": 3,
-             "id_doctor": 2,
-             "id_horario": 5,
-             "motivo": "Consulta general"
+             "hora_inicio": "09:00",
+             "hora_fin": "09:30"
           }
         headers: []
         description: ''
@@ -119,16 +250,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/citas/{id}'
+    uri: 'api/horarios/{id}'
     metadata:
-      groupName: 'Citas [ADMIN]'
+      groupName: 'Horarios [ADMIN/DOCTOR]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Eliminar una cita
+        Eliminar un intervalo
 
-        Permite al administrador eliminar una cita y liberar el horario.
+        Permite eliminar un intervalo de 30 minutos.
       description: ''
       authenticated: true
       deprecated: false
@@ -140,7 +271,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID de la cita.'
+        description: 'ID del horario.'
         required: false
         example: 1
         type: integer
@@ -160,7 +291,7 @@ endpoints:
         status: 200
         content: |-
           {
-             "message": "Cita eliminada con éxito"
+             "message": "Horario eliminado con éxito"
           }
         headers: []
         description: ''
@@ -176,17 +307,119 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - PUT
-    uri: 'api/citas/{id}'
+      - POST
+    uri: api/mis-horarios
     metadata:
-      groupName: 'Citas [ADMIN]'
+      groupName: 'Horarios [ADMIN/DOCTOR]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Editar cualquier cita
+        Crear horarios
 
-        Permite al administrador modificar el motivo de una cita.
+        Crea horarios para un doctor a partir de un rango amplio, dividiéndolos en intervalos de 30 minutos.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      dias:
+        name: dias
+        description: 'Lista de días (1=Lunes, 7=Domingo).'
+        required: false
+        example:
+          - 1
+          - 3
+          - 5
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_inicio:
+        name: hora_inicio
+        description: 'Hora de inicio (HH:mm).'
+        required: false
+        example: '08:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_fin:
+        name: hora_fin
+        description: 'Hora de fin (HH:mm).'
+        required: false
+        example: '12:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor (requerido para admin).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      dias:
+        - 1
+        - 3
+        - 5
+      hora_inicio: '08:00'
+      hora_fin: '12:00'
+      id_doctor: 1
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          [
+            {
+               "id_doctor": 1,
+               "dia": 1,
+               "hora_inicio": "08:00",
+               "hora_fin": "08:30"
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/mis-horarios/{id}'
+    metadata:
+      groupName: 'Horarios [ADMIN/DOCTOR]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Editar un intervalo
+
+        Permite editar un intervalo de 30 minutos específico.
       description: ''
       authenticated: true
       deprecated: false
@@ -198,7 +431,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID de la cita.'
+        description: 'ID del horario.'
         required: false
         example: 1
         type: integer
@@ -211,18 +444,29 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      motivo:
-        name: motivo
-        description: 'Nuevo motivo.'
+      hora_inicio:
+        name: hora_inicio
+        description: 'Hora de inicio.'
         required: false
-        example: 'Revisión general'
+        example: '09:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_fin:
+        name: hora_fin
+        description: 'Hora de fin.'
+        required: false
+        example: '09:30'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanBodyParameters:
-      motivo: 'Revisión general'
+      hora_inicio: '09:00'
+      hora_fin: '09:30'
     fileParameters: []
     responses:
       -
@@ -230,7 +474,66 @@ endpoints:
         content: |-
           {
              "id": 1,
-             "motivo": "Revisión general"
+             "hora_inicio": "09:00",
+             "hora_fin": "09:30"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/mis-horarios/{id}'
+    metadata:
+      groupName: 'Horarios [ADMIN/DOCTOR]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Eliminar un intervalo
+
+        Permite eliminar un intervalo de 30 minutos.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del horario.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Horario eliminado con éxito"
           }
         headers: []
         description: ''

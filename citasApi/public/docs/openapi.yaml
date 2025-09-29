@@ -14,7 +14,13 @@ tags:
     name: 'Administradores [ADMIN]'
     description: ''
   -
+    name: Authentication
+    description: ''
+  -
     name: 'Citas [ADMIN]'
+    description: ''
+  -
+    name: 'Citas [PACIENTE]'
     description: ''
   -
     name: Consultas
@@ -222,6 +228,114 @@ paths:
                 - cedula
                 - telefono
       security: []
+  /api/mi-perfil-admin:
+    get:
+      summary: "Ver mi perfil\n\nDevuelve los datos del administrador autenticado."
+      operationId: verMiPerfilDevuelveLosDatosDelAdministradorAutenticado
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Carlos
+                  apellidos: Pérez
+                  cedula: '12345678'
+                  telefono: '3001234567'
+                  user_id: 5
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Carlos
+                  apellidos:
+                    type: string
+                    example: Pérez
+                  cedula:
+                    type: string
+                    example: '12345678'
+                  telefono:
+                    type: string
+                    example: '3001234567'
+                  user_id:
+                    type: integer
+                    example: 5
+      tags:
+        - 'Administradores [ADMIN]'
+    put:
+      summary: "Actualizar mi perfil\n\nPermite al administrador autenticado modificar sus propios datos."
+      operationId: actualizarMiPerfilPermiteAlAdministradorAutenticadoModificarSusPropiosDatos
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Carlos
+                  apellidos: Pérez
+                  cedula: '12345678'
+                  telefono: '3001234567'
+                  user_id: 5
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Carlos
+                  apellidos:
+                    type: string
+                    example: Pérez
+                  cedula:
+                    type: string
+                    example: '12345678'
+                  telefono:
+                    type: string
+                    example: '3001234567'
+                  user_id:
+                    type: integer
+                    example: 5
+      tags:
+        - 'Administradores [ADMIN]'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                  description: 'Nombres del administrador.'
+                  example: Carlos
+                  nullable: false
+                apellidos:
+                  type: string
+                  description: 'Apellidos del administrador.'
+                  example: Pérez
+                  nullable: false
+                cedula:
+                  type: string
+                  description: 'Cédula del administrador.'
+                  example: '12345678'
+                  nullable: false
+                telefono:
+                  type: string
+                  description: 'Teléfono del administrador.'
+                  example: '3001234567'
+                  nullable: false
   /api/administradores:
     get:
       summary: "Listar administradores\n\nDevuelve una lista de todos los administradores registrados."
@@ -390,6 +504,118 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  /api/change-password:
+    post:
+      summary: "Cambiar contraseña del usuario\n\nEste endpoint permite que un usuario autenticado cambie su propia contraseña."
+      operationId: cambiarContraseaDelUsuarioEsteEndpointPermiteQueUnUsuarioAutenticadoCambieSuPropiaContrasea
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  Message: 'Contraseña actualizada correctamente'
+                properties:
+                  Message:
+                    type: string
+                    example: 'Contraseña actualizada correctamente'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'La contraseña actual es incorrecta'
+                properties:
+                  message:
+                    type: string
+                    example: 'La contraseña actual es incorrecta'
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  description: 'Contraseña actual del usuario.'
+                  example: oldpassword123
+                  nullable: false
+                new_password:
+                  type: string
+                  description: 'Nueva contraseña del usuario, mínimo 6 caracteres.'
+                  example: newpassword123
+                  nullable: false
+              required:
+                - current_password
+                - new_password
+  /api/delete-account:
+    delete:
+      summary: "Eliminar cuenta de usuario\n\nEste endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.\nSe ejecuta dentro de una transacción para garantizar la integridad de los datos."
+      operationId: eliminarCuentaDeUsuarioEsteEndpointPermiteQueUnUsuarioAutenticadoElimineSuPropiaCuentaYTodosLosDatosAsociadosSeEjecutaDentroDeUnaTransaccinParaGarantizarLaIntegridadDeLosDatos
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cuenta eliminada correctamente'
+                properties:
+                  message:
+                    type: string
+                    example: 'Cuenta eliminada correctamente'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Usuario no autenticado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Usuario no autenticado'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'La contraseña es incorrecta'
+                properties:
+                  message:
+                    type: string
+                    example: 'La contraseña es incorrecta'
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: 'Contraseña actual del usuario para confirmar la eliminación.'
+                  example: mypassword123
+                  nullable: false
+              required:
+                - password
   /api/citas:
     get:
       summary: "Listar todas las citas\n\nDevuelve todas las citas registradas en el sistema."
@@ -414,6 +640,88 @@ paths:
                     motivo: 'Consulta general'
       tags:
         - 'Citas [ADMIN]'
+    post:
+      summary: "Crear cita\n\nCrea una cita en un horario disponible para el doctor seleccionado."
+      operationId: crearCitaCreaUnaCitaEnUnHorarioDisponibleParaElDoctorSeleccionado
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 10
+                  id_paciente: 3
+                  id_doctor: 2
+                  fecha_cita: '2025-10-01'
+                  hora_cita: '14:30'
+                  lugar: 'Consultorio 101'
+                  motivo: 'Dolor de cabeza'
+                properties:
+                  id:
+                    type: integer
+                    example: 10
+                  id_paciente:
+                    type: integer
+                    example: 3
+                  id_doctor:
+                    type: integer
+                    example: 2
+                  fecha_cita:
+                    type: string
+                    example: '2025-10-01'
+                  hora_cita:
+                    type: string
+                    example: '14:30'
+                  lugar:
+                    type: string
+                    example: 'Consultorio 101'
+                  motivo:
+                    type: string
+                    example: 'Dolor de cabeza'
+      tags:
+        - 'Citas [PACIENTE]'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_doctor:
+                  type: integer
+                  description: 'ID del doctor.'
+                  example: 2
+                  nullable: false
+                fecha_cita:
+                  type: date
+                  description: 'Fecha de la cita (YYYY-MM-DD).'
+                  example: '2025-10-01'
+                  nullable: false
+                hora_cita:
+                  type: time
+                  description: 'Hora de la cita (HH:MM).'
+                  example: '14:30'
+                  nullable: false
+                lugar:
+                  type: string
+                  description: 'Lugar de la cita.'
+                  example: 'Consultorio 101'
+                  nullable: false
+                motivo:
+                  type: string
+                  description: 'Motivo de la cita.'
+                  example: 'Dolor de cabeza'
+                  nullable: false
+              required:
+                - id_doctor
+                - fecha_cita
+                - hora_cita
+                - lugar
+                - motivo
   '/api/citas/{id}':
     get:
       summary: "Ver una cita\n\nDevuelve los detalles de una cita específica."
@@ -427,28 +735,8 @@ paths:
             application/json:
               schema:
                 type: object
-                example:
-                  id: 1
-                  id_paciente: 3
-                  id_doctor: 2
-                  id_horario: 5
-                  motivo: 'Consulta general'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  id_paciente:
-                    type: integer
-                    example: 3
-                  id_doctor:
-                    type: integer
-                    example: 2
-                  id_horario:
-                    type: integer
-                    example: 5
-                  motivo:
-                    type: string
-                    example: 'Consulta general'
+                example: {  }
+                properties: {  }
       tags:
         - 'Citas [ADMIN]'
     delete:
@@ -496,17 +784,42 @@ paths:
       tags:
         - 'Citas [ADMIN]'
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
+                id_doctor:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the doctores table.'
+                  example: consequatur
+                  nullable: false
+                fecha_cita:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2106-10-28'
+                  nullable: false
+                hora_cita:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i</code>.'
+                  example: '05:39'
+                  nullable: false
+                lugar:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: false
                 motivo:
                   type: string
                   description: 'Nuevo motivo.'
                   example: 'Revisión general'
                   nullable: false
+              required:
+                - id_doctor
+                - fecha_cita
+                - hora_cita
+                - lugar
     parameters:
       -
         in: path
@@ -522,6 +835,27 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  /api/countCitas:
+    get:
+      summary: "Contar citas\n\nDevuelve el número total de citas registradas en el sistema."
+      operationId: contarCitasDevuelveElNmeroTotalDeCitasRegistradasEnElSistema
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 150
+                properties:
+                  total:
+                    type: integer
+                    example: 150
+      tags:
+        - 'Citas [ADMIN]'
   '/api/horarios/compactados/{id_doctor}':
     get:
       summary: "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos."
@@ -1004,38 +1338,6 @@ paths:
                   description: 'The <code>id</code> of an existing record in the especialidades table.'
                   example: 17
                   nullable: false
-    delete:
-      summary: "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID."
-      operationId: eliminarUnDoctorPermiteAlAdministradorEliminarUnDoctorPorID
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor eliminado con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor eliminado con éxito'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor no encontrado'
-      tags:
-        - 'Doctores [ADMIN]'
     parameters:
       -
         in: path
@@ -1197,38 +1499,28 @@ paths:
                   description: 'Número telefónico.'
                   example: '3012345678'
                   nullable: false
-    delete:
-      summary: "Eliminar mi cuenta (Doctor)\n\nPermite al doctor autenticado eliminar su cuenta del sistema."
-      operationId: eliminarMiCuentaDoctorPermiteAlDoctorAutenticadoEliminarSuCuentaDelSistema
+  /api/user:
+    get:
+      summary: ''
+      operationId: getApiUser
       description: ''
       parameters: []
       responses:
-        200:
+        401:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: 'Doctor eliminado con éxito'
+                  message: Unauthenticated.
                 properties:
                   message:
                     type: string
-                    example: 'Doctor eliminado con éxito'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor no encontrado'
+                    example: Unauthenticated.
       tags:
-        - 'Doctores [AUTENTICADO]'
+        - Endpoints
+      security: []
   /api/logout:
     post:
       summary: ''
@@ -2478,35 +2770,3 @@ paths:
                   description: 'Comentarios adicionales.'
                   example: 'Paciente estable'
                   nullable: true
-    delete:
-      summary: "Eliminar mi cuenta\n\nPermite al paciente autenticado eliminar su cuenta del sistema junto con todos sus datos."
-      operationId: eliminarMiCuentaPermiteAlPacienteAutenticadoEliminarSuCuentaDelSistemaJuntoConTodosSusDatos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Paciente eliminado con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Paciente eliminado con éxito'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Paciente no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Paciente no encontrado'
-      tags:
-        - 'Pacientes [AUTENTICADO]'

@@ -1,25 +1,77 @@
-name: Doctores
+name: 'Administradores [ADMIN]'
 description: ''
 endpoints:
   -
     httpMethods:
-      - POST
-    uri: api/registrar-doctor
+      - GET
+    uri: api/mi-perfil-admin
     metadata:
-      groupName: Doctores
+      groupName: 'Administradores [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Registrar un nuevo doctor
+        Ver mi perfil
 
-        Este endpoint permite crear un doctor y su usuario asociado en el sistema. Se ejecuta dentro de
-        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de doctor (id_rol = 2).
+        Devuelve los datos del administrador autenticado.
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
       custom: []
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombres": "Carlos",
+             "apellidos": "Pérez",
+             "cedula": "12345678",
+             "telefono": "3001234567",
+             "user_id": 5
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: api/mi-perfil-admin
+    metadata:
+      groupName: 'Administradores [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Actualizar mi perfil
+
+        Permite al administrador autenticado modificar sus propios datos.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -27,31 +79,11 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      email:
-        name: email
-        description: 'Correo electrónico único del usuario.'
-        required: true
-        example: doctor@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      password:
-        name: password
-        description: 'Contraseña del usuario, mínimo 6 caracteres.'
-        required: true
-        example: secret123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
       nombres:
         name: nombres
-        description: 'Nombres completos del doctor.'
-        required: true
-        example: Andrés
+        description: 'Nombres del administrador.'
+        required: false
+        example: Carlos
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -59,9 +91,9 @@ endpoints:
         custom: []
       apellidos:
         name: apellidos
-        description: 'Apellidos completos del doctor.'
-        required: true
-        example: 'García López'
+        description: 'Apellidos del administrador.'
+        required: false
+        example: Pérez
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -69,104 +101,332 @@ endpoints:
         custom: []
       cedula:
         name: cedula
-        description: 'Cédula única del doctor.'
-        required: true
-        example: '1122334455'
+        description: 'Cédula del administrador.'
+        required: false
+        example: '12345678'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      id_especialidades:
-        name: id_especialidades
-        description: 'ID de la especialidad a la que pertenece el doctor.'
-        required: true
+      telefono:
+        name: telefono
+        description: 'Teléfono del administrador.'
+        required: false
+        example: '3001234567'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombres: Carlos
+      apellidos: Pérez
+      cedula: '12345678'
+      telefono: '3001234567'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombres": "Carlos",
+             "apellidos": "Pérez",
+             "cedula": "12345678",
+             "telefono": "3001234567",
+             "user_id": 5
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/administradores
+    metadata:
+      groupName: 'Administradores [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Listar administradores
+
+        Devuelve una lista de todos los administradores registrados.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+               "id": 1,
+               "nombres": "Carlos",
+               "apellidos": "Pérez",
+               "cedula": "12345678",
+               "telefono": "3001234567",
+               "user_id": 5
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/administradores/{id}'
+    metadata:
+      groupName: 'Administradores [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Ver administrador
+
+        Devuelve los datos de un administrador específico.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del administrador.'
+        required: false
         example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      horario:
-        name: horario
-        description: 'Horario de atención del doctor.'
-        required: false
-        example: 'Lunes a Viernes 8:00 AM - 4:00 PM'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      lugar_trabajo:
-        name: lugar_trabajo
-        description: 'Lugar donde atiende el doctor.'
-        required: false
-        example: 'Hospital Central'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-    cleanBodyParameters:
-      email: doctor@example.com
-      password: secret123
-      nombres: Andrés
-      apellidos: 'García López'
-      cedula: '1122334455'
-      id_especialidades: 1
-      horario: 'Lunes a Viernes 8:00 AM - 4:00 PM'
-      lugar_trabajo: 'Hospital Central'
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 201
+        status: 200
         content: |-
           {
-            "message": "Doctor registrado correctamente",
-            "user": {
-                "id": 15,
-                "email": "doctor@example.com",
-                "id_rol": 2,
-                "created_at": "2025-09-05T10:00:00.000000Z"
-            },
-            "doctor": {
-                "id": 7,
-                "user_id": 15,
-                "nombres": "Andrés",
-                "apellidos": "García López",
-                "cedula": "1122334455",
-                "id_especialidades": 1,
-                "horario": "Lunes a Viernes 8:00 AM - 4:00 PM",
-                "lugar_trabajo": "Hospital Central"
-            }
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 422
-        content: |-
-          {
-            "message": "The given data was invalid.",
-            "errors": {
-                "email": ["El campo email es obligatorio."]
-            }
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 500
-        content: |-
-          {
-            "message": "Error al registrar doctor",
-            "error": "Detalle del error interno"
+             "id": 1,
+             "nombres": "Carlos",
+             "apellidos": "Pérez",
+             "cedula": "12345678",
+             "telefono": "3001234567",
+             "user_id": 5
           }
         headers: []
         description: ''
         custom: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/administradores/{id}'
+    metadata:
+      groupName: 'Administradores [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Actualizar administrador
+
+        Permite modificar los datos de un administrador.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del administrador.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombres:
+        name: nombres
+        description: 'Nombres del administrador.'
+        required: false
+        example: Carlos
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      apellidos:
+        name: apellidos
+        description: 'Apellidos del administrador.'
+        required: false
+        example: Pérez
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      cedula:
+        name: cedula
+        description: 'Cédula del administrador.'
+        required: false
+        example: '12345678'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      telefono:
+        name: telefono
+        description: 'Teléfono del administrador.'
+        required: false
+        example: '3001234567'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombres: Carlos
+      apellidos: Pérez
+      cedula: '12345678'
+      telefono: '3001234567'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombres": "Carlos",
+             "apellidos": "Pérez",
+             "cedula": "12345678",
+             "telefono": "3001234567",
+             "user_id": 5
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/administradores/{id}'
+    metadata:
+      groupName: 'Administradores [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Eliminar administrador
+
+        Permite eliminar un administrador del sistema.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del administrador.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Administrador eliminado con éxito"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
