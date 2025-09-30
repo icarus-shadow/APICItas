@@ -1,19 +1,66 @@
-name: 'Horarios [ADMIN]'
+name: 'Especialidades [PUBLICO AUTENTICADO]'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/horarios
+    uri: api/countEspecialidades
     metadata:
-      groupName: 'Horarios [ADMIN]'
+      groupName: 'Especialidades [PUBLICO AUTENTICADO]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Listar todos los horarios (compacto)
+        Contar especialidades
 
-        Devuelve todos los horarios del sistema agrupados por rango grande (no por intervalos de 30 minutos).
+        Devuelve el número total de especialidades registradas en el sistema.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "total": 10
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/especialidades
+    metadata:
+      groupName: 'Especialidades [PUBLICO AUTENTICADO]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Listar todas las especialidades
+
+        Devuelve una lista de todas las especialidades registradas en el sistema.
       description: ''
       authenticated: true
       deprecated: false
@@ -35,10 +82,9 @@ endpoints:
         content: |-
           [
             {
-               "id_doctor": 1,
-               "nombre_doctor": "Juan Pérez",
-               "dia": 1,
-               "rango": "08:00 - 12:00"
+               "id": 1,
+               "nombre": "Cardiología",
+               "descripcion": "Especialidad del corazón"
             }
           ]
         headers: []
@@ -56,16 +102,16 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/horarios-doctor/{id_doctor}'
+    uri: 'api/especialidades/{id}'
     metadata:
-      groupName: 'Horarios [ADMIN]'
+      groupName: 'Especialidades [PUBLICO AUTENTICADO]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Listar horarios por doctor
+        Ver una especialidad
 
-        Devuelve todos los intervalos de 30 minutos de un doctor específico.
+        Devuelve los detalles de una especialidad específica.
       description: ''
       authenticated: true
       deprecated: false
@@ -75,9 +121,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      id_doctor:
-        name: id_doctor
-        description: 'ID del doctor.'
+      id:
+        name: id
+        description: 'ID de la especialidad.'
         required: false
         example: 1
         type: integer
@@ -86,7 +132,7 @@ endpoints:
         nullable: false
         custom: []
     cleanUrlParameters:
-      id_doctor: 1
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -96,13 +142,20 @@ endpoints:
       -
         status: 200
         content: |-
-          [
-            {
-               "dia": 1,
-               "hora_inicio": "08:00",
-               "hora_fin": "08:30"
-            }
-          ]
+          {
+             "id": 1,
+             "nombre": "Cardiología",
+             "descripcion": "Especialidad del corazón"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Especialidad no encontrada"
+          }
         headers: []
         description: ''
         custom: []

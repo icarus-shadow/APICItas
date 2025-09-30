@@ -48,6 +48,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('/horarios/{id}', [HorariosController::class, 'update']);  // Editar un bloque específico
     Route::delete('/horarios/{id}', [HorariosController::class, 'destroy']); // Eliminar un bloque
     Route::get('/horarios-doctor/{id_doctor}', [HorariosController::class, 'listByDoctor']); // Listar por doctor
+    Route::get('/countHorarios', [HorariosController::class, 'count']);
 
     // administacion de citas
     Route::get('/citas', [CitasController::class, 'index']); // Ver todas

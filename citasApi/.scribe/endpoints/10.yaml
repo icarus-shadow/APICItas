@@ -1,19 +1,19 @@
-name: 'Consultas [ADMIN]'
+name: 'Citas [ADMIN]'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/reportes/citas-por-especialidad
+    uri: api/citas
     metadata:
-      groupName: 'Consultas [ADMIN]'
+      groupName: 'Citas [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Reporte de citas por especialidad
+        Listar todas las citas
 
-        Devuelve el total de citas agrupadas por especialidad.
+        Devuelve todas las citas registradas en el sistema.
       description: ''
       authenticated: true
       deprecated: false
@@ -34,8 +34,291 @@ endpoints:
         status: 200
         content: |-
           [
-             { "especialidad": "Cardiología", "total_citas": 15 }
+            {
+               "id": 1,
+               "id_paciente": 3,
+               "id_doctor": 2,
+               "id_horario": 5,
+               "motivo": "Consulta general"
+            }
           ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/citas/{id}'
+    metadata:
+      groupName: 'Citas [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Ver una cita
+
+        Devuelve los detalles de una cita específica.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la cita.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/citas/{id}'
+    metadata:
+      groupName: 'Citas [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Eliminar una cita
+
+        Permite al administrador eliminar una cita y liberar el horario.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la cita.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Cita eliminada con éxito"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/citas/{id}'
+    metadata:
+      groupName: 'Citas [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Editar cualquier cita
+
+        Permite al administrador modificar el motivo de una cita.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la cita.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id_doctor:
+        name: id_doctor
+        description: 'The <code>id</code> of an existing record in the doctores table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      fecha_cita:
+        name: fecha_cita
+        description: 'Must be a valid date. Must be a date after <code>today</code>.'
+        required: true
+        example: '2106-10-29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      hora_cita:
+        name: hora_cita
+        description: 'Must be a valid date in the format <code>H:i</code>.'
+        required: true
+        example: '01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      lugar:
+        name: lugar
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      motivo:
+        name: motivo
+        description: 'Nuevo motivo.'
+        required: false
+        example: 'Revisión general'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      id_doctor: consequatur
+      fecha_cita: '2106-10-29'
+      hora_cita: '01:00'
+      lugar: mqeopfuudtdsufvyvddqa
+      motivo: 'Revisión general'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "motivo": "Revisión general"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/countCitas
+    metadata:
+      groupName: 'Citas [ADMIN]'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Contar citas
+
+        Devuelve el número total de citas registradas en el sistema.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "total": 150
+          }
         headers: []
         description: ''
         custom: []

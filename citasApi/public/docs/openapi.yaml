@@ -504,6 +504,27 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  /api/countAdministradores:
+    get:
+      summary: "Contar administradores\n\nDevuelve el número total de administradores registrados."
+      operationId: contarAdministradoresDevuelveElNmeroTotalDeAdministradoresRegistrados
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 5
+                properties:
+                  total:
+                    type: integer
+                    example: 5
+      tags:
+        - 'Administradores [ADMIN]'
   /api/change-password:
     post:
       summary: "Cambiar contraseña del usuario\n\nEste endpoint permite que un usuario autenticado cambie su propia contraseña."
@@ -691,6 +712,11 @@ paths:
             schema:
               type: object
               properties:
+                id_paciente:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the pacientes table.'
+                  example: consequatur
+                  nullable: false
                 id_doctor:
                   type: integer
                   description: 'ID del doctor.'
@@ -717,6 +743,7 @@ paths:
                   example: 'Dolor de cabeza'
                   nullable: false
               required:
+                - id_paciente
                 - id_doctor
                 - fecha_cita
                 - hora_cita
@@ -798,12 +825,12 @@ paths:
                 fecha_cita:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-28'
+                  example: '2106-10-29'
                   nullable: false
                 hora_cita:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i</code>.'
-                  example: '05:39'
+                  example: '01:00'
                   nullable: false
                 lugar:
                   type: string
@@ -1338,6 +1365,38 @@ paths:
                   description: 'The <code>id</code> of an existing record in the especialidades table.'
                   example: 17
                   nullable: false
+    delete:
+      summary: "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID."
+      operationId: eliminarUnDoctorPermiteAlAdministradorEliminarUnDoctorPorID
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor eliminado con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor eliminado con éxito'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Doctores [ADMIN]'
     parameters:
       -
         in: path
@@ -1353,6 +1412,27 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  /api/countDoctores:
+    get:
+      summary: "Contar doctores\n\nDevuelve el número total de doctores registrados en el sistema."
+      operationId: contarDoctoresDevuelveElNmeroTotalDeDoctoresRegistradosEnElSistema
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 10
+                properties:
+                  total:
+                    type: integer
+                    example: 10
+      tags:
+        - 'Doctores [ADMIN]'
   /api/doctores:
     get:
       summary: "Listar doctores\n\nDevuelve la lista completa de doctores registrados en el sistema."
@@ -1793,6 +1873,27 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  /api/countEspecialidades:
+    get:
+      summary: "Contar especialidades\n\nDevuelve el número total de especialidades registradas en el sistema."
+      operationId: contarEspecialidadesDevuelveElNmeroTotalDeEspecialidadesRegistradasEnElSistema
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 10
+                properties:
+                  total:
+                    type: integer
+                    example: 10
+      tags:
+        - 'Especialidades [PUBLICO AUTENTICADO]'
   '/api/horarios/{id}':
     get:
       summary: "Ver un horario\n\nDevuelve la información de un intervalo de 30 minutos específico."
@@ -2179,6 +2280,27 @@ paths:
           present:
             summary: 'When the value is present'
             value: 1
+  /api/countHorarios:
+    get:
+      summary: "Contar horarios\n\nDevuelve el número total de horarios registrados."
+      operationId: contarHorariosDevuelveElNmeroTotalDeHorariosRegistrados
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 150
+                properties:
+                  total:
+                    type: integer
+                    example: 150
+      tags:
+        - 'Horarios [ADMIN]'
   /api/registrar-paciente:
     post:
       summary: "Registrar un nuevo paciente\n\nEste endpoint permite crear un paciente y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacción para garantizar la integridad de los datos. El usuario se crea con el rol de paciente (id_rol = 1)."
@@ -2625,6 +2747,27 @@ paths:
         required: true
         schema:
           type: integer
+  /api/countPacientes:
+    get:
+      summary: "Contar total de pacientes\n\nDevuelve el número total de pacientes registrados en el sistema."
+      operationId: contarTotalDePacientesDevuelveElNmeroTotalDePacientesRegistradosEnElSistema
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 10
+                properties:
+                  total:
+                    type: integer
+                    example: 10
+      tags:
+        - 'Pacientes [ADMIN]'
   /api/mi-perfil:
     get:
       summary: "Ver mi información\n\nDevuelve los datos del paciente autenticado."

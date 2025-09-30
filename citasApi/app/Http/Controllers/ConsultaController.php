@@ -6,6 +6,7 @@ use App\Models\Citas;
 use App\Models\Doctores;
 use App\Models\Horarios;
 use App\Models\Especialidades;
+use App\Models\Pacientes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,16 +67,51 @@ class ConsultaController extends Controller
      */
     public function misCitas()
     {
-        $user = Auth::user();
-        if ($user->rol_id == 1) {
-            $citas = Citas::where('id_paciente', $user->paciente->id)->get();
-        } elseif ($user->rol_id == 2) {
-            $citas = Citas::where('id_doctor', $user->doctor->id)->get();
-        } else {
-            $citas = [];
+        try {
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+
+            // Verificar que sea paciente (id_rol = 1)
+            if ($user->id_rol !== 1) {
+                return response()->json(['message' => 'Acceso denegado'], 403);
+            }
+
+            // Buscar el paciente asociado al usuario
+            $paciente = Pacientes::where('user_id', $user->id)->first();
+
+            if (!$paciente) {
+                return response()->json(['message' => 'Paciente no encontrado'], 404);
+            }
+
+            // Obtener citas del paciente con relaciones
+            $citas = Citas::where('id_paciente', $paciente->id)
+                ->with(['doctor', 'paciente'])
+                ->orderBy('fecha_cita', 'desc')
+                ->get()
+                ->map(function ($cita) {
+                    return [
+                        'id' => $cita->id,
+                        'fecha_cita' => $cita->fecha_cita,
+                        'hora_cita' => $cita->hora_cita,
+                        'lugar' => $cita->lugar,
+                        'motivo' => $cita->motivo,
+                        'id_doctor' => $cita->id_doctor,
+                        'id_paciente' => $cita->id_paciente,
+                        'doctor' => $cita->doctor,
+                        'paciente' => $cita->paciente,
+                        'created_at' => $cita->created_at,
+                        'updated_at' => $cita->updated_at,
+                    ];
+                });
+
+            return response()->json($citas);
+
+        } catch (\Exception $e) {
+            \Log::error('Error en misCitas: ' . $e->getMessage());
+            return response()->json(['message' => 'Error interno del servidor'], 500);
         }
-        return response()->json($citas);
     }
+
 
     /**
      * @group Consultas

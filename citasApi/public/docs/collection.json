@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel - Documentaci\u00f3n de la API",
-        "_postman_id": "7ac1cc13-32cf-4f3c-ae79-919916b1d8f6",
+        "_postman_id": "46b70b92-18c4-44f9-97e7-baf204f38e80",
         "description": "API de Citas M\u00e9dicas - Una API RESTful para la gesti\u00f3n de citas m\u00e9dicas, doctores, pacientes y horarios.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -296,6 +296,38 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Contar administradores\n\nDevuelve el n\u00famero total de administradores registrados.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/countAdministradores",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/countAdministradores"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"total\": 5\n}",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -539,7 +571,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id_doctor\":\"consequatur\",\"fecha_cita\":\"2106-10-28\",\"hora_cita\":\"05:39\",\"lugar\":\"mqeopfuudtdsufvyvddqa\",\"motivo\":\"Revisi\u00f3n general\"}"
+                            "raw": "{\"id_doctor\":\"consequatur\",\"fecha_cita\":\"2106-10-29\",\"hora_cita\":\"01:00\",\"lugar\":\"mqeopfuudtdsufvyvddqa\",\"motivo\":\"Revisi\u00f3n general\"}"
                         },
                         "description": ""
                     },
@@ -612,7 +644,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id_doctor\":2,\"fecha_cita\":\"2025-10-01\",\"hora_cita\":\"14:30\",\"lugar\":\"Consultorio 101\",\"motivo\":\"Dolor de cabeza\"}"
+                            "raw": "{\"id_paciente\":\"consequatur\",\"id_doctor\":2,\"fecha_cita\":\"2025-10-01\",\"hora_cita\":\"14:30\",\"lugar\":\"Consultorio 101\",\"motivo\":\"Dolor de cabeza\"}"
                         },
                         "description": ""
                     },
@@ -1024,6 +1056,84 @@
                     ]
                 },
                 {
+                    "name": "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/doctor\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/doctor\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "ID del doctor."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"message\": \"Doctor eliminado con \u00e9xito\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n   \"message\": \"Doctor no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Contar doctores\n\nDevuelve el n\u00famero total de doctores registrados en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/countDoctores",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/countDoctores"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"total\": 10\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "Listar doctores\n\nDevuelve la lista completa de doctores registrados en el sistema.",
                     "request": {
                         "url": {
@@ -1407,6 +1517,38 @@
             "name": "Especialidades [PUBLICO AUTENTICADO]",
             "description": "",
             "item": [
+                {
+                    "name": "Contar especialidades\n\nDevuelve el n\u00famero total de especialidades registradas en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/countEspecialidades",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/countEspecialidades"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"total\": 10\n}",
+                            "name": ""
+                        }
+                    ]
+                },
                 {
                     "name": "Listar todas las especialidades\n\nDevuelve una lista de todas las especialidades registradas en el sistema.",
                     "request": {
@@ -1844,6 +1986,38 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Contar horarios\n\nDevuelve el n\u00famero total de horarios registrados.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/countHorarios",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/countHorarios"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"total\": 150\n}",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -2120,6 +2294,38 @@
                             "header": [],
                             "code": 404,
                             "body": "{\n   \"message\": \"Paciente no encontrado\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Contar total de pacientes\n\nDevuelve el n\u00famero total de pacientes registrados en el sistema.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/countPacientes",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/countPacientes"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"total\": 10\n}",
                             "name": ""
                         }
                     ]

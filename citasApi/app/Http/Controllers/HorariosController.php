@@ -250,4 +250,24 @@ class HorariosController extends Controller
         $horario->delete();
         return response()->json(['message' => 'Horario eliminado con éxito']);
     }
+
+    /**
+     * @group Horarios [ADMIN]
+     *
+     * Contar horarios
+     *
+     * Devuelve el número total de horarios registrados.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "total": 150
+     * }
+     */
+    public function count()
+    {
+        $total = Horarios::count();
+        return response()->json(['total' => $total]);
+    }
+
 }

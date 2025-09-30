@@ -114,6 +114,11 @@ Permite modificar los datos de un administrador.</a>
 
 Permite eliminar un administrador del sistema.</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="administradores-admin-GETapi-countAdministradores">
+                                <a href="#administradores-admin-GETapi-countAdministradores">Contar administradores
+
+Devuelve el número total de administradores registrados.</a>
+                            </li>
                                                                         </ul>
                             </ul>
                     <ul id="tocify-header-authentication" class="tocify-header">
@@ -250,6 +255,16 @@ Devuelve los datos de un doctor específico por su ID.</a>
 
 Permite al administrador actualizar los datos de un doctor por ID.</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="doctores-admin-DELETEapi-doctor--id-">
+                                <a href="#doctores-admin-DELETEapi-doctor--id-">Eliminar un doctor
+
+Permite al administrador eliminar un doctor por ID.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="doctores-admin-GETapi-countDoctores">
+                                <a href="#doctores-admin-GETapi-countDoctores">Contar doctores
+
+Devuelve el número total de doctores registrados en el sistema.</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="doctores-admin-GETapi-doctores">
                                 <a href="#doctores-admin-GETapi-doctores">Listar doctores
 
@@ -317,7 +332,12 @@ Permite al administrador eliminar una especialidad del sistema.</a>
                     <a href="#especialidades-publico-autenticado">Especialidades [PUBLICO AUTENTICADO]</a>
                 </li>
                                     <ul id="tocify-subheader-especialidades-publico-autenticado" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="especialidades-publico-autenticado-GETapi-especialidades">
+                                                    <li class="tocify-item level-2" data-unique="especialidades-publico-autenticado-GETapi-countEspecialidades">
+                                <a href="#especialidades-publico-autenticado-GETapi-countEspecialidades">Contar especialidades
+
+Devuelve el número total de especialidades registradas en el sistema.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="especialidades-publico-autenticado-GETapi-especialidades">
                                 <a href="#especialidades-publico-autenticado-GETapi-especialidades">Listar todas las especialidades
 
 Devuelve una lista de todas las especialidades registradas en el sistema.</a>
@@ -386,6 +406,11 @@ Devuelve todos los horarios del sistema agrupados por rango grande (no por inter
 
 Devuelve todos los intervalos de 30 minutos de un doctor específico.</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="horarios-admin-GETapi-countHorarios">
+                                <a href="#horarios-admin-GETapi-countHorarios">Contar horarios
+
+Devuelve el número total de horarios registrados.</a>
+                            </li>
                                                                         </ul>
                             </ul>
                     <ul id="tocify-header-horarios-doctor" class="tocify-header">
@@ -438,6 +463,11 @@ Permite al administrador modificar los datos de un paciente específico.</a>
 
 Permite al administrador eliminar un paciente del sistema.</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="pacientes-admin-GETapi-countPacientes">
+                                <a href="#pacientes-admin-GETapi-countPacientes">Contar total de pacientes
+
+Devuelve el número total de pacientes registrados en el sistema.</a>
+                            </li>
                                                                         </ul>
                             </ul>
                     <ul id="tocify-header-pacientes-autenticado" class="tocify-header">
@@ -466,7 +496,7 @@ Permite al paciente autenticado actualizar sus datos personales.</a>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Última actualización: 29 de September de 2025</li>
+        <li>Última actualización: 30 de September de 2025</li>
     </ul>
 </div>
 
@@ -1720,6 +1750,139 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="administradores-admin-GETapi-countAdministradores">Contar administradores
+
+Devuelve el número total de administradores registrados.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-countAdministradores">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/countAdministradores" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/countAdministradores"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-countAdministradores">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;total&quot;: 5
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-countAdministradores" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-countAdministradores"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-countAdministradores"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-countAdministradores" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-countAdministradores">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-countAdministradores" data-method="GET"
+      data-path="api/countAdministradores"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-countAdministradores', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-countAdministradores"
+                    onclick="tryItOut('GETapi-countAdministradores');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-countAdministradores"
+                    onclick="cancelTryOut('GETapi-countAdministradores');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-countAdministradores"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/countAdministradores</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-countAdministradores"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-countAdministradores"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-countAdministradores"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
                 <h1 id="authentication">Authentication</h1>
 
     
@@ -2526,8 +2689,8 @@ Permite al administrador modificar el motivo de una cita.</h2>
     --header "Accept: application/json" \
     --data "{
     \"id_doctor\": \"consequatur\",
-    \"fecha_cita\": \"2106-10-28\",
-    \"hora_cita\": \"05:39\",
+    \"fecha_cita\": \"2106-10-29\",
+    \"hora_cita\": \"01:00\",
     \"lugar\": \"mqeopfuudtdsufvyvddqa\",
     \"motivo\": \"Revisión general\"
 }"
@@ -2547,8 +2710,8 @@ const headers = {
 
 let body = {
     "id_doctor": "consequatur",
-    "fecha_cita": "2106-10-28",
-    "hora_cita": "05:39",
+    "fecha_cita": "2106-10-29",
+    "hora_cita": "01:00",
     "lugar": "mqeopfuudtdsufvyvddqa",
     "motivo": "Revisión general"
 };
@@ -2683,10 +2846,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="fecha_cita"                data-endpoint="PUTapi-citas--id-"
-               value="2106-10-28"
+               value="2106-10-29"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>today</code>. Example: <code>2106-10-28</code></p>
+<p>Must be a valid date. Must be a date after <code>today</code>. Example: <code>2106-10-29</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>hora_cita</code></b>&nbsp;&nbsp;
@@ -2694,10 +2857,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="hora_cita"                data-endpoint="PUTapi-citas--id-"
-               value="05:39"
+               value="01:00"
                data-component="body">
     <br>
-<p>Must be a valid date in the format <code>H:i</code>. Example: <code>05:39</code></p>
+<p>Must be a valid date in the format <code>H:i</code>. Example: <code>01:00</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>lugar</code></b>&nbsp;&nbsp;
@@ -2881,6 +3044,7 @@ Crea una cita en un horario disponible para el doctor seleccionado.</h2>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
+    \"id_paciente\": \"consequatur\",
     \"id_doctor\": 2,
     \"fecha_cita\": \"2025-10-01\",
     \"hora_cita\": \"14:30\",
@@ -2902,6 +3066,7 @@ const headers = {
 };
 
 let body = {
+    "id_paciente": "consequatur",
     "id_doctor": 2,
     "fecha_cita": "2025-10-01",
     "hora_cita": "14:30",
@@ -3016,6 +3181,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                                 <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id_paciente</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="id_paciente"                data-endpoint="POSTapi-citas"
+               value="consequatur"
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the pacientes table. Example: <code>consequatur</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>id_doctor</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
@@ -4620,6 +4796,293 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
+                    <h2 id="doctores-admin-DELETEapi-doctor--id-">Eliminar un doctor
+
+Permite al administrador eliminar un doctor por ID.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-doctor--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://127.0.0.1:8000/api/doctor/1" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/doctor/1"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-doctor--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Doctor eliminado con &eacute;xito&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Doctor no encontrado&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-doctor--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-doctor--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-doctor--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-doctor--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-doctor--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-doctor--id-" data-method="DELETE"
+      data-path="api/doctor/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-doctor--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-doctor--id-"
+                    onclick="tryItOut('DELETEapi-doctor--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-doctor--id-"
+                    onclick="cancelTryOut('DELETEapi-doctor--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-doctor--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/doctor/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-doctor--id-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-doctor--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-doctor--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="DELETEapi-doctor--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>ID del doctor. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="doctores-admin-GETapi-countDoctores">Contar doctores
+
+Devuelve el número total de doctores registrados en el sistema.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-countDoctores">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/countDoctores" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/countDoctores"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-countDoctores">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;total&quot;: 10
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-countDoctores" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-countDoctores"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-countDoctores"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-countDoctores" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-countDoctores">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-countDoctores" data-method="GET"
+      data-path="api/countDoctores"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-countDoctores', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-countDoctores"
+                    onclick="tryItOut('GETapi-countDoctores');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-countDoctores"
+                    onclick="cancelTryOut('GETapi-countDoctores');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-countDoctores"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/countDoctores</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-countDoctores"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-countDoctores"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-countDoctores"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
                     <h2 id="doctores-admin-GETapi-doctores">Listar doctores
 
 Devuelve la lista completa de doctores registrados en el sistema.</h2>
@@ -6022,7 +6485,140 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     
 
-                                <h2 id="especialidades-publico-autenticado-GETapi-especialidades">Listar todas las especialidades
+                                <h2 id="especialidades-publico-autenticado-GETapi-countEspecialidades">Contar especialidades
+
+Devuelve el número total de especialidades registradas en el sistema.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-countEspecialidades">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/countEspecialidades" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/countEspecialidades"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-countEspecialidades">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;total&quot;: 10
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-countEspecialidades" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-countEspecialidades"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-countEspecialidades"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-countEspecialidades" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-countEspecialidades">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-countEspecialidades" data-method="GET"
+      data-path="api/countEspecialidades"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-countEspecialidades', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-countEspecialidades"
+                    onclick="tryItOut('GETapi-countEspecialidades');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-countEspecialidades"
+                    onclick="cancelTryOut('GETapi-countEspecialidades');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-countEspecialidades"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/countEspecialidades</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-countEspecialidades"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-countEspecialidades"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-countEspecialidades"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="especialidades-publico-autenticado-GETapi-especialidades">Listar todas las especialidades
 
 Devuelve una lista de todas las especialidades registradas en el sistema.</h2>
 
@@ -7827,6 +8423,139 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="horarios-admin-GETapi-countHorarios">Contar horarios
+
+Devuelve el número total de horarios registrados.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-countHorarios">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/countHorarios" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/countHorarios"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-countHorarios">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;total&quot;: 150
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-countHorarios" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-countHorarios"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-countHorarios"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-countHorarios" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-countHorarios">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-countHorarios" data-method="GET"
+      data-path="api/countHorarios"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-countHorarios', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-countHorarios"
+                    onclick="tryItOut('GETapi-countHorarios');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-countHorarios"
+                    onclick="cancelTryOut('GETapi-countHorarios');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-countHorarios"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/countHorarios</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-countHorarios"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-countHorarios"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-countHorarios"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
                 <h1 id="horarios-doctor">Horarios [DOCTOR]</h1>
 
     
@@ -9062,6 +9791,139 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>ID del paciente a eliminar. Example: <code>1</code></p>
             </div>
                     </form>
+
+                    <h2 id="pacientes-admin-GETapi-countPacientes">Contar total de pacientes
+
+Devuelve el número total de pacientes registrados en el sistema.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-countPacientes">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/countPacientes" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/countPacientes"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-countPacientes">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;total&quot;: 10
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-countPacientes" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-countPacientes"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-countPacientes"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-countPacientes" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-countPacientes">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-countPacientes" data-method="GET"
+      data-path="api/countPacientes"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-countPacientes', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-countPacientes"
+                    onclick="tryItOut('GETapi-countPacientes');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-countPacientes"
+                    onclick="cancelTryOut('GETapi-countPacientes');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-countPacientes"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/countPacientes</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-countPacientes"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-countPacientes"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-countPacientes"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
 
                 <h1 id="pacientes-autenticado">Pacientes [AUTENTICADO]</h1>
 

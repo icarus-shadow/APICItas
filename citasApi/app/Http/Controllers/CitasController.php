@@ -259,14 +259,13 @@ class CitasController extends Controller
             'fecha_cita' => 'required|date|after:today',
             'hora_cita' => 'required|date_format:H:i',
             'lugar' => 'required|string|max:255',
-            'motivo' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $cita->update($request->only(['id_doctor', 'fecha_cita', 'hora_cita', 'lugar', 'motivo']));
+        $cita->update($request->only(['id_doctor', 'fecha_cita', 'hora_cita', 'lugar']));
 
         return response()->json($cita);
     }

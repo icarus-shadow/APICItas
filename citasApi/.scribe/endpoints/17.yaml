@@ -1,19 +1,19 @@
-name: 'Especialidades [PUBLICO AUTENTICADO]'
+name: 'Horarios [DOCTOR]'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/especialidades
+    uri: api/mis-horarios
     metadata:
-      groupName: 'Especialidades [PUBLICO AUTENTICADO]'
+      groupName: 'Horarios [DOCTOR]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Listar todas las especialidades
+        Listar mis horarios
 
-        Devuelve una lista de todas las especialidades registradas en el sistema.
+        Devuelve todos los intervalos de 30 minutos del doctor autenticado.
       description: ''
       authenticated: true
       deprecated: false
@@ -35,80 +35,11 @@ endpoints:
         content: |-
           [
             {
-               "id": 1,
-               "nombre": "Cardiología",
-               "descripcion": "Especialidad del corazón"
+               "dia": 1,
+               "hora_inicio": "08:00",
+               "hora_fin": "08:30"
             }
           ]
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/especialidades/{id}'
-    metadata:
-      groupName: 'Especialidades [PUBLICO AUTENTICADO]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Ver una especialidad
-
-        Devuelve los detalles de una especialidad específica.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID de la especialidad.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-             "id": 1,
-             "nombre": "Cardiología",
-             "descripcion": "Especialidad del corazón"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-             "message": "Especialidad no encontrada"
-          }
         headers: []
         description: ''
         custom: []
