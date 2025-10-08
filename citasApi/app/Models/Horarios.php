@@ -10,15 +10,18 @@ class Horarios extends Model
     use HasFactory;
 
     protected $fillable = [
-        'dia',
+        'nombre',
         'hora_inicio',
         'hora_fin',
-        'id_doctor',
-        'disponible'
+        'dias'
     ];
 
-    public function doctor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    protected $casts = [
+        'dias' => 'array',
+    ];
+
+    public function doctorHorarios(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Doctores::class, 'id_doctor');
+        return $this->hasMany(DoctorHorario::class, 'id_horario');
     }
 }

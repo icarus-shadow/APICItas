@@ -15,6 +15,27 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [authController::class, 'logout']);
+    Route::post('/change-password', [authController::class, 'changePassword']);
+    Route::delete('/delete-account', [authController::class, 'deleteAccount']);
+
+
+    // CRUD para pacientes (solo puede acceder a su propia información)
+    Route::get('/mi-perfil', [PacientesController::class, 'showOwn']);        // Ver su información
+    Route::put('/mi-perfil', [PacientesController::class, 'updateOwn']);     // Actualizar su información
+
+    // Pacientes y Doctores
+    Route::get('/doctores/especialidad/{id}', [ConsultaController::class, 'doctoresPorEspecialidad']);
+    Route::get('/doctor/{id}/disponibilidad', [ConsultaController::class, 'disponibilidadDoctor']);
+
+    // Paciente autenticado
+    Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
+    Route::post('/citas', [CitasController::class, 'store']);
+
+
+});
+
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/mi-perfil-admin', [AdministradoresController::class, 'showOwn']);
     Route::put('/mi-perfil-admin', [AdministradoresController::class, 'updateOwn']);
@@ -42,13 +63,20 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/countEspecialidades', [EspecialidadesController::class, 'count']);
 
     // endpoints para la administracion de horarios
-    Route::get('/horarios', [HorariosController::class, 'indexCompact']); // Listar todos compactos
+    Route::get('/horarios', [HorariosController::class, 'index']); // Listar plantillas de horario
     Route::get('/horarios/{id}', [HorariosController::class, 'show']);    // Ver un horario
-    Route::post('/horarios', [HorariosController::class, 'store']);       // Crear bloques de horarios
+    Route::post('/horarios', [HorariosController::class, 'store']);       // Crear plantilla de horario
+    Route::post('/asignar-horario', [HorariosController::class, 'assignToDoctor']); // Asignar horario a doctor
+    Route::post('/desasignar-horario', [HorariosController::class, 'unassignFromDoctor']); // Desasignar horario de doctor
+    Route::post('/verificar-conflicto-horario', [HorariosController::class, 'checkConflict']); // Verificar conflictos antes de asignar
     Route::put('/horarios/{id}', [HorariosController::class, 'update']);  // Editar un bloque específico
     Route::delete('/horarios/{id}', [HorariosController::class, 'destroy']); // Eliminar un bloque
     Route::get('/horarios-doctor/{id_doctor}', [HorariosController::class, 'listByDoctor']); // Listar por doctor
     Route::get('/countHorarios', [HorariosController::class, 'count']);
+
+    // Notificaciones
+    Route::get('/notificaciones', [\App\Http\Controllers\NotificacionesController::class, 'index']); // Listar pendientes
+    Route::put('/notificaciones/{id}', [\App\Http\Controllers\NotificacionesController::class, 'update']); // Aprobar/rechazar
 
     // administacion de citas
     Route::get('/citas', [CitasController::class, 'index']); // Ver todas
@@ -69,27 +97,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/horarios/compactados/{id_doctor}', [ConsultaController::class, 'horariosCompactados']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [authController::class, 'logout']);
-    Route::post('/change-password', [authController::class, 'changePassword']);
-    Route::delete('/delete-account', [authController::class, 'deleteAccount']);
-
-
-    // CRUD para pacientes (solo puede acceder a su propia información)
-    Route::get('/mi-perfil', [PacientesController::class, 'showOwn']);        // Ver su información
-    Route::put('/mi-perfil', [PacientesController::class, 'updateOwn']);     // Actualizar su información
-
-    // Pacientes y Doctores
-    Route::get('/doctores/especialidad/{id}', [ConsultaController::class, 'doctoresPorEspecialidad']);
-    Route::get('/doctor/{id}/disponibilidad', [ConsultaController::class, 'disponibilidadDoctor']);
-
-    // Paciente autenticado
-    Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
-    Route::post('/citas', [CitasController::class, 'store']);
-
-
-});
-
 Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/mi-perfil-doctor', [DoctoresController::class, 'showOwn']);       // Ver su perfil
     Route::put('/mi-perfil-doctor', [DoctoresController::class, 'updateOwn']);     // Actualizar su perfil
@@ -97,9 +104,8 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
 
     // manejo de horarios disponibles por el doctor
     Route::get('/mis-horarios', [HorariosController::class, 'listOwn']);   // Listar mis horarios completos
-    Route::post('/mis-horarios', [HorariosController::class, 'store']);    // Crear bloques para mí
-    Route::put('/mis-horarios/{id}', [HorariosController::class, 'update']); // Editar un bloque mío
-    Route::delete('/mis-horarios/{id}', [HorariosController::class, 'destroy']);
+    Route::post('/solicitar-bloqueo', [\App\Http\Controllers\NotificacionesController::class, 'store']); // Solicitar bloqueo
+    Route::get('/mis-notificaciones', [\App\Http\Controllers\NotificacionesController::class, 'myNotifications']); // Ver mis notificaciones
 
     // Doctor autenticado
     Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);// Eliminar un bloque mío
@@ -110,3 +116,6 @@ Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar d
 Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Listar
 Route::get('/especialidades/{id}', [EspecialidadesController::class, 'show']); // Ver detalle
 Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);
+
+
+

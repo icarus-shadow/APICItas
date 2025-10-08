@@ -240,7 +240,7 @@ class authcontroller extends Controller
      * @bodyParam apellidos string required Apellidos completos del doctor. Example: García López
      * @bodyParam cedula string required Cédula única del doctor. Example: 1122334455
      * @bodyParam id_especialidades integer required ID de la especialidad a la que pertenece el doctor. Example: 1
-     * @bodyParam horario string Horario de atención del doctor. Example: Lunes a Viernes 8:00 AM - 4:00 PM
+     * @bodyParam id_horario integer ID de la plantilla de horario a asignar (opcional). Example: 1
      * @bodyParam lugar_trabajo string Lugar donde atiende el doctor. Example: Hospital Central
      *
      * @response 201 {
@@ -288,7 +288,7 @@ class authcontroller extends Controller
             'apellidos' => 'required|string',
             'cedula' => 'required|string|unique:doctores,cedula',
             'id_especialidades' => 'required|exists:especialidades,id',
-            'horario' => 'nullable|string',
+            'id_horario' => 'nullable|exists:horarios,id',
             'lugar_trabajo' => 'nullable|string',
         ]);
 
@@ -307,9 +307,49 @@ class authcontroller extends Controller
                 'apellidos' => $request->apellidos,
                 'cedula' => $request->cedula,
                 'id_especialidades' => $request->id_especialidades,
-                'horario' => $request->horario,
+                'horario' => $request->horario ?? null,
                 'lugar_trabajo' => $request->lugar_trabajo
             ]);
+
+            // Si se especificó un horario, asignarlo al doctor
+            if ($request->id_horario) {
+                $horarioTemplate = \App\Models\Horarios::find($request->id_horario);
+
+                // Verificar conflictos antes de asignar
+                $horariosController = new \App\Http\Controllers\HorariosController();
+                $conflictos = $horariosController->checkHorarioConflicts($doctor->id, $horarioTemplate);
+                if (!empty($conflictos)) {
+                    DB::rollBack();
+                    return response()->json([
+                        'error' => 'Conflicto de horarios detectado',
+                        'conflictos' => $conflictos,
+                        'message' => 'No se puede asignar este horario porque hay conflictos.'
+                    ], 422);
+                }
+
+                // Asignar el horario
+                $hora_inicio = \DateTime::createFromFormat('H:i', $horarioTemplate->hora_inicio);
+                $hora_fin = \DateTime::createFromFormat('H:i', $horarioTemplate->hora_fin);
+                $interval = new \DateInterval('PT30M');
+
+                foreach ($horarioTemplate->dias as $dia) {
+                    $period = new \DatePeriod($hora_inicio, $interval, $hora_fin);
+
+                    foreach ($period as $start) {
+                        $end = clone $start;
+                        $end->add($interval);
+
+                        \App\Models\DoctorHorario::create([
+                            'id_horario' => $horarioTemplate->id,
+                            'id_doctor' => $doctor->id,
+                            'dia' => $dia,
+                            'hora_inicio' => $start->format('H:i'),
+                            'hora_fin' => $end->format('H:i'),
+                            'disponible' => true,
+                        ]);
+                    }
+                }
+            }
 
             DB::commit();
 

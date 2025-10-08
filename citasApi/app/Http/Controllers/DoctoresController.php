@@ -28,7 +28,22 @@ class DoctoresController extends Controller
      */
     public function index()
     {
-        $doctores = Doctores::all();
+        $doctores = Doctores::with(['doctorHorarios.horario'])->get()->map(function ($doctor) {
+            $horariosAsignados = $doctor->doctorHorarios->pluck('horario.nombre')->unique()->values();
+            return [
+                'id' => $doctor->id,
+                'user_id' => $doctor->user_id,
+                'cedula' => $doctor->cedula,
+                'nombres' => $doctor->nombres,
+                'apellidos' => $doctor->apellidos,
+                'id_especialidades' => $doctor->id_especialidades,
+                'horario' => $doctor->horario,
+                'lugar_trabajo' => $doctor->lugar_trabajo,
+                'created_at' => $doctor->created_at,
+                'updated_at' => $doctor->updated_at,
+                'horarios_asignados' => $horariosAsignados
+            ];
+        });
         return response()->json($doctores);
     }
 
@@ -74,6 +89,8 @@ class DoctoresController extends Controller
      * @bodyParam nombres string Nombre del doctor. Example: Pedro
      * @bodyParam apellidos string Apellido del doctor. Example: López
      * @bodyParam telefono string Número telefónico. Example: 3012345678
+     * @bodyParam especialidad integer ID de la especialidad. Example: 1
+     * @bodyParam horario integer ID del horario a asignar (opcional). Example: 1
      *
      * @urlParam id integer ID del doctor. Example: 1
      *
@@ -84,6 +101,9 @@ class DoctoresController extends Controller
      * }
      * @response 404 {
      *    "message": "Doctor no encontrado"
+     * }
+     * @response 422 {
+     *    "error": "Conflicto de horarios detectado"
      * }
      */
     public function update(Request $request, string $id)
@@ -97,14 +117,32 @@ class DoctoresController extends Controller
             'nombres' => 'string|max:255',
             'apellidos' => 'string|max:255',
             'telefono' => 'string|max:255',
-            'especialidad_id' => 'integer|exists:especialidades,id'
+            'especialidad' => 'nullable|integer|exists:especialidades,id',
+            'horarios_asignados' => 'nullable|array',
+            'horarios_asignados.*.id' => 'integer|exists:horarios,id',
+            'horarios_asignados.*.nombre' => 'string'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $doctor->update($validator->validated());
+        $data = $validator->validated();
+
+        // Mapear nombres simplificados a nombres de base de datos
+        if (isset($data['especialidad'])) {
+            $data['id_especialidades'] = $data['especialidad'];
+            unset($data['especialidad']);
+        }
+
+        // Nota: Los horarios se manejan directamente desde el frontend con las llamadas
+        // a /asignar-horario y /desasignar-horario, por lo que aquí no necesitamos
+        // procesar horarios_asignados. Solo removemos el campo si existe.
+        if (isset($data['horarios_asignados'])) {
+            unset($data['horarios_asignados']);
+        }
+
+        $doctor->update($data);
 
         return response()->json($doctor);
     }
@@ -233,4 +271,5 @@ class DoctoresController extends Controller
         $total = Doctores::count();
         return response()->json(['total' => $total]);
     }
+
 }

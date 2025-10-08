@@ -48,7 +48,7 @@ class ConsultaController extends Controller
      */
     public function disponibilidadDoctor($id)
     {
-        $horarios = Horarios::where('id_doctor', $id)->where('disponible', true)->get();
+        $horarios = \App\Models\DoctorHorario::where('id_doctor', $id)->where('disponible', true)->get();
         return response()->json($horarios);
     }
 
@@ -72,7 +72,7 @@ class ConsultaController extends Controller
             $user = Auth::user();
 
             // Verificar que sea paciente (id_rol = 1)
-            if ($user->id_rol !== 1) {
+            if ((int)$user->id_rol !== 1) {
                 return response()->json(['message' => 'Acceso denegado'], 403);
             }
 

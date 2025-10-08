@@ -34,8 +34,8 @@ class Doctores extends Model
         return $this->hasMany(Cita::class, 'id_doctor');
     }
 
-    public function horarios()
+    public function doctorHorarios()
     {
-        return $this->hasMany(Horario::class, 'id_doctor');
+        return $this->hasMany(DoctorHorario::class, 'id_doctor');
     }
 }
