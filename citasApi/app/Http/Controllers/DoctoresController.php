@@ -116,6 +116,8 @@ class DoctoresController extends Controller
         $validator = Validator::make($request->all(), [
             'nombres' => 'string|max:255',
             'apellidos' => 'string|max:255',
+            'cedula' => 'string|max:255|unique:doctores,cedula,' . $id,
+            'lugar_trabajo' => 'nullable|string|max:255',
             'telefono' => 'string|max:255',
             'especialidad' => 'nullable|integer|exists:especialidades,id',
             'horarios_asignados' => 'nullable|array',
