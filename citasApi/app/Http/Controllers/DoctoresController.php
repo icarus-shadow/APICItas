@@ -29,7 +29,7 @@ class DoctoresController extends Controller
     public function index()
     {
         $doctores = Doctores::with(['doctorHorarios.horario'])->get()->map(function ($doctor) {
-            $horariosAsignados = $doctor->doctorHorarios->pluck('horario.nombre')->unique()->values();
+            $horariosAsignados = $doctor->doctorHorarios->map(function($dh) { return $dh->horario->nombre; })->unique()->values();
             return [
                 'id' => $doctor->id,
                 'user_id' => $doctor->user_id,
