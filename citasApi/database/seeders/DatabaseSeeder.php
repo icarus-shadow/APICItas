@@ -9,9 +9,9 @@ use App\Models\Doctores;
 use App\Models\Pacientes;
 use App\Models\Administradores;
 use App\Models\Citas;
-use App\Models\Horarios;
 use App\Models\DoctorHorario;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -198,31 +198,31 @@ class DatabaseSeeder extends Seeder
             Citas::create($citaData);
         }
 
-        // Crear plantillas de horarios de ejemplo
-        $horariosData = [
-            ['nombre' => 'Horario Mañana', 'hora_inicio' => '08:00', 'hora_fin' => '12:00', 'dias' => [1, 2, 3, 4, 5]], // Lunes a Viernes
-            ['nombre' => 'Horario Tarde', 'hora_inicio' => '14:00', 'hora_fin' => '18:00', 'dias' => [1, 2, 3, 4, 5]], // Lunes a Viernes
-            ['nombre' => 'Horario Fin de Semana', 'hora_inicio' => '09:00', 'hora_fin' => '13:00', 'dias' => [6, 7]], // Sábado y Domingo
+        // Crear plantillas de horarios
+        $horariosTemplates = [
+            ['nombre' => 'Horario Mañana L-V', 'hora_inicio' => '08:00', 'hora_fin' => '12:00', 'dias' => [1, 2, 3, 4, 5]],
+            ['nombre' => 'Horario Tarde L-V', 'hora_inicio' => '14:00', 'hora_fin' => '18:00', 'dias' => [1, 2, 3, 4, 5]],
+            ['nombre' => 'Horario Fin de Semana', 'hora_inicio' => '09:00', 'hora_fin' => '13:00', 'dias' => [6, 7]],
         ];
 
-        $horariosTemplates = [];
-        foreach ($horariosData as $horarioData) {
-            $horariosTemplates[] = Horarios::create($horarioData);
+        $horarios = [];
+        foreach ($horariosTemplates as $template) {
+            $horarios[] = \App\Models\Horarios::create($template);
         }
 
-        // Asignar horarios a doctores y crear slots
+        // Asignar horarios a doctores
         $asignaciones = [
-            ['doctor' => $doctores[0], 'horario' => $horariosTemplates[0]], // Juan - Horario Mañana
-            ['doctor' => $doctores[1], 'horario' => $horariosTemplates[1]], // María - Horario Tarde
-            ['doctor' => $doctores[2], 'horario' => $horariosTemplates[2]], // Carlos - Horario Fin de Semana
+            ['doctor' => $doctores[0], 'horario' => $horarios[0]], // Juan - Mañana
+            ['doctor' => $doctores[1], 'horario' => $horarios[1]], // María - Tarde
+            ['doctor' => $doctores[2], 'horario' => $horarios[2]], // Carlos - Fin de semana
         ];
 
         foreach ($asignaciones as $asignacion) {
-            $this->assignHorarioToDoctor($asignacion['horario'], $asignacion['doctor']);
+            $this->assignHorarioToDoctor($asignacion['doctor'], $asignacion['horario']);
         }
     }
 
-    private function assignHorarioToDoctor($horarioTemplate, $doctor)
+    private function assignHorarioToDoctor($doctor, $horarioTemplate)
     {
         $hora_inicio = \DateTime::createFromFormat('H:i', $horarioTemplate->hora_inicio);
         $hora_fin = \DateTime::createFromFormat('H:i', $horarioTemplate->hora_fin);
@@ -235,7 +235,7 @@ class DatabaseSeeder extends Seeder
                 $end = clone $start;
                 $end->add($interval);
 
-                DoctorHorario::create([
+                \App\Models\DoctorHorario::create([
                     'id_horario' => $horarioTemplate->id,
                     'id_doctor' => $doctor->id,
                     'dia' => $dia,

@@ -23,15 +23,13 @@ class HorariosController extends Controller
      *      "nombre": "Horario Mañana",
      *      "hora_inicio": "08:00",
      *      "hora_fin": "12:00",
-     *      "dias": [1,2,3,4,5]
+     *      "dias": [1,3,5]
      *   }
      * ]
      */
     public function index()
     {
-        $horarios = Horarios::select('id', 'nombre', 'hora_inicio', 'hora_fin', 'dias')
-            ->orderBy('nombre')
-            ->get();
+        $horarios = Horarios::all();
 
         return response()->json($horarios);
     }
@@ -39,19 +37,20 @@ class HorariosController extends Controller
     /**
      * @group Horarios [ADMIN]
      *
-     * Listar todas las plantillas de horario (compacto)
+     * Listar todos los horarios de doctores (compacto)
      *
-     * Devuelve todas las plantillas de horario con sus rangos.
+     * Devuelve todos los horarios de doctores con sus rangos.
      *
      * @authenticated
      *
      * @response 200 [
      *   {
      *      "id": 1,
-     *      "nombre": "Horario Mañana",
+     *      "dia": 1,
      *      "hora_inicio": "08:00",
-     *      "hora_fin": "12:00",
-     *      "dias": [1,2,3,4,5]
+     *      "hora_fin": "08:30",
+     *      "id_doctor": 1,
+     *      "disponible": true
      *   }
      * ]
      */
@@ -457,21 +456,21 @@ class HorariosController extends Controller
 
     /**
      * @group Horarios [ADMIN]
-     *
-     * Contar horarios
-     *
-     * Devuelve el número total de horarios registrados.
-     *
-     * @authenticated
-     *
-     * @response 200 {
-     *    "total": 150
-     * }
-     */
-    public function count()
-    {
-        $total = Horarios::count();
-        return response()->json(['total' => $total]);
-    }
+      *
+      * Contar plantillas de horarios
+      *
+      * Devuelve el número total de plantillas de horarios registradas.
+      *
+      * @authenticated
+      *
+      * @response 200 {
+      *    "total": 3
+      * }
+      */
+     public function count()
+     {
+         $total = Horarios::count();
+         return response()->json(['total' => $total]);
+     }
 
 }
