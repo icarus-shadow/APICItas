@@ -196,7 +196,7 @@ class PacientesController extends Controller
      *    "id": 1,
      *    "nombres": "Juan",
      *    "apellidos": "Pérez",
-     *    "documento": "12345678",
+     *    "cedula": "12345678",
      *    "telefono": "3001234567"
      * }
      * @response 404 {
@@ -209,7 +209,10 @@ class PacientesController extends Controller
         if (!$paciente) {
             return response()->json(['message' => 'Paciente no encontrado'], 404);
         }
-        return response()->json($paciente);
+        $data = $paciente->toArray();
+        $data['cedula'] = $paciente->documento;
+        unset($data['documento']);
+        return response()->json($data);
     }
 
     /**
