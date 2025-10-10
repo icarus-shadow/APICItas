@@ -11,10 +11,37 @@ use Illuminate\Support\Facades\DB;
 
 class NotificacionesController extends Controller
 {
-    /**
-     * Listar notificaciones activas (pendientes) con paginación y filtros
-     */
-    public function index(Request $request)
+     /**
+      * @group Gestión del Sistema
+      * @subgroup Notificaciones
+      *
+      * Listar notificaciones activas (pendientes)
+      *
+      * Devuelve una lista paginada de notificaciones pendientes con filtros opcionales por doctor y fecha.
+      *
+      * @authenticated
+      *
+      * @queryParam doctor_id integer ID del doctor (opcional). Example: 1
+      * @queryParam fecha_solicitada date Fecha solicitada (opcional). Example: 2025-10-10
+      * @queryParam per_page integer Número de elementos por página (opcional, default 15). Example: 10
+      *
+      * @response 200 {
+      *    "current_page": 1,
+      *    "data": [
+      *       {
+      *          "id": 1,
+      *          "doctor_id": 1,
+      *          "fecha_solicitada": "2025-10-10",
+      *          "slots": [...],
+      *          "estado": "pendiente",
+      *          "doctor": {...}
+      *       }
+      *    ],
+      *    "per_page": 15,
+      *    "total": 1
+      * }
+      */
+     public function index(Request $request)
     {
         $query = Notificaciones::where('estado', EstadoNotificacion::PENDIENTE)->with('doctor');
 
@@ -32,7 +59,36 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Listar historial de notificaciones (aprobadas/rechazadas) con paginación y filtros
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Listar historial de notificaciones
+     *
+     * Devuelve una lista paginada del historial de notificaciones aprobadas o rechazadas con filtros opcionales.
+     *
+     * @authenticated
+     *
+     * @queryParam doctor_id integer ID del doctor (opcional). Example: 1
+     * @queryParam fecha_solicitada date Fecha solicitada (opcional). Example: 2025-10-10
+     * @queryParam per_page integer Número de elementos por página (opcional, default 15). Example: 10
+     *
+     * @response 200 {
+     *    "current_page": 1,
+     *    "data": [
+     *       {
+     *          "id": 1,
+     *          "doctor_id": 1,
+     *          "fecha_solicitada": "2025-10-10",
+     *          "slots": [...],
+     *          "estado": "aprobada",
+     *          "admin_id": 1,
+     *          "doctor": {...},
+     *          "administrador": {...}
+     *       }
+     *    ],
+     *    "per_page": 15,
+     *    "total": 1
+     * }
      */
     public function historial(Request $request)
     {
@@ -52,7 +108,26 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Aprobar notificación y apartar slots
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Aprobar notificación
+     *
+     * Aprueba una notificación pendiente y aparta los slots correspondientes en la agenda del doctor.
+     *
+     * @authenticated
+     *
+     * @urlParam id integer ID de la notificación. Example: 1
+     *
+     * @response 200 {
+     *    "message": "Notificación aprobada y slots apartados"
+     * }
+     * @response 404 {
+     *    "message": "Notificación no encontrada o no pendiente"
+     * }
+     * @response 500 {
+     *    "message": "Error interno del servidor"
+     * }
      */
     public function aprobar($id)
     {
@@ -93,7 +168,23 @@ class NotificacionesController extends Controller
     }
 
     /**
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
      * Rechazar notificación
+     *
+     * Rechaza una notificación pendiente.
+     *
+     * @authenticated
+     *
+     * @urlParam id integer ID de la notificación. Example: 1
+     *
+     * @response 200 {
+     *    "message": "Notificación rechazada"
+     * }
+     * @response 404 {
+     *    "message": "Notificación no encontrada o no pendiente"
+     * }
      */
     public function rechazar($id)
     {
@@ -111,7 +202,18 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Eliminar historial
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Eliminar historial de notificaciones
+     *
+     * Elimina permanentemente todo el historial de notificaciones aprobadas y rechazadas.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "message": "Historial eliminado"
+     * }
      */
     public function eliminarHistorial()
     {
@@ -121,7 +223,20 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Retornar contadores
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Contadores de notificaciones
+     *
+     * Devuelve los contadores de notificaciones por estado: pendientes, aprobadas y rechazadas.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "pendientes": 5,
+     *    "aprobadas": 10,
+     *    "rechazadas": 2
+     * }
      */
     public function contadores()
     {
@@ -137,7 +252,32 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Crear solicitud de notificación (para doctores)
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Crear solicitud de notificación
+     *
+     * Permite a un doctor crear una nueva solicitud de notificación para apartar slots en su agenda.
+     *
+     * @authenticated
+     *
+     * @bodyParam fecha_solicitada date required Fecha para la que se solicita el apartado. Example: 2025-10-15
+     * @bodyParam slots array required Lista de slots a apartar. Example: [{"fecha": "2025-10-15", "hora": "10:00-10:30"}]
+     * @bodyParam slots.*.fecha date required Fecha del slot. Example: 2025-10-15
+     * @bodyParam slots.*.hora string required Rango horario del slot. Example: 10:00-10:30
+     *
+     * @response 201 {
+     *    "id": 1,
+     *    "doctor_id": 1,
+     *    "fecha_solicitada": "2025-10-15",
+     *    "slots": [...],
+     *    "estado": "pendiente"
+     * }
+     * @response 422 {
+     *    "errors": {
+     *       "fecha_solicitada": ["El campo fecha_solicitada es obligatorio"]
+     *    }
+     * }
      */
     public function store(Request $request)
     {
@@ -163,7 +303,25 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Ver mis notificaciones (para doctores)
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Ver mis notificaciones
+     *
+     * Devuelve todas las notificaciones del doctor autenticado.
+     *
+     * @authenticated
+     *
+     * @response 200 [
+     *    {
+     *       "id": 1,
+     *       "doctor_id": 1,
+     *       "fecha_solicitada": "2025-10-15",
+     *       "slots": [...],
+     *       "estado": "pendiente",
+     *       "administrador": {...}
+     *    }
+     * ]
      */
     public function myNotifications()
     {
@@ -173,7 +331,29 @@ class NotificacionesController extends Controller
     }
 
     /**
-     * Actualizar notificación (aprobar/rechazar)
+     * @group Gestión del Sistema
+     * @subgroup Notificaciones
+     *
+     * Actualizar notificación
+     *
+     * Permite aprobar o rechazar una notificación pendiente.
+     *
+     * @authenticated
+     *
+     * @urlParam id integer ID de la notificación. Example: 1
+     * @bodyParam estado string required Estado a actualizar (aprobada o rechazada). Example: aprobada
+     *
+     * @response 200 {
+     *    "message": "Notificación aprobada y slots apartados"
+     * }
+     * @response 404 {
+     *    "message": "Notificación no encontrada"
+     * }
+     * @response 422 {
+     *    "errors": {
+     *       "estado": ["El estado debe ser aprobada o rechazada"]
+     *    }
+     * }
      */
     public function update(Request $request, $id)
     {

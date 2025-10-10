@@ -1,132 +1,198 @@
-name: Administradores
+name: 'Gestión del Sistema'
 description: ''
 endpoints:
   -
     httpMethods:
-      - POST
-    uri: api/registrar-administrador
+      - GET
+    uri: 'api/doctores/especialidad/{id}'
     metadata:
-      groupName: Administradores
+      groupName: 'Gestión del Sistema'
       groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Registrar un nuevo administrador
+      subgroup: |-
+        Consulta
 
-        Este endpoint permite crear un administrador y su usuario asociado en el sistema. Se ejecuta dentro de
-        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de administrador (id_rol = 3).
+        Doctores por especialidad
+
+        Lista todos los doctores que pertenecen a una especialidad específica.
+      subgroupDescription: ''
+      title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
       custom: []
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la especialidad.'
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 3
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+             { "id": 1, "nombres": "Juan", "apellidos": "López", "especialidad": "Cardiología" }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Especialidad no encontrada"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/doctor/{id}/disponibilidad'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Consulta
+
+        Disponibilidad de un doctor
+
+        Devuelve los horarios disponibles (disponible = true) de un doctor para agendar cita.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del doctor.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 2
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+             { "dia": 1, "hora_inicio": "08:00", "hora_fin": "08:30", "disponible": true }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Doctor no encontrado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/citas/mis-citas
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Consulta
+
+        Mis citas
+
+        Muestra el historial de citas del usuario autenticado (paciente).
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      email:
-        name: email
-        description: 'Correo electrónico único del usuario.'
-        required: true
-        example: admin@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      password:
-        name: password
-        description: 'Contraseña del usuario, mínimo 6 caracteres.'
-        required: true
-        example: secret123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      nombres:
-        name: nombres
-        description: 'Nombres completos del administrador.'
-        required: true
-        example: María
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      apellidos:
-        name: apellidos
-        description: 'Apellidos completos del administrador.'
-        required: true
-        example: 'Rodríguez López'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      cedula:
-        name: cedula
-        description: 'Cédula única del administrador.'
-        required: true
-        example: '987654321'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      telefono:
-        name: telefono
-        description: 'Teléfono de contacto del administrador.'
-        required: true
-        example: '3109876543'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      email: admin@example.com
-      password: secret123
-      nombres: María
-      apellidos: 'Rodríguez López'
-      cedula: '987654321'
-      telefono: '3109876543'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 201
+        status: 200
+        content: |-
+          [
+             { "id": 1, "fecha_cita": "2025-09-10", "hora_cita": "10:00", "lugar": "Consultorio 1", "motivo": "Chequeo general", "id_doctor": 1, "id_paciente": 1, "doctor": {...}, "paciente": {...} }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
         content: |-
           {
-            "message": "Administrador registrado correctamente",
-            "user": {
-                "id": 12,
-                "email": "admin@example.com",
-                "id_rol": 3,
-                "created_at": "2025-09-05T10:00:00.000000Z"
-            },
-            "administrador": {
-                "id": 3,
-                "user_id": 12,
-                "nombres": "María",
-                "apellidos": "Rodríguez López",
-                "cedula": "987654321",
-                "telefono": "3109876543"
-            }
+             "message": "Acceso denegado"
           }
         headers: []
         description: ''
         custom: []
       -
-        status: 422
+        status: 404
         content: |-
           {
-            "message": "The given data was invalid.",
-            "errors": {
-                "email": ["El campo email es obligatorio."]
-            }
+             "message": "Paciente no encontrado"
           }
         headers: []
         description: ''
@@ -135,14 +201,2380 @@ endpoints:
         status: 500
         content: |-
           {
-            "message": "Error al registrar administrador",
-            "error": "Detalle del error interno"
+             "message": "Error interno del servidor"
           }
         headers: []
         description: ''
         custom: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/especialidades
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Especialidades
+
+        Crear especialidad
+
+        Permite a un administrador registrar una nueva especialidad médica en el sistema.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombre:
+        name: nombre
+        description: 'Nombre de la especialidad.'
+        required: true
+        example: Cardiología
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      descripcion:
+        name: descripcion
+        description: 'Descripción de la especialidad.'
+        required: true
+        example: 'Tratamiento del corazón'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombre: Cardiología
+      descripcion: 'Tratamiento del corazón'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+             "id": 1,
+             "nombre": "Cardiología",
+             "descripcion": "Especialidad del corazón"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "nombre": ["El campo nombre es obligatorio"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+             "message": "Error interno del servidor"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/especialidades/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Especialidades
+
+        Actualizar especialidad
+
+        Permite a un administrador actualizar los datos de una especialidad médica existente.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la especialidad.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombre:
+        name: nombre
+        description: 'Nombre de la especialidad (opcional).'
+        required: false
+        example: Cardiología
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      descripcion:
+        name: descripcion
+        description: 'Descripción de la especialidad (opcional).'
+        required: false
+        example: 'Tratamiento del corazón'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombre: Cardiología
+      descripcion: 'Tratamiento del corazón'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombre": "Cardiología",
+             "descripcion": "Especialidad actualizada"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Especialidad no encontrada"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "nombre": ["El campo nombre debe ser una cadena"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/especialidades/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Especialidades
+
+        Eliminar especialidad
+
+        Permite a un administrador eliminar una especialidad médica del sistema de forma permanente.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la especialidad.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Especialidad eliminada con éxito"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Especialidad no encontrada"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+             "message": "Error interno del servidor"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/countEspecialidades
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Especialidades
+
+        Contar especialidades
+
+        Devuelve el número total de especialidades médicas registradas en el sistema.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "total": 10
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/horarios
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Listar todas las plantillas de horario
+
+        Devuelve todas las plantillas de horario disponibles para administradores.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+               "id": 1,
+               "nombre": "Horario Mañana",
+               "hora_inicio": "08:00",
+               "hora_fin": "12:00",
+               "dias": [1,3,5]
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/horarios/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Ver un horario
+
+        Devuelve la información detallada de una plantilla de horario específica.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del horario.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombre": "Horario Mañana",
+             "hora_inicio": "08:00",
+             "hora_fin": "12:00",
+             "dias": [1,3,5]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Horario no encontrado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/horarios
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Crear plantilla de horario
+
+        Crea una nueva plantilla de horario con nombre y configuración, sin asignar a ningún doctor.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombre:
+        name: nombre
+        description: 'Nombre de la plantilla.'
+        required: true
+        example: 'Horario Mañana'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      dias:
+        name: dias
+        description: 'Lista de días (1=Lunes, 7=Domingo).'
+        required: true
+        example:
+          - 1
+          - 3
+          - 5
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_inicio:
+        name: hora_inicio
+        description: 'Hora de inicio (HH:mm).'
+        required: true
+        example: '08:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_fin:
+        name: hora_fin
+        description: 'Hora de fin (HH:mm).'
+        required: true
+        example: '12:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombre: 'Horario Mañana'
+      dias:
+        - 1
+        - 3
+        - 5
+      hora_inicio: '08:00'
+      hora_fin: '12:00'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+             "id": 1,
+             "nombre": "Horario Mañana",
+             "hora_inicio": "08:00",
+             "hora_fin": "12:00",
+             "dias": [1,3,5]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "nombre": ["El campo nombre es obligatorio"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/asignar-horario
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Asignar horario a doctor
+
+        Asigna una plantilla de horario a un doctor, creando automáticamente los slots individuales de 30 minutos.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id_horario:
+        name: id_horario
+        description: 'ID de la plantilla de horario.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      id_horario: 1
+      id_doctor: 1
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          [
+            {
+               "id_horario": 1,
+               "id_doctor": 1,
+               "dia": 1,
+               "hora_inicio": "08:00",
+               "hora_fin": "08:30",
+               "disponible": true
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "error": "Conflicto de horarios detectado",
+             "conflictos": [...],
+             "message": "No se puede asignar este horario porque hay conflictos."
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/desasignar-horario
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Desasignar horario de doctor
+
+        Elimina todos los slots de 30 minutos de una plantilla de horario específica asignada a un doctor.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id_horario:
+        name: id_horario
+        description: 'ID de la plantilla de horario.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      id_horario: 1
+      id_doctor: 1
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Horario desasignado correctamente"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "id_horario": ["El campo id_horario es obligatorio"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/verificar-conflicto-horario
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Verificar conflictos de horario antes de asignar
+
+        Verifica si asignar una plantilla de horario a un doctor causaría conflictos con horarios ya existentes.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_horario:
+        name: id_horario
+        description: 'ID de la plantilla de horario.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      id_doctor: 1
+      id_horario: 1
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "conflictos": []
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "conflictos": [
+                {
+                   "dia": 1,
+                   "horario_conflictivo": {...},
+                   "horario_nuevo": {...}
+                }
+             ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/horarios/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Editar una plantilla de horario
+
+        Permite editar los datos de una plantilla de horario existente.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del horario.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombre:
+        name: nombre
+        description: 'Nombre de la plantilla (opcional).'
+        required: false
+        example: 'Horario Mañana'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      dias:
+        name: dias
+        description: 'Lista de días (opcional).'
+        required: false
+        example:
+          - 1
+          - 3
+          - 5
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_inicio:
+        name: hora_inicio
+        description: 'Hora de inicio (opcional).'
+        required: false
+        example: '09:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      hora_fin:
+        name: hora_fin
+        description: 'Hora de fin (opcional).'
+        required: false
+        example: '13:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nombre: 'Horario Mañana'
+      dias:
+        - 1
+        - 3
+        - 5
+      hora_inicio: '09:00'
+      hora_fin: '13:00'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombre": "Horario Mañana",
+             "hora_inicio": "09:00",
+             "hora_fin": "13:00",
+             "dias": [1,3,5]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Plantilla de horario no encontrada"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "hora_inicio": ["El formato de hora no es válido"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/horarios/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Eliminar una plantilla de horario
+
+        Permite eliminar una plantilla de horario del sistema.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID del horario.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Horario eliminado con éxito"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Horario no encontrado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/horarios-doctor/{id_doctor}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Listar horarios por doctor
+
+        Devuelve todos los intervalos de 30 minutos asignados a un doctor específico, opcionalmente filtrados por plantilla de horario.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id_doctor: 1
+    queryParameters:
+      id_horario:
+        name: id_horario
+        description: 'ID de la plantilla de horario (opcional).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      id_horario: 1
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+               "dia": 1,
+               "hora_inicio": "08:00",
+               "hora_fin": "08:30",
+               "disponible": true
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Doctor no encontrado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/countHorarios
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Contar plantillas de horarios
+
+        Devuelve el número total de plantillas de horarios registradas en el sistema.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "total": 3
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notificaciones
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Listar notificaciones activas (pendientes)
+
+        Devuelve una lista paginada de notificaciones pendientes con filtros opcionales por doctor y fecha.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      doctor_id:
+        name: doctor_id
+        description: 'ID del doctor (opcional).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      fecha_solicitada:
+        name: fecha_solicitada
+        description: 'date Fecha solicitada (opcional).'
+        required: false
+        example: '2025-10-10'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Número de elementos por página (opcional, default 15).'
+        required: false
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      doctor_id: 1
+      fecha_solicitada: '2025-10-10'
+      per_page: 10
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "current_page": 1,
+             "data": [
+                {
+                   "id": 1,
+                   "doctor_id": 1,
+                   "fecha_solicitada": "2025-10-10",
+                   "slots": [...],
+                   "estado": "pendiente",
+                   "doctor": {...}
+                }
+             ],
+             "per_page": 15,
+             "total": 1
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/notificaciones/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Actualizar notificación
+
+        Permite aprobar o rechazar una notificación pendiente.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la notificación.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      estado:
+        name: estado
+        description: 'Estado a actualizar (aprobada o rechazada).'
+        required: true
+        example: aprobada
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      estado: aprobada
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Notificación aprobada y slots apartados"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Notificación no encontrada"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "estado": ["El estado debe ser aprobada o rechazada"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/reportes/citas-por-especialidad
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Consulta
+
+        Reporte de citas por especialidad
+
+        Devuelve el total de citas agrupadas por especialidad (solo para administradores).
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+             { "especialidad": "Cardiología", "total_citas": 15 }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+             "message": "Acceso denegado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notificaciones/activas
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Listar notificaciones activas (pendientes)
+
+        Devuelve una lista paginada de notificaciones pendientes con filtros opcionales por doctor y fecha.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      doctor_id:
+        name: doctor_id
+        description: 'ID del doctor (opcional).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      fecha_solicitada:
+        name: fecha_solicitada
+        description: 'date Fecha solicitada (opcional).'
+        required: false
+        example: '2025-10-10'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Número de elementos por página (opcional, default 15).'
+        required: false
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      doctor_id: 1
+      fecha_solicitada: '2025-10-10'
+      per_page: 10
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "current_page": 1,
+             "data": [
+                {
+                   "id": 1,
+                   "doctor_id": 1,
+                   "fecha_solicitada": "2025-10-10",
+                   "slots": [...],
+                   "estado": "pendiente",
+                   "doctor": {...}
+                }
+             ],
+             "per_page": 15,
+             "total": 1
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notificaciones/historial
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Listar historial de notificaciones
+
+        Devuelve una lista paginada del historial de notificaciones aprobadas o rechazadas con filtros opcionales.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      doctor_id:
+        name: doctor_id
+        description: 'ID del doctor (opcional).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      fecha_solicitada:
+        name: fecha_solicitada
+        description: 'date Fecha solicitada (opcional).'
+        required: false
+        example: '2025-10-10'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Número de elementos por página (opcional, default 15).'
+        required: false
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      doctor_id: 1
+      fecha_solicitada: '2025-10-10'
+      per_page: 10
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "current_page": 1,
+             "data": [
+                {
+                   "id": 1,
+                   "doctor_id": 1,
+                   "fecha_solicitada": "2025-10-10",
+                   "slots": [...],
+                   "estado": "aprobada",
+                   "admin_id": 1,
+                   "doctor": {...},
+                   "administrador": {...}
+                }
+             ],
+             "per_page": 15,
+             "total": 1
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/notificaciones/{id}/aprobar'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Aprobar notificación
+
+        Aprueba una notificación pendiente y aparta los slots correspondientes en la agenda del doctor.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la notificación.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Notificación aprobada y slots apartados"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Notificación no encontrada o no pendiente"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+             "message": "Error interno del servidor"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/notificaciones/{id}/rechazar'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Rechazar notificación
+
+        Rechaza una notificación pendiente.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la notificación.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Notificación rechazada"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Notificación no encontrada o no pendiente"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: api/notificaciones/historial
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Eliminar historial de notificaciones
+
+        Elimina permanentemente todo el historial de notificaciones aprobadas y rechazadas.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "message": "Historial eliminado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notificaciones/contadores
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Contadores de notificaciones
+
+        Devuelve los contadores de notificaciones por estado: pendientes, aprobadas y rechazadas.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "pendientes": 5,
+             "aprobadas": 10,
+             "rechazadas": 2
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/horarios/compactados/{id_doctor}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Consulta
+
+        Horarios compactados por doctor
+
+        Devuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id_doctor:
+        name: id_doctor
+        description: 'ID del doctor.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id_doctor: 2
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+             { "dia": 1, "rango": "08:00 - 12:00" }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Doctor no encontrado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/mis-horarios
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Horarios
+
+        Listar mis horarios
+
+        Devuelve todos los intervalos de 30 minutos asignados al doctor autenticado.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+               "dia": 1,
+               "hora_inicio": "08:00",
+               "hora_fin": "08:30",
+               "disponible": true
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+             "message": "Acceso denegado"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/notificaciones
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Crear solicitud de notificación
+
+        Permite a un doctor crear una nueva solicitud de notificación para apartar slots en su agenda.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      fecha_solicitada:
+        name: fecha_solicitada
+        description: 'Fecha para la que se solicita el apartado.'
+        required: true
+        example: '2025-10-15'
+        type: date
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      slots:
+        name: slots
+        description: 'Lista de slots a apartar.'
+        required: true
+        example:
+          -
+            fecha: '2025-10-15'
+            hora: '10:00-10:30'
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'slots[].fecha':
+        name: 'slots[].fecha'
+        description: 'Must be a valid date.'
+        required: true
+        example: '2025-10-10T06:15:50'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'slots[].hora':
+        name: 'slots[].hora'
+        description: 'Must be a valid date in the format <code>H:i</code>.'
+        required: true
+        example: '06:15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'slots.*.fecha':
+        name: 'slots.*.fecha'
+        description: 'Fecha del slot.'
+        required: true
+        example: '2025-10-15'
+        type: date
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'slots.*.hora':
+        name: 'slots.*.hora'
+        description: 'Rango horario del slot.'
+        required: true
+        example: '10:00-10:30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      fecha_solicitada: '2025-10-15'
+      slots:
+        -
+          fecha: '2025-10-15'
+          hora: '10:00-10:30'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+             "id": 1,
+             "doctor_id": 1,
+             "fecha_solicitada": "2025-10-15",
+             "slots": [...],
+             "estado": "pendiente"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "errors": {
+                "fecha_solicitada": ["El campo fecha_solicitada es obligatorio"]
+             }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/mis-notificaciones
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Notificaciones
+
+        Ver mis notificaciones
+
+        Devuelve todas las notificaciones del doctor autenticado.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+             {
+                "id": 1,
+                "doctor_id": 1,
+                "fecha_solicitada": "2025-10-15",
+                "slots": [...],
+                "estado": "pendiente",
+                "administrador": {...}
+             }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/doctor/mis-pacientes
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Consulta
+
+        Pacientes atendidos por doctor
+
+        Devuelve un listado de pacientes que el doctor autenticado ha atendido, con filtro opcional por fechas.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      fecha_inicio:
+        name: fecha_inicio
+        description: 'date Fecha inicial del filtro (opcional).'
+        required: false
+        example: '2025-09-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      fecha_fin:
+        name: fecha_fin
+        description: 'date Fecha final del filtro (opcional).'
+        required: false
+        example: '2025-09-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      fecha_inicio: '2025-09-01'
+      fecha_fin: '2025-09-30'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+             { "id": 1, "fecha_cita": "2025-09-05", "paciente": {...}, "doctor": {...} }
+          ]
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+             "message": "Error interno del servidor"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/especialidades
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Especialidades
+
+        Listar todas las especialidades
+
+        Devuelve una lista completa de todas las especialidades médicas registradas en el sistema.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+               "id": 1,
+               "nombre": "Cardiología",
+               "descripcion": "Especialidad del corazón"
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/especialidades/{id}'
+    metadata:
+      groupName: 'Gestión del Sistema'
+      groupDescription: ''
+      subgroup: |-
+        Especialidades
+
+        Ver una especialidad
+
+        Devuelve los detalles completos de una especialidad médica específica por su ID.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la especialidad.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+             "id": 1,
+             "nombre": "Cardiología",
+             "descripcion": "Especialidad del corazón"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+             "message": "Especialidad no encontrada"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null

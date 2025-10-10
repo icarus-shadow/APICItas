@@ -8,61 +8,25 @@ servers:
     url: 'http://127.0.0.1:8000'
 tags:
   -
-    name: Administradores
+    name: Autenticación
     description: ''
   -
-    name: 'Administradores [ADMIN]'
-    description: ''
-  -
-    name: Authentication
-    description: ''
-  -
-    name: 'Citas [ADMIN]'
-    description: ''
-  -
-    name: 'Citas [PACIENTE]'
-    description: ''
-  -
-    name: Consultas
-    description: ''
-  -
-    name: 'Consultas [ADMIN]'
-    description: ''
-  -
-    name: Doctores
-    description: ''
-  -
-    name: 'Doctores [ADMIN]'
-    description: ''
-  -
-    name: 'Doctores [AUTENTICADO]'
+    name: Citas
     description: ''
   -
     name: Endpoints
     description: ''
   -
-    name: 'Especialidades [ADMIN]'
+    name: 'Gestión de Usuarios'
     description: ''
   -
-    name: 'Especialidades [PUBLICO AUTENTICADO]'
+    name: 'Gestión de Usuarios [ADMIN]'
     description: ''
   -
-    name: 'Horarios [ADMIN/DOCTOR]'
+    name: 'Gestión de Usuarios [AUTENTICADO]'
     description: ''
   -
-    name: 'Horarios [ADMIN]'
-    description: ''
-  -
-    name: 'Horarios [DOCTOR]'
-    description: ''
-  -
-    name: Pacientes
-    description: ''
-  -
-    name: 'Pacientes [ADMIN]'
-    description: ''
-  -
-    name: 'Pacientes [AUTENTICADO]'
+    name: 'Gestión del Sistema'
     description: ''
 components:
   securitySchemes:
@@ -74,461 +38,43 @@ security:
   -
     default: []
 paths:
-  /api/registrar-administrador:
+  /api/logout:
     post:
-      summary: "Registrar un nuevo administrador\n\nEste endpoint permite crear un administrador y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacción para garantizar la integridad de los datos. El usuario se crea con el rol de administrador (id_rol = 3)."
-      operationId: registrarUnNuevoAdministradorEsteEndpointPermiteCrearUnAdministradorYSuUsuarioAsociadoEnElSistemaSeEjecutaDentroDeUnaTransaccinParaGarantizarLaIntegridadDeLosDatosElUsuarioSeCreaConElRolDeAdministradoridRol3
+      summary: ''
+      operationId: postApiLogout
       description: ''
       parameters: []
       responses:
-        201:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: 'Administrador registrado correctamente'
-                  user:
-                    id: 12
-                    email: admin@example.com
-                    id_rol: 3
-                    created_at: '2025-09-05T10:00:00.000000Z'
-                  administrador:
-                    id: 3
-                    user_id: 12
-                    nombres: María
-                    apellidos: 'Rodríguez López'
-                    cedula: '987654321'
-                    telefono: '3109876543'
+                  message: 'Sesión cerrada correctamente'
                 properties:
                   message:
                     type: string
-                    example: 'Administrador registrado correctamente'
-                  user:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 12
-                      email:
-                        type: string
-                        example: admin@example.com
-                      id_rol:
-                        type: integer
-                        example: 3
-                      created_at:
-                        type: string
-                        example: '2025-09-05T10:00:00.000000Z'
-                  administrador:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 3
-                      user_id:
-                        type: integer
-                        example: 12
-                      nombres:
-                        type: string
-                        example: María
-                      apellidos:
-                        type: string
-                        example: 'Rodríguez López'
-                      cedula:
-                        type: string
-                        example: '987654321'
-                      telefono:
-                        type: string
-                        example: '3109876543'
-        422:
+                    example: 'Sesión cerrada correctamente'
+        401:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: 'The given data was invalid.'
-                  errors:
-                    email:
-                      - 'El campo email es obligatorio.'
+                  message: 'Usuario no autenticado'
                 properties:
                   message:
                     type: string
-                    example: 'The given data was invalid.'
-                  errors:
-                    type: object
-                    properties:
-                      email:
-                        type: array
-                        example:
-                          - 'El campo email es obligatorio.'
-                        items:
-                          type: string
-        500:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Error al registrar administrador'
-                  error: 'Detalle del error interno'
-                properties:
-                  message:
-                    type: string
-                    example: 'Error al registrar administrador'
-                  error:
-                    type: string
-                    example: 'Detalle del error interno'
+                    example: 'Usuario no autenticado'
       tags:
-        - Administradores
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  description: 'Correo electrónico único del usuario.'
-                  example: admin@example.com
-                  nullable: false
-                password:
-                  type: string
-                  description: 'Contraseña del usuario, mínimo 6 caracteres.'
-                  example: secret123
-                  nullable: false
-                nombres:
-                  type: string
-                  description: 'Nombres completos del administrador.'
-                  example: María
-                  nullable: false
-                apellidos:
-                  type: string
-                  description: 'Apellidos completos del administrador.'
-                  example: 'Rodríguez López'
-                  nullable: false
-                cedula:
-                  type: string
-                  description: 'Cédula única del administrador.'
-                  example: '987654321'
-                  nullable: false
-                telefono:
-                  type: string
-                  description: 'Teléfono de contacto del administrador.'
-                  example: '3109876543'
-                  nullable: false
-              required:
-                - email
-                - password
-                - nombres
-                - apellidos
-                - cedula
-                - telefono
-      security: []
-  /api/mi-perfil-admin:
-    get:
-      summary: "Ver mi perfil\n\nDevuelve los datos del administrador autenticado."
-      operationId: verMiPerfilDevuelveLosDatosDelAdministradorAutenticado
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Carlos
-                  apellidos: Pérez
-                  cedula: '12345678'
-                  telefono: '3001234567'
-                  user_id: 5
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Carlos
-                  apellidos:
-                    type: string
-                    example: Pérez
-                  cedula:
-                    type: string
-                    example: '12345678'
-                  telefono:
-                    type: string
-                    example: '3001234567'
-                  user_id:
-                    type: integer
-                    example: 5
-      tags:
-        - 'Administradores [ADMIN]'
-    put:
-      summary: "Actualizar mi perfil\n\nPermite al administrador autenticado modificar sus propios datos."
-      operationId: actualizarMiPerfilPermiteAlAdministradorAutenticadoModificarSusPropiosDatos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Carlos
-                  apellidos: Pérez
-                  cedula: '12345678'
-                  telefono: '3001234567'
-                  user_id: 5
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Carlos
-                  apellidos:
-                    type: string
-                    example: Pérez
-                  cedula:
-                    type: string
-                    example: '12345678'
-                  telefono:
-                    type: string
-                    example: '3001234567'
-                  user_id:
-                    type: integer
-                    example: 5
-      tags:
-        - 'Administradores [ADMIN]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nombres:
-                  type: string
-                  description: 'Nombres del administrador.'
-                  example: Carlos
-                  nullable: false
-                apellidos:
-                  type: string
-                  description: 'Apellidos del administrador.'
-                  example: Pérez
-                  nullable: false
-                cedula:
-                  type: string
-                  description: 'Cédula del administrador.'
-                  example: '12345678'
-                  nullable: false
-                telefono:
-                  type: string
-                  description: 'Teléfono del administrador.'
-                  example: '3001234567'
-                  nullable: false
-  /api/administradores:
-    get:
-      summary: "Listar administradores\n\nDevuelve una lista de todos los administradores registrados."
-      operationId: listarAdministradoresDevuelveUnaListaDeTodosLosAdministradoresRegistrados
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id: 1
-                    nombres: Carlos
-                    apellidos: Pérez
-                    cedula: '12345678'
-                    telefono: '3001234567'
-                    user_id: 5
-      tags:
-        - 'Administradores [ADMIN]'
-  '/api/administradores/{id}':
-    get:
-      summary: "Ver administrador\n\nDevuelve los datos de un administrador específico."
-      operationId: verAdministradorDevuelveLosDatosDeUnAdministradorEspecfico
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Carlos
-                  apellidos: Pérez
-                  cedula: '12345678'
-                  telefono: '3001234567'
-                  user_id: 5
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Carlos
-                  apellidos:
-                    type: string
-                    example: Pérez
-                  cedula:
-                    type: string
-                    example: '12345678'
-                  telefono:
-                    type: string
-                    example: '3001234567'
-                  user_id:
-                    type: integer
-                    example: 5
-      tags:
-        - 'Administradores [ADMIN]'
-    put:
-      summary: "Actualizar administrador\n\nPermite modificar los datos de un administrador."
-      operationId: actualizarAdministradorPermiteModificarLosDatosDeUnAdministrador
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Carlos
-                  apellidos: Pérez
-                  cedula: '12345678'
-                  telefono: '3001234567'
-                  user_id: 5
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Carlos
-                  apellidos:
-                    type: string
-                    example: Pérez
-                  cedula:
-                    type: string
-                    example: '12345678'
-                  telefono:
-                    type: string
-                    example: '3001234567'
-                  user_id:
-                    type: integer
-                    example: 5
-      tags:
-        - 'Administradores [ADMIN]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nombres:
-                  type: string
-                  description: 'Nombres del administrador.'
-                  example: Carlos
-                  nullable: false
-                apellidos:
-                  type: string
-                  description: 'Apellidos del administrador.'
-                  example: Pérez
-                  nullable: false
-                cedula:
-                  type: string
-                  description: 'Cédula del administrador.'
-                  example: '12345678'
-                  nullable: false
-                telefono:
-                  type: string
-                  description: 'Teléfono del administrador.'
-                  example: '3001234567'
-                  nullable: false
-    delete:
-      summary: "Eliminar administrador\n\nPermite eliminar un administrador del sistema."
-      operationId: eliminarAdministradorPermiteEliminarUnAdministradorDelSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Administrador eliminado con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Administrador eliminado con éxito'
-      tags:
-        - 'Administradores [ADMIN]'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID del administrador.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  /api/countAdministradores:
-    get:
-      summary: "Contar administradores\n\nDevuelve el número total de administradores registrados."
-      operationId: contarAdministradoresDevuelveElNmeroTotalDeAdministradoresRegistrados
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  total: 5
-                properties:
-                  total:
-                    type: integer
-                    example: 5
-      tags:
-        - 'Administradores [ADMIN]'
+        - Autenticación
   /api/change-password:
     post:
-      summary: "Cambiar contraseña del usuario\n\nEste endpoint permite que un usuario autenticado cambie su propia contraseña."
-      operationId: cambiarContraseaDelUsuarioEsteEndpointPermiteQueUnUsuarioAutenticadoCambieSuPropiaContrasea
+      summary: ''
+      operationId: postApiChangePassword
       description: ''
       parameters: []
       responses:
@@ -539,12 +85,24 @@ paths:
               schema:
                 type: object
                 example:
-                  Message: 'Contraseña actualizada correctamente'
+                  message: 'Contraseña actualizada correctamente'
                 properties:
-                  Message:
+                  message:
                     type: string
                     example: 'Contraseña actualizada correctamente'
-        422:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Usuario no autenticado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Usuario no autenticado'
+        409:
           description: ''
           content:
             application/json:
@@ -556,8 +114,28 @@ paths:
                   message:
                     type: string
                     example: 'La contraseña actual es incorrecta'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    new_password:
+                      - 'La nueva contraseña debe tener al menos 6 caracteres'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      new_password:
+                        type: array
+                        example:
+                          - 'La nueva contraseña debe tener al menos 6 caracteres'
+                        items:
+                          type: string
       tags:
-        - Authentication
+        - Autenticación
       requestBody:
         required: true
         content:
@@ -580,8 +158,8 @@ paths:
                 - new_password
   /api/delete-account:
     delete:
-      summary: "Eliminar cuenta de usuario\n\nEste endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.\nSe ejecuta dentro de una transacción para garantizar la integridad de los datos."
-      operationId: eliminarCuentaDeUsuarioEsteEndpointPermiteQueUnUsuarioAutenticadoElimineSuPropiaCuentaYTodosLosDatosAsociadosSeEjecutaDentroDeUnaTransaccinParaGarantizarLaIntegridadDeLosDatos
+      summary: ''
+      operationId: deleteApiDeleteAccount
       description: ''
       parameters: []
       responses:
@@ -621,8 +199,24 @@ paths:
                   message:
                     type: string
                     example: 'La contraseña es incorrecta'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error al eliminar la cuenta'
+                  error: 'Detalle del error interno'
+                properties:
+                  message:
+                    type: string
+                    example: 'Error al eliminar la cuenta'
+                  error:
+                    type: string
+                    example: 'Detalle del error interno'
       tags:
-        - Authentication
+        - Autenticación
       requestBody:
         required: true
         content:
@@ -637,454 +231,10 @@ paths:
                   nullable: false
               required:
                 - password
-  /api/citas:
-    get:
-      summary: "Listar todas las citas\n\nDevuelve todas las citas registradas en el sistema."
-      operationId: listarTodasLasCitasDevuelveTodasLasCitasRegistradasEnElSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id: 1
-                    id_paciente: 3
-                    id_doctor: 2
-                    id_horario: 5
-                    motivo: 'Consulta general'
-      tags:
-        - 'Citas [ADMIN]'
-    post:
-      summary: "Crear cita\n\nCrea una cita en un horario disponible para el doctor seleccionado."
-      operationId: crearCitaCreaUnaCitaEnUnHorarioDisponibleParaElDoctorSeleccionado
-      description: ''
-      parameters: []
-      responses:
-        201:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 10
-                  id_paciente: 3
-                  id_doctor: 2
-                  fecha_cita: '2025-10-01'
-                  hora_cita: '14:30'
-                  lugar: 'Consultorio 101'
-                  motivo: 'Dolor de cabeza'
-                properties:
-                  id:
-                    type: integer
-                    example: 10
-                  id_paciente:
-                    type: integer
-                    example: 3
-                  id_doctor:
-                    type: integer
-                    example: 2
-                  fecha_cita:
-                    type: string
-                    example: '2025-10-01'
-                  hora_cita:
-                    type: string
-                    example: '14:30'
-                  lugar:
-                    type: string
-                    example: 'Consultorio 101'
-                  motivo:
-                    type: string
-                    example: 'Dolor de cabeza'
-      tags:
-        - 'Citas [PACIENTE]'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id_paciente:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the pacientes table.'
-                  example: consequatur
-                  nullable: false
-                id_doctor:
-                  type: integer
-                  description: 'ID del doctor.'
-                  example: 2
-                  nullable: false
-                fecha_cita:
-                  type: date
-                  description: 'Fecha de la cita (YYYY-MM-DD).'
-                  example: '2025-10-01'
-                  nullable: false
-                hora_cita:
-                  type: time
-                  description: 'Hora de la cita (HH:MM).'
-                  example: '14:30'
-                  nullable: false
-                lugar:
-                  type: string
-                  description: 'Lugar de la cita.'
-                  example: 'Consultorio 101'
-                  nullable: false
-                motivo:
-                  type: string
-                  description: 'Motivo de la cita.'
-                  example: 'Dolor de cabeza'
-                  nullable: false
-              required:
-                - id_paciente
-                - id_doctor
-                - fecha_cita
-                - hora_cita
-                - lugar
-                - motivo
-  '/api/citas/{id}':
-    get:
-      summary: "Ver una cita\n\nDevuelve los detalles de una cita específica."
-      operationId: verUnaCitaDevuelveLosDetallesDeUnaCitaEspecfica
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {  }
-                properties: {  }
-      tags:
-        - 'Citas [ADMIN]'
-    delete:
-      summary: "Eliminar una cita\n\nPermite al administrador eliminar una cita y liberar el horario."
-      operationId: eliminarUnaCitaPermiteAlAdministradorEliminarUnaCitaYLiberarElHorario
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Cita eliminada con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Cita eliminada con éxito'
-      tags:
-        - 'Citas [ADMIN]'
-    put:
-      summary: "Editar cualquier cita\n\nPermite al administrador modificar el motivo de una cita."
-      operationId: editarCualquierCitaPermiteAlAdministradorModificarElMotivoDeUnaCita
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  motivo: 'Revisión general'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  motivo:
-                    type: string
-                    example: 'Revisión general'
-      tags:
-        - 'Citas [ADMIN]'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id_doctor:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the doctores table.'
-                  example: consequatur
-                  nullable: false
-                fecha_cita:
-                  type: string
-                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-29'
-                  nullable: false
-                hora_cita:
-                  type: string
-                  description: 'Must be a valid date in the format <code>H:i</code>.'
-                  example: '01:00'
-                  nullable: false
-                lugar:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: false
-                motivo:
-                  type: string
-                  description: 'Nuevo motivo.'
-                  example: 'Revisión general'
-                  nullable: false
-              required:
-                - id_doctor
-                - fecha_cita
-                - hora_cita
-                - lugar
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID de la cita.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  /api/countCitas:
-    get:
-      summary: "Contar citas\n\nDevuelve el número total de citas registradas en el sistema."
-      operationId: contarCitasDevuelveElNmeroTotalDeCitasRegistradasEnElSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  total: 150
-                properties:
-                  total:
-                    type: integer
-                    example: 150
-      tags:
-        - 'Citas [ADMIN]'
-  '/api/horarios/compactados/{id_doctor}':
-    get:
-      summary: "Horarios compactados por doctor\n\nDevuelve los horarios del doctor agrupados en rangos grandes, en lugar de intervalos de 30 minutos."
-      operationId: horariosCompactadosPorDoctorDevuelveLosHorariosDelDoctorAgrupadosEnRangosGrandesEnLugarDeIntervalosDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    dia: 1
-                    rango: '08:00 - 12:00'
-      tags:
-        - Consultas
-    parameters:
-      -
-        in: path
-        name: id_doctor
-        description: 'Optional parameter. ID del doctor.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 2
-  '/api/doctores/especialidad/{id}':
-    get:
-      summary: "Doctores por especialidad\n\nLista todos los doctores que pertenecen a una especialidad específica."
-      operationId: doctoresPorEspecialidadListaTodosLosDoctoresQuePertenecenAUnaEspecialidadEspecfica
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id: 1
-                    nombres: Juan
-                    apellidos: López
-                    especialidad: Cardiología
-      tags:
-        - Consultas
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID de la especialidad.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 3
-  '/api/doctor/{id}/disponibilidad':
-    get:
-      summary: "Disponibilidad de un doctor\n\nDevuelve los horarios disponibles (disponible = true) de un doctor para agendar cita."
-      operationId: disponibilidadDeUnDoctorDevuelveLosHorariosDisponiblesdisponibleTrueDeUnDoctorParaAgendarCita
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    dia: 1
-                    hora_inicio: '08:00'
-                    hora_fin: '08:30'
-                    disponible: true
-      tags:
-        - Consultas
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID del doctor.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 2
-  /api/citas/mis-citas:
-    get:
-      summary: "Mis citas\n\nMuestra el historial de citas del usuario autenticado (paciente o doctor)."
-      operationId: misCitasMuestraElHistorialDeCitasDelUsuarioAutenticadopacienteODoctor
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    fecha: '2025-09-10'
-                    estado: pendiente
-                    doctor: 'Juan Pérez'
-      tags:
-        - Consultas
-  /api/doctor/mis-pacientes:
-    get:
-      summary: "Pacientes atendidos por doctor\n\nDevuelve un listado de pacientes que el doctor autenticado ha atendido, con filtro opcional por fechas."
-      operationId: pacientesAtendidosPorDoctorDevuelveUnListadoDePacientesQueElDoctorAutenticadoHaAtendidoConFiltroOpcionalPorFechas
-      description: ''
-      parameters:
-        -
-          in: query
-          name: fecha_inicio
-          description: 'date Fecha inicial del filtro.'
-          example: '2025-09-01'
-          required: false
-          schema:
-            type: string
-            description: 'date Fecha inicial del filtro.'
-            example: '2025-09-01'
-            nullable: false
-        -
-          in: query
-          name: fecha_fin
-          description: 'date Fecha final del filtro.'
-          example: '2025-09-30'
-          required: false
-          schema:
-            type: string
-            description: 'date Fecha final del filtro.'
-            example: '2025-09-30'
-            nullable: false
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    paciente: 'María Gómez'
-                    fecha: '2025-09-05'
-      tags:
-        - Consultas
-  /api/reportes/citas-por-especialidad:
-    get:
-      summary: "Reporte de citas por especialidad\n\nDevuelve el total de citas agrupadas por especialidad."
-      operationId: reporteDeCitasPorEspecialidadDevuelveElTotalDeCitasAgrupadasPorEspecialidad
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    especialidad: Cardiología
-                    total_citas: 15
-      tags:
-        - 'Consultas [ADMIN]'
   /api/registrar-doctor:
     post:
-      summary: "Registrar un nuevo doctor\n\nEste endpoint permite crear un doctor y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacción para garantizar la integridad de los datos. El usuario se crea con el rol de doctor (id_rol = 2)."
-      operationId: registrarUnNuevoDoctorEsteEndpointPermiteCrearUnDoctorYSuUsuarioAsociadoEnElSistemaSeEjecutaDentroDeUnaTransaccinParaGarantizarLaIntegridadDeLosDatosElUsuarioSeCreaConElRolDeDoctoridRol2
+      summary: ''
+      operationId: postApiRegistrarDoctor
       description: ''
       parameters: []
       responses:
@@ -1197,7 +347,7 @@ paths:
                     type: string
                     example: 'Detalle del error interno'
       tags:
-        - Doctores
+        - Autenticación
       requestBody:
         required: true
         content:
@@ -1235,10 +385,10 @@ paths:
                   description: 'ID de la especialidad a la que pertenece el doctor.'
                   example: 1
                   nullable: false
-                horario:
-                  type: string
-                  description: 'Horario de atención del doctor.'
-                  example: 'Lunes a Viernes 8:00 AM - 4:00 PM'
+                id_horario:
+                  type: integer
+                  description: 'ID de la plantilla de horario a asignar (opcional).'
+                  example: 1
                   nullable: true
                 lugar_trabajo:
                   type: string
@@ -1253,288 +403,73 @@ paths:
                 - cedula
                 - id_especialidades
       security: []
-  '/api/doctor/{id}':
-    get:
-      summary: "Ver un doctor\n\nDevuelve los datos de un doctor específico por su ID."
-      operationId: verUnDoctorDevuelveLosDatosDeUnDoctorEspecficoPorSuID
+  /api/registrar-administrador:
+    post:
+      summary: ''
+      operationId: postApiRegistrarAdministrador
       description: ''
       parameters: []
       responses:
-        200:
+        201:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  id: 1
-                  nombres: Pedro
-                  apellidos: López
-                  especialidad: Cardiología
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Pedro
-                  apellidos:
-                    type: string
-                    example: López
-                  especialidad:
-                    type: string
-                    example: Cardiología
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
+                  message: 'Administrador registrado correctamente'
+                  user:
+                    id: 12
+                    email: admin@example.com
+                    id_rol: 3
+                    created_at: '2025-09-05T10:00:00.000000Z'
+                  administrador:
+                    id: 3
+                    user_id: 12
+                    nombres: María
+                    apellidos: 'Rodríguez López'
+                    cedula: '987654321'
+                    telefono: '3109876543'
                 properties:
                   message:
                     type: string
-                    example: 'Doctor no encontrado'
-      tags:
-        - 'Doctores [ADMIN]'
-    put:
-      summary: "Actualizar un doctor\n\nPermite al administrador actualizar los datos de un doctor por ID."
-      operationId: actualizarUnDoctorPermiteAlAdministradorActualizarLosDatosDeUnDoctorPorID
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Pedro
-                  apellidos: López
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Pedro
-                  apellidos:
-                    type: string
-                    example: López
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor no encontrado'
-      tags:
-        - 'Doctores [ADMIN]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nombres:
-                  type: string
-                  description: 'Nombre del doctor.'
-                  example: Pedro
-                  nullable: false
-                apellidos:
-                  type: string
-                  description: 'Apellido del doctor.'
-                  example: López
-                  nullable: false
-                telefono:
-                  type: string
-                  description: 'Número telefónico.'
-                  example: '3012345678'
-                  nullable: false
-                especialidad_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the especialidades table.'
-                  example: 17
-                  nullable: false
-    delete:
-      summary: "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID."
-      operationId: eliminarUnDoctorPermiteAlAdministradorEliminarUnDoctorPorID
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor eliminado con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor eliminado con éxito'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor no encontrado'
-      tags:
-        - 'Doctores [ADMIN]'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID del doctor.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  /api/countDoctores:
-    get:
-      summary: "Contar doctores\n\nDevuelve el número total de doctores registrados en el sistema."
-      operationId: contarDoctoresDevuelveElNmeroTotalDeDoctoresRegistradosEnElSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  total: 10
-                properties:
-                  total:
-                    type: integer
-                    example: 10
-      tags:
-        - 'Doctores [ADMIN]'
-  /api/doctores:
-    get:
-      summary: "Listar doctores\n\nDevuelve la lista completa de doctores registrados en el sistema."
-      operationId: listarDoctoresDevuelveLaListaCompletaDeDoctoresRegistradosEnElSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id: 1
-                    nombres: Pedro
-                    apellidos: López
-                    especialidad: Cardiología
-      tags:
-        - 'Doctores [ADMIN]'
-  /api/mi-perfil-doctor:
-    get:
-      summary: "Ver mi información (Doctor)\n\nDevuelve los datos del doctor autenticado."
-      operationId: verMiInformacinDoctorDevuelveLosDatosDelDoctorAutenticado
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Pedro
-                  apellidos: López
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Pedro
-                  apellidos:
-                    type: string
-                    example: López
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor no encontrado'
-      tags:
-        - 'Doctores [AUTENTICADO]'
-    put:
-      summary: "Actualizar mi información (Doctor)\n\nPermite al doctor autenticado actualizar sus propios datos."
-      operationId: actualizarMiInformacinDoctorPermiteAlDoctorAutenticadoActualizarSusPropiosDatos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombres: Pedro
-                  apellidos: López
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombres:
-                    type: string
-                    example: Pedro
-                  apellidos:
-                    type: string
-                    example: López
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Doctor no encontrado'
-                properties:
-                  message:
-                    type: string
-                    example: 'Doctor no encontrado'
+                    example: 'Administrador registrado correctamente'
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 12
+                      email:
+                        type: string
+                        example: admin@example.com
+                      id_rol:
+                        type: integer
+                        example: 3
+                      created_at:
+                        type: string
+                        example: '2025-09-05T10:00:00.000000Z'
+                  administrador:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 3
+                      user_id:
+                        type: integer
+                        example: 12
+                      nombres:
+                        type: string
+                        example: María
+                      apellidos:
+                        type: string
+                        example: 'Rodríguez López'
+                      cedula:
+                        type: string
+                        example: '987654321'
+                      telefono:
+                        type: string
+                        example: '3109876543'
         422:
           description: ''
           content:
@@ -1542,84 +477,41 @@ paths:
               schema:
                 type: object
                 example:
+                  message: 'The given data was invalid.'
                   errors:
-                    nombres:
-                      - 'El campo nombres debe ser una cadena de texto'
+                    email:
+                      - 'El campo email es obligatorio.'
                 properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
                   errors:
                     type: object
                     properties:
-                      nombres:
+                      email:
                         type: array
                         example:
-                          - 'El campo nombres debe ser una cadena de texto'
+                          - 'El campo email es obligatorio.'
                         items:
                           type: string
-      tags:
-        - 'Doctores [AUTENTICADO]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nombres:
-                  type: string
-                  description: 'Nombre del doctor.'
-                  example: Pedro
-                  nullable: false
-                apellidos:
-                  type: string
-                  description: 'Apellido del doctor.'
-                  example: López
-                  nullable: false
-                telefono:
-                  type: string
-                  description: 'Número telefónico.'
-                  example: '3012345678'
-                  nullable: false
-  /api/user:
-    get:
-      summary: ''
-      operationId: getApiUser
-      description: ''
-      parameters: []
-      responses:
-        401:
+        500:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'Error al registrar administrador'
+                  error: 'Detalle del error interno'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'Error al registrar administrador'
+                  error:
+                    type: string
+                    example: 'Detalle del error interno'
       tags:
-        - Endpoints
-      security: []
-  /api/logout:
-    post:
-      summary: ''
-      operationId: postApiLogout
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-      security: []
-  /api/login:
-    post:
-      summary: ''
-      operationId: postApiLogin
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
+        - Autenticación
       requestBody:
         required: true
         content:
@@ -1629,45 +521,81 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'Must be a valid email address.'
-                  example: qkunze@example.com
+                  description: 'Correo electrónico único del usuario.'
+                  example: admin@example.com
                   nullable: false
                 password:
                   type: string
-                  description: ''
-                  example: consequatur
+                  description: 'Contraseña del usuario, mínimo 6 caracteres.'
+                  example: secret123
+                  nullable: false
+                nombres:
+                  type: string
+                  description: 'Nombres completos del administrador.'
+                  example: María
+                  nullable: false
+                apellidos:
+                  type: string
+                  description: 'Apellidos completos del administrador.'
+                  example: 'Rodríguez López'
+                  nullable: false
+                cedula:
+                  type: string
+                  description: 'Cédula única del administrador.'
+                  example: '987654321'
+                  nullable: false
+                telefono:
+                  type: string
+                  description: 'Teléfono de contacto del administrador.'
+                  example: '3109876543'
                   nullable: false
               required:
                 - email
                 - password
+                - nombres
+                - apellidos
+                - cedula
+                - telefono
       security: []
-  /api/especialidades:
+  /api/login:
     post:
-      summary: "Crear especialidad\n\nPermite al administrador registrar una nueva especialidad."
-      operationId: crearEspecialidadPermiteAlAdministradorRegistrarUnaNuevaEspecialidad
+      summary: ''
+      operationId: postApiLogin
       description: ''
       parameters: []
       responses:
-        201:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  id: 1
-                  nombre: Cardiología
-                  descripcion: 'Especialidad del corazón'
+                  access_token: 1|abc123...
+                  token_type: Bearer
+                  user:
+                    id: 1
+                    email: user@example.com
+                    id_rol: 1
                 properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombre:
+                  access_token:
                     type: string
-                    example: Cardiología
-                  descripcion:
+                    example: 1|abc123...
+                  token_type:
                     type: string
-                    example: 'Especialidad del corazón'
+                    example: Bearer
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: user@example.com
+                      id_rol:
+                        type: integer
+                        example: 1
         422:
           description: ''
           content:
@@ -1675,636 +603,50 @@ paths:
               schema:
                 type: object
                 example:
+                  message: 'The given data was invalid.'
                   errors:
-                    nombre:
-                      - 'El campo nombre es obligatorio'
+                    email:
+                      - 'Credenciales incorrectas'
                 properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
                   errors:
                     type: object
                     properties:
-                      nombre:
+                      email:
                         type: array
                         example:
-                          - 'El campo nombre es obligatorio'
+                          - 'Credenciales incorrectas'
                         items:
                           type: string
       tags:
-        - 'Especialidades [ADMIN]'
+        - Autenticación
       requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nombre:
-                  type: string
-                  description: 'Nombre de la especialidad.'
-                  example: Cardiología
-                  nullable: false
-                descripcion:
-                  type: string
-                  description: 'Descripción de la especialidad.'
-                  example: 'Tratamiento del corazón'
-                  nullable: false
-    get:
-      summary: "Listar todas las especialidades\n\nDevuelve una lista de todas las especialidades registradas en el sistema."
-      operationId: listarTodasLasEspecialidadesDevuelveUnaListaDeTodasLasEspecialidadesRegistradasEnElSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id: 1
-                    nombre: Cardiología
-                    descripcion: 'Especialidad del corazón'
-      tags:
-        - 'Especialidades [PUBLICO AUTENTICADO]'
-  '/api/especialidades/{id}':
-    put:
-      summary: "Actualizar especialidad\n\nPermite al administrador actualizar los datos de una especialidad."
-      operationId: actualizarEspecialidadPermiteAlAdministradorActualizarLosDatosDeUnaEspecialidad
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombre: Cardiología
-                  descripcion: 'Especialidad actualizada'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombre:
-                    type: string
-                    example: Cardiología
-                  descripcion:
-                    type: string
-                    example: 'Especialidad actualizada'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Especialidad no encontrada'
-                properties:
-                  message:
-                    type: string
-                    example: 'Especialidad no encontrada'
-      tags:
-        - 'Especialidades [ADMIN]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nombre:
-                  type: string
-                  description: 'Nombre de la especialidad.'
-                  example: Cardiología
-                  nullable: false
-                descripcion:
-                  type: string
-                  description: 'Descripción de la especialidad.'
-                  example: 'Tratamiento del corazón'
-                  nullable: false
-    delete:
-      summary: "Eliminar especialidad\n\nPermite al administrador eliminar una especialidad del sistema."
-      operationId: eliminarEspecialidadPermiteAlAdministradorEliminarUnaEspecialidadDelSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Especialidad eliminada con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Especialidad eliminada con éxito'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Especialidad no encontrada'
-                properties:
-                  message:
-                    type: string
-                    example: 'Especialidad no encontrada'
-      tags:
-        - 'Especialidades [ADMIN]'
-    get:
-      summary: "Ver una especialidad\n\nDevuelve los detalles de una especialidad específica."
-      operationId: verUnaEspecialidadDevuelveLosDetallesDeUnaEspecialidadEspecfica
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  nombre: Cardiología
-                  descripcion: 'Especialidad del corazón'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  nombre:
-                    type: string
-                    example: Cardiología
-                  descripcion:
-                    type: string
-                    example: 'Especialidad del corazón'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Especialidad no encontrada'
-                properties:
-                  message:
-                    type: string
-                    example: 'Especialidad no encontrada'
-      tags:
-        - 'Especialidades [PUBLICO AUTENTICADO]'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID de la especialidad.'
         required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  /api/countEspecialidades:
-    get:
-      summary: "Contar especialidades\n\nDevuelve el número total de especialidades registradas en el sistema."
-      operationId: contarEspecialidadesDevuelveElNmeroTotalDeEspecialidadesRegistradasEnElSistema
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  total: 10
-                properties:
-                  total:
-                    type: integer
-                    example: 10
-      tags:
-        - 'Especialidades [PUBLICO AUTENTICADO]'
-  '/api/horarios/{id}':
-    get:
-      summary: "Ver un horario\n\nDevuelve la información de un intervalo de 30 minutos específico."
-      operationId: verUnHorarioDevuelveLaInformacinDeUnIntervaloDe30MinutosEspecfico
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  id_doctor: 1
-                  dia: 1
-                  hora_inicio: '08:00'
-                  hora_fin: '08:30'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  id_doctor:
-                    type: integer
-                    example: 1
-                  dia:
-                    type: integer
-                    example: 1
-                  hora_inicio:
-                    type: string
-                    example: '08:00'
-                  hora_fin:
-                    type: string
-                    example: '08:30'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-    put:
-      summary: "Editar un intervalo\n\nPermite editar un intervalo de 30 minutos específico."
-      operationId: editarUnIntervaloPermiteEditarUnIntervaloDe30MinutosEspecfico
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  hora_inicio: '09:00'
-                  hora_fin: '09:30'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  hora_inicio:
-                    type: string
-                    example: '09:00'
-                  hora_fin:
-                    type: string
-                    example: '09:30'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-      requestBody:
-        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
-                hora_inicio:
+                email:
                   type: string
-                  description: 'Hora de inicio.'
-                  example: '09:00'
+                  description: 'Correo electrónico del usuario.'
+                  example: user@example.com
                   nullable: false
-                hora_fin:
+                password:
                   type: string
-                  description: 'Hora de fin.'
-                  example: '09:30'
+                  description: 'Contraseña del usuario.'
+                  example: secret123
                   nullable: false
-    delete:
-      summary: "Eliminar un intervalo\n\nPermite eliminar un intervalo de 30 minutos."
-      operationId: eliminarUnIntervaloPermiteEliminarUnIntervaloDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Horario eliminado con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Horario eliminado con éxito'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID del horario.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  /api/horarios:
-    post:
-      summary: "Crear horarios\n\nCrea horarios para un doctor a partir de un rango amplio, dividiéndolos en intervalos de 30 minutos."
-      operationId: crearHorariosCreaHorariosParaUnDoctorAPartirDeUnRangoAmplioDividindolosEnIntervalosDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        201:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id_doctor: 1
-                    dia: 1
-                    hora_inicio: '08:00'
-                    hora_fin: '08:30'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                dias:
-                  type: array
-                  description: 'Lista de días (1=Lunes, 7=Domingo).'
-                  example:
-                    - 1
-                    - 3
-                    - 5
-                  items:
-                    type: string
-                hora_inicio:
-                  type: string
-                  description: 'Hora de inicio (HH:mm).'
-                  example: '08:00'
-                  nullable: false
-                hora_fin:
-                  type: string
-                  description: 'Hora de fin (HH:mm).'
-                  example: '12:00'
-                  nullable: false
-                id_doctor:
-                  type: integer
-                  description: 'ID del doctor (requerido para admin).'
-                  example: 1
-                  nullable: false
-    get:
-      summary: "Listar todos los horarios (compacto)\n\nDevuelve todos los horarios del sistema agrupados por rango grande (no por intervalos de 30 minutos)."
-      operationId: listarTodosLosHorarioscompactoDevuelveTodosLosHorariosDelSistemaAgrupadosPorRangoGrandenoPorIntervalosDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id_doctor: 1
-                    nombre_doctor: 'Juan Pérez'
-                    dia: 1
-                    rango: '08:00 - 12:00'
-      tags:
-        - 'Horarios [ADMIN]'
-  /api/mis-horarios:
-    post:
-      summary: "Crear horarios\n\nCrea horarios para un doctor a partir de un rango amplio, dividiéndolos en intervalos de 30 minutos."
-      operationId: crearHorariosCreaHorariosParaUnDoctorAPartirDeUnRangoAmplioDividindolosEnIntervalosDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        201:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    id_doctor: 1
-                    dia: 1
-                    hora_inicio: '08:00'
-                    hora_fin: '08:30'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                dias:
-                  type: array
-                  description: 'Lista de días (1=Lunes, 7=Domingo).'
-                  example:
-                    - 1
-                    - 3
-                    - 5
-                  items:
-                    type: string
-                hora_inicio:
-                  type: string
-                  description: 'Hora de inicio (HH:mm).'
-                  example: '08:00'
-                  nullable: false
-                hora_fin:
-                  type: string
-                  description: 'Hora de fin (HH:mm).'
-                  example: '12:00'
-                  nullable: false
-                id_doctor:
-                  type: integer
-                  description: 'ID del doctor (requerido para admin).'
-                  example: 1
-                  nullable: false
-    get:
-      summary: "Listar mis horarios\n\nDevuelve todos los intervalos de 30 minutos del doctor autenticado."
-      operationId: listarMisHorariosDevuelveTodosLosIntervalosDe30MinutosDelDoctorAutenticado
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    dia: 1
-                    hora_inicio: '08:00'
-                    hora_fin: '08:30'
-      tags:
-        - 'Horarios [DOCTOR]'
-  '/api/mis-horarios/{id}':
-    put:
-      summary: "Editar un intervalo\n\nPermite editar un intervalo de 30 minutos específico."
-      operationId: editarUnIntervaloPermiteEditarUnIntervaloDe30MinutosEspecfico
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  hora_inicio: '09:00'
-                  hora_fin: '09:30'
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  hora_inicio:
-                    type: string
-                    example: '09:00'
-                  hora_fin:
-                    type: string
-                    example: '09:30'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                hora_inicio:
-                  type: string
-                  description: 'Hora de inicio.'
-                  example: '09:00'
-                  nullable: false
-                hora_fin:
-                  type: string
-                  description: 'Hora de fin.'
-                  example: '09:30'
-                  nullable: false
-    delete:
-      summary: "Eliminar un intervalo\n\nPermite eliminar un intervalo de 30 minutos."
-      operationId: eliminarUnIntervaloPermiteEliminarUnIntervaloDe30Minutos
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Horario eliminado con éxito'
-                properties:
-                  message:
-                    type: string
-                    example: 'Horario eliminado con éxito'
-      tags:
-        - 'Horarios [ADMIN/DOCTOR]'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Optional parameter. ID del horario.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  '/api/horarios-doctor/{id_doctor}':
-    get:
-      summary: "Listar horarios por doctor\n\nDevuelve todos los intervalos de 30 minutos de un doctor específico."
-      operationId: listarHorariosPorDoctorDevuelveTodosLosIntervalosDe30MinutosDeUnDoctorEspecfico
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                example:
-                  -
-                    dia: 1
-                    hora_inicio: '08:00'
-                    hora_fin: '08:30'
-      tags:
-        - 'Horarios [ADMIN]'
-    parameters:
-      -
-        in: path
-        name: id_doctor
-        description: 'Optional parameter. ID del doctor.'
-        required: true
-        schema:
-          type: integer
-        examples:
-          omitted:
-            summary: 'When the value is omitted'
-            value: ''
-          present:
-            summary: 'When the value is present'
-            value: 1
-  /api/countHorarios:
-    get:
-      summary: "Contar horarios\n\nDevuelve el número total de horarios registrados."
-      operationId: contarHorariosDevuelveElNmeroTotalDeHorariosRegistrados
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  total: 150
-                properties:
-                  total:
-                    type: integer
-                    example: 150
-      tags:
-        - 'Horarios [ADMIN]'
+              required:
+                - email
+                - password
+      security: []
   /api/registrar-paciente:
     post:
-      summary: "Registrar un nuevo paciente\n\nEste endpoint permite crear un paciente y su usuario asociado en el sistema. Se ejecuta dentro de\nuna transacción para garantizar la integridad de los datos. El usuario se crea con el rol de paciente (id_rol = 1)."
-      operationId: registrarUnNuevoPacienteEsteEndpointPermiteCrearUnPacienteYSuUsuarioAsociadoEnElSistemaSeEjecutaDentroDeUnaTransaccinParaGarantizarLaIntegridadDeLosDatosElUsuarioSeCreaConElRolDePacienteidRol1
+      summary: ''
+      operationId: postApiRegistrarPaciente
       description: ''
       parameters: []
       responses:
@@ -2433,7 +775,7 @@ paths:
                     type: string
                     example: 'Detalle del error interno'
       tags:
-        - Pacientes
+        - Autenticación
       requestBody:
         required: true
         content:
@@ -2512,10 +854,269 @@ paths:
                 - genero
                 - edad
       security: []
-  /api/pacientes:
+  '/api/doctores/{doctorId}/slots':
     get:
-      summary: "Listar todos los pacientes\n\nDevuelve la lista completa de pacientes registrados en el sistema."
-      operationId: listarTodosLosPacientesDevuelveLaListaCompletaDePacientesRegistradosEnElSistema
+      summary: ''
+      operationId: getApiDoctoresDoctorIdSlots
+      description: ''
+      parameters:
+        -
+          in: query
+          name: startDate
+          description: 'date The start date (YYYY-MM-DD).'
+          example: '2025-10-10'
+          required: true
+          schema:
+            type: string
+            description: 'date The start date (YYYY-MM-DD).'
+            example: '2025-10-10'
+            nullable: false
+        -
+          in: query
+          name: endDate
+          description: 'date The end date (YYYY-MM-DD).'
+          example: '2025-10-10'
+          required: true
+          schema:
+            type: string
+            description: 'date The end date (YYYY-MM-DD).'
+            example: '2025-10-10'
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    fecha: '2025-10-10'
+                    hora_inicio: '09:00'
+                    hora_fin: '10:00'
+                    disponible: true
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Fechas requeridas'
+                properties:
+                  message:
+                    type: string
+                    example: 'Fechas requeridas'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - Citas
+      security: []
+    parameters:
+      -
+        in: path
+        name: doctorId
+        description: 'The ID of the doctor.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/doctores/{doctorId}/validate-slot':
+    post:
+      summary: ''
+      operationId: postApiDoctoresDoctorIdValidateSlot
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  available: true
+                properties:
+                  available:
+                    type: boolean
+                    example: true
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    fecha:
+                      - 'The fecha field is required.'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      fecha:
+                        type: array
+                        example:
+                          - 'The fecha field is required.'
+                        items:
+                          type: string
+      tags:
+        - Citas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fecha:
+                  type: date
+                  description: 'The date (YYYY-MM-DD).'
+                  example: '2025-10-10'
+                  nullable: false
+                hora:
+                  type: time
+                  description: 'The time (HH:MM).'
+                  example: '09:00'
+                  nullable: false
+              required:
+                - fecha
+                - hora
+      security: []
+    parameters:
+      -
+        in: path
+        name: doctorId
+        description: 'The ID of the doctor.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/citas:
+    post:
+      summary: ''
+      operationId: postApiCitas
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cita creada con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Cita creada con éxito'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    fecha_cita:
+                      - 'The fecha cita field is required.'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      fecha_cita:
+                        type: array
+                        example:
+                          - 'The fecha cita field is required.'
+                        items:
+                          type: string
+      tags:
+        - Citas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_paciente:
+                  type: integer
+                  description: 'The ID of the patient.'
+                  example: 3
+                  nullable: false
+                id_doctor:
+                  type: integer
+                  description: 'The ID of the doctor.'
+                  example: 2
+                  nullable: false
+                fecha_cita:
+                  type: date
+                  description: 'The appointment date (YYYY-MM-DD).'
+                  example: '2025-10-01'
+                  nullable: false
+                hora_cita:
+                  type: time
+                  description: 'The appointment time (HH:MM).'
+                  example: '14:30'
+                  nullable: false
+                lugar:
+                  type: string
+                  description: 'The appointment location.'
+                  example: 'Consultorio 101'
+                  nullable: false
+                motivo:
+                  type: string
+                  description: 'The reason for the appointment.'
+                  example: 'Dolor de cabeza'
+                  nullable: false
+              required:
+                - id_paciente
+                - id_doctor
+                - fecha_cita
+                - hora_cita
+                - lugar
+                - motivo
+    get:
+      summary: ''
+      operationId: getApiCitas
       description: ''
       parameters: []
       responses:
@@ -2530,16 +1131,351 @@ paths:
                 example:
                   -
                     id: 1
-                    nombres: Juan
-                    apellidos: Pérez
-                    documento: '12345678'
-                    telefono: '3001234567'
+                    id_paciente: 3
+                    id_doctor: 2
+                    fecha_cita: '2025-10-01'
+                    hora_cita: '14:30:00'
+                    lugar: 'Consultorio 101'
+                    motivo: 'Consulta general'
+                    created_at: '2025-09-01T10:00:00.000000Z'
+                    updated_at: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No autenticado.'
+                properties:
+                  message:
+                    type: string
+                    example: 'No autenticado.'
       tags:
-        - 'Pacientes [ADMIN]'
-  '/api/pacientes/{id}':
+        - Citas
+  '/api/citas/{id}':
+    put:
+      summary: ''
+      operationId: putApiCitasId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  id_paciente: 3
+                  id_doctor: 2
+                  fecha_cita: '2025-10-01'
+                  hora_cita: '14:30:00'
+                  lugar: 'Consultorio 101'
+                  motivo: 'Consulta general'
+                  created_at: '2025-09-01T10:00:00.000000Z'
+                  updated_at: '2025-09-01T10:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  id_paciente:
+                    type: integer
+                    example: 3
+                  id_doctor:
+                    type: integer
+                    example: 2
+                  fecha_cita:
+                    type: string
+                    example: '2025-10-01'
+                  hora_cita:
+                    type: string
+                    example: '14:30:00'
+                  lugar:
+                    type: string
+                    example: 'Consultorio 101'
+                  motivo:
+                    type: string
+                    example: 'Consulta general'
+                  created_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cita no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Cita no encontrada'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    id_paciente:
+                      - 'The id paciente field is required.'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      id_paciente:
+                        type: array
+                        example:
+                          - 'The id paciente field is required.'
+                        items:
+                          type: string
+      tags:
+        - Citas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_paciente:
+                  type: integer
+                  description: 'The ID of the patient.'
+                  example: 3
+                  nullable: false
+                id_doctor:
+                  type: integer
+                  description: 'The ID of the doctor.'
+                  example: 2
+                  nullable: false
+                fecha_cita:
+                  type: date
+                  description: 'The appointment date (YYYY-MM-DD).'
+                  example: '2025-10-01'
+                  nullable: false
+                hora_cita:
+                  type: time
+                  description: 'The appointment time (HH:MM).'
+                  example: '14:30'
+                  nullable: false
+                lugar:
+                  type: string
+                  description: 'The appointment location.'
+                  example: 'Consultorio 101'
+                  nullable: false
+              required:
+                - id_paciente
+                - id_doctor
+                - fecha_cita
+                - hora_cita
+                - lugar
+    delete:
+      summary: ''
+      operationId: deleteApiCitasId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cita eliminada con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Cita eliminada con éxito'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cita no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Cita no encontrada'
+      tags:
+        - Citas
     get:
-      summary: "Ver un paciente específico\n\nObtiene los datos completos de un paciente a partir de su ID."
-      operationId: verUnPacienteEspecficoObtieneLosDatosCompletosDeUnPacienteAPartirDeSuID
+      summary: ''
+      operationId: getApiCitasId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  id_paciente: 3
+                  id_doctor: 2
+                  fecha_cita: '2025-10-01'
+                  hora_cita: '14:30:00'
+                  lugar: 'Consultorio 101'
+                  motivo: 'Consulta general'
+                  created_at: '2025-09-01T10:00:00.000000Z'
+                  updated_at: '2025-09-01T10:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  id_paciente:
+                    type: integer
+                    example: 3
+                  id_doctor:
+                    type: integer
+                    example: 2
+                  fecha_cita:
+                    type: string
+                    example: '2025-10-01'
+                  hora_cita:
+                    type: string
+                    example: '14:30:00'
+                  lugar:
+                    type: string
+                    example: 'Consultorio 101'
+                  motivo:
+                    type: string
+                    example: 'Consulta general'
+                  created_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cita no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Cita no encontrada'
+      tags:
+        - Citas
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the appointment.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/countCitas:
+    get:
+      summary: ''
+      operationId: getApiCountCitas
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 150
+                properties:
+                  total:
+                    type: integer
+                    example: 150
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Citas
+  /api/user:
+    get:
+      summary: ''
+      operationId: getApiUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/mi-perfil:
+    get:
+      summary: ''
+      operationId: getApiMiPerfil
       description: ''
       parameters: []
       responses:
@@ -2584,10 +1520,10 @@ paths:
                     type: string
                     example: 'Paciente no encontrado'
       tags:
-        - 'Pacientes [ADMIN]'
+        - 'Gestión de Usuarios'
     put:
-      summary: "Actualizar un paciente\n\nPermite al administrador modificar los datos de un paciente específico."
-      operationId: actualizarUnPacientePermiteAlAdministradorModificarLosDatosDeUnPacienteEspecfico
+      summary: ''
+      operationId: putApiMiPerfil
       description: ''
       parameters: []
       responses:
@@ -2648,7 +1584,368 @@ paths:
                         items:
                           type: string
       tags:
-        - 'Pacientes [ADMIN]'
+        - 'Gestión de Usuarios'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                  description: 'Nombre del paciente.'
+                  example: Juan
+                  nullable: false
+                apellidos:
+                  type: string
+                  description: 'Apellido del paciente.'
+                  example: Pérez
+                  nullable: false
+                telefono:
+                  type: string
+                  description: 'Número telefónico.'
+                  example: '3001234567'
+                  nullable: false
+                alergias:
+                  type: string
+                  description: 'Alergias conocidas.'
+                  example: Ninguna
+                  nullable: true
+                comentarios:
+                  type: string
+                  description: 'Comentarios adicionales.'
+                  example: 'Paciente estable'
+                  nullable: true
+  /api/mi-perfil-admin:
+    get:
+      summary: ''
+      operationId: getApiMiPerfilAdmin
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Carlos
+                  apellidos: Pérez
+                  cedula: '12345678'
+                  telefono: '3001234567'
+                  user_id: 5
+                  created_at: '2025-09-01T10:00:00.000000Z'
+                  updated_at: '2025-09-01T10:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Carlos
+                  apellidos:
+                    type: string
+                    example: Pérez
+                  cedula:
+                    type: string
+                    example: '12345678'
+                  telefono:
+                    type: string
+                    example: '3001234567'
+                  user_id:
+                    type: integer
+                    example: 5
+                  created_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Administrador no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Administrador no encontrado'
+      tags:
+        - 'Gestión de Usuarios'
+    put:
+      summary: ''
+      operationId: putApiMiPerfilAdmin
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Carlos
+                  apellidos: Pérez
+                  cedula: '12345678'
+                  telefono: '3001234567'
+                  user_id: 5
+                  created_at: '2025-09-01T10:00:00.000000Z'
+                  updated_at: '2025-09-01T10:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Carlos
+                  apellidos:
+                    type: string
+                    example: Pérez
+                  cedula:
+                    type: string
+                    example: '12345678'
+                  telefono:
+                    type: string
+                    example: '3001234567'
+                  user_id:
+                    type: integer
+                    example: 5
+                  created_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Administrador no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Administrador no encontrado'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    cedula:
+                      - 'The cedula has already been taken.'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      cedula:
+                        type: array
+                        example:
+                          - 'The cedula has already been taken.'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión de Usuarios'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                  description: 'optional First names of the administrator.'
+                  example: Carlos
+                  nullable: false
+                apellidos:
+                  type: string
+                  description: 'optional Last names of the administrator.'
+                  example: Pérez
+                  nullable: false
+                cedula:
+                  type: string
+                  description: 'optional ID card number of the administrator.'
+                  example: '12345678'
+                  nullable: false
+                telefono:
+                  type: string
+                  description: 'optional Phone number of the administrator.'
+                  example: '3001234567'
+                  nullable: false
+  /api/pacientes:
+    get:
+      summary: ''
+      operationId: getApiPacientes
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    nombres: Juan
+                    apellidos: Pérez
+                    documento: '12345678'
+                    telefono: '3001234567'
+      tags:
+        - 'Gestión de Usuarios'
+  '/api/pacientes/{id}':
+    get:
+      summary: ''
+      operationId: getApiPacientesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Juan
+                  apellidos: Pérez
+                  documento: '12345678'
+                  telefono: '3001234567'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Juan
+                  apellidos:
+                    type: string
+                    example: Pérez
+                  documento:
+                    type: string
+                    example: '12345678'
+                  telefono:
+                    type: string
+                    example: '3001234567'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Paciente no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Paciente no encontrado'
+      tags:
+        - 'Gestión de Usuarios'
+    put:
+      summary: ''
+      operationId: putApiPacientesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Juan
+                  apellidos: Pérez
+                  telefono: '3001234567'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Juan
+                  apellidos:
+                    type: string
+                    example: Pérez
+                  telefono:
+                    type: string
+                    example: '3001234567'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Paciente no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Paciente no encontrado'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    nombres:
+                      - 'El campo nombres es obligatorio'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      nombres:
+                        type: array
+                        example:
+                          - 'El campo nombres es obligatorio'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión de Usuarios'
       requestBody:
         required: false
         content:
@@ -2707,8 +2004,8 @@ paths:
                   example: 'Paciente estable'
                   nullable: true
     delete:
-      summary: "Eliminar un paciente\n\nPermite al administrador eliminar un paciente del sistema."
-      operationId: eliminarUnPacientePermiteAlAdministradorEliminarUnPacienteDelSistema
+      summary: ''
+      operationId: deleteApiPacientesId
       description: ''
       parameters: []
       responses:
@@ -2737,7 +2034,7 @@ paths:
                     type: string
                     example: 'Paciente no encontrado'
       tags:
-        - 'Pacientes [ADMIN]'
+        - 'Gestión de Usuarios'
     parameters:
       -
         in: path
@@ -2749,8 +2046,8 @@ paths:
           type: integer
   /api/countPacientes:
     get:
-      summary: "Contar total de pacientes\n\nDevuelve el número total de pacientes registrados en el sistema."
-      operationId: contarTotalDePacientesDevuelveElNmeroTotalDePacientesRegistradosEnElSistema
+      summary: ''
+      operationId: getApiCountPacientes
       description: ''
       parameters: []
       responses:
@@ -2767,11 +2064,50 @@ paths:
                     type: integer
                     example: 10
       tags:
-        - 'Pacientes [ADMIN]'
-  /api/mi-perfil:
+        - 'Gestión de Usuarios'
+  /api/administradores:
     get:
-      summary: "Ver mi información\n\nDevuelve los datos del paciente autenticado."
-      operationId: verMiInformacinDevuelveLosDatosDelPacienteAutenticado
+      summary: ''
+      operationId: getApiAdministradores
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    nombres: Carlos
+                    apellidos: Pérez
+                    cedula: '12345678'
+                    telefono: '3001234567'
+                    user_id: 5
+                    created_at: '2025-09-01T10:00:00.000000Z'
+                    updated_at: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Gestión de Usuarios'
+  '/api/administradores/{id}':
+    get:
+      summary: ''
+      operationId: getApiAdministradoresId
       description: ''
       parameters: []
       responses:
@@ -2783,26 +2119,50 @@ paths:
                 type: object
                 example:
                   id: 1
-                  nombres: Juan
+                  nombres: Carlos
                   apellidos: Pérez
-                  documento: '12345678'
+                  cedula: '12345678'
                   telefono: '3001234567'
+                  user_id: 5
+                  created_at: '2025-09-01T10:00:00.000000Z'
+                  updated_at: '2025-09-01T10:00:00.000000Z'
                 properties:
                   id:
                     type: integer
                     example: 1
                   nombres:
                     type: string
-                    example: Juan
+                    example: Carlos
                   apellidos:
                     type: string
                     example: Pérez
-                  documento:
+                  cedula:
                     type: string
                     example: '12345678'
                   telefono:
                     type: string
                     example: '3001234567'
+                  user_id:
+                    type: integer
+                    example: 5
+                  created_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
         404:
           description: ''
           content:
@@ -2810,16 +2170,16 @@ paths:
               schema:
                 type: object
                 example:
-                  message: 'Paciente no encontrado'
+                  message: 'Administrador no encontrado'
                 properties:
                   message:
                     type: string
-                    example: 'Paciente no encontrado'
+                    example: 'Administrador no encontrado'
       tags:
-        - 'Pacientes [AUTENTICADO]'
+        - 'Gestión de Usuarios'
     put:
-      summary: "Actualizar mi información\n\nPermite al paciente autenticado actualizar sus datos personales."
-      operationId: actualizarMiInformacinPermiteAlPacienteAutenticadoActualizarSusDatosPersonales
+      summary: ''
+      operationId: putApiAdministradoresId
       description: ''
       parameters: []
       responses:
@@ -2831,22 +2191,50 @@ paths:
                 type: object
                 example:
                   id: 1
-                  nombres: Juan
+                  nombres: Carlos
                   apellidos: Pérez
+                  cedula: '12345678'
                   telefono: '3001234567'
+                  user_id: 5
+                  created_at: '2025-09-01T10:00:00.000000Z'
+                  updated_at: '2025-09-01T10:00:00.000000Z'
                 properties:
                   id:
                     type: integer
                     example: 1
                   nombres:
                     type: string
-                    example: Juan
+                    example: Carlos
                   apellidos:
                     type: string
                     example: Pérez
+                  cedula:
+                    type: string
+                    example: '12345678'
                   telefono:
                     type: string
                     example: '3001234567'
+                  user_id:
+                    type: integer
+                    example: 5
+                  created_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2025-09-01T10:00:00.000000Z'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
         404:
           description: ''
           content:
@@ -2854,11 +2242,11 @@ paths:
               schema:
                 type: object
                 example:
-                  message: 'Paciente no encontrado'
+                  message: 'Administrador no encontrado'
                 properties:
                   message:
                     type: string
-                    example: 'Paciente no encontrado'
+                    example: 'Administrador no encontrado'
         422:
           description: ''
           content:
@@ -2867,20 +2255,20 @@ paths:
                 type: object
                 example:
                   errors:
-                    nombres:
-                      - 'El campo nombres es obligatorio'
+                    cedula:
+                      - 'The cedula has already been taken.'
                 properties:
                   errors:
                     type: object
                     properties:
-                      nombres:
+                      cedula:
                         type: array
                         example:
-                          - 'El campo nombres es obligatorio'
+                          - 'The cedula has already been taken.'
                         items:
                           type: string
       tags:
-        - 'Pacientes [AUTENTICADO]'
+        - 'Gestión de Usuarios'
       requestBody:
         required: false
         content:
@@ -2890,26 +2278,2138 @@ paths:
               properties:
                 nombres:
                   type: string
-                  description: 'Nombre del paciente.'
-                  example: Juan
+                  description: 'optional First names of the administrator.'
+                  example: Carlos
                   nullable: false
                 apellidos:
                   type: string
-                  description: 'Apellido del paciente.'
+                  description: 'optional Last names of the administrator.'
                   example: Pérez
+                  nullable: false
+                cedula:
+                  type: string
+                  description: 'optional ID card number of the administrator.'
+                  example: '12345678'
+                  nullable: false
+                telefono:
+                  type: string
+                  description: 'optional Phone number of the administrator.'
+                  example: '3001234567'
+                  nullable: false
+    delete:
+      summary: ''
+      operationId: deleteApiAdministradoresId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Administrador eliminado con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Administrador eliminado con éxito'
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Administrador no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Administrador no encontrado'
+      tags:
+        - 'Gestión de Usuarios'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the administrator.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/countAdministradores:
+    get:
+      summary: ''
+      operationId: getApiCountAdministradores
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 5
+                properties:
+                  total:
+                    type: integer
+                    example: 5
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Gestión de Usuarios'
+  '/api/doctor/{id}':
+    get:
+      summary: "Ver un doctor\n\nDevuelve los datos de un doctor específico por su ID."
+      operationId: verUnDoctorDevuelveLosDatosDeUnDoctorEspecficoPorSuID
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Pedro
+                  apellidos: López
+                  especialidad: Cardiología
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Pedro
+                  apellidos:
+                    type: string
+                    example: López
+                  especialidad:
+                    type: string
+                    example: Cardiología
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Gestión de Usuarios [ADMIN]'
+    put:
+      summary: "Actualizar un doctor\n\nPermite al administrador actualizar los datos de un doctor por ID."
+      operationId: actualizarUnDoctorPermiteAlAdministradorActualizarLosDatosDeUnDoctorPorID
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Pedro
+                  apellidos: López
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Pedro
+                  apellidos:
+                    type: string
+                    example: López
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error: 'Conflicto de horarios detectado'
+                properties:
+                  error:
+                    type: string
+                    example: 'Conflicto de horarios detectado'
+      tags:
+        - 'Gestión de Usuarios [ADMIN]'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                  description: 'Nombre del doctor.'
+                  example: Pedro
+                  nullable: false
+                apellidos:
+                  type: string
+                  description: 'Apellido del doctor.'
+                  example: López
+                  nullable: false
+                cedula:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: false
+                lugar_trabajo:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: qxbajwbpilpmufinllwlo
+                  nullable: true
+                telefono:
+                  type: string
+                  description: 'Número telefónico.'
+                  example: '3012345678'
+                  nullable: false
+                especialidad:
+                  type: integer
+                  description: 'ID de la especialidad.'
+                  example: 1
+                  nullable: true
+                horarios_asignados:
+                  type: array
+                  description: ''
+                  example: null
+                  items:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: integer
+                        description: 'The <code>id</code> of an existing record in the horarios table.'
+                        example: 17
+                        nullable: false
+                      nombre:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: false
+                horario:
+                  type: integer
+                  description: 'ID del horario a asignar (opcional).'
+                  example: 1
+                  nullable: false
+    delete:
+      summary: "Eliminar un doctor\n\nPermite al administrador eliminar un doctor por ID."
+      operationId: eliminarUnDoctorPermiteAlAdministradorEliminarUnDoctorPorID
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor eliminado con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor eliminado con éxito'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Gestión de Usuarios [ADMIN]'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID del doctor.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  /api/countDoctores:
+    get:
+      summary: "Contar doctores\n\nDevuelve el número total de doctores registrados en el sistema."
+      operationId: contarDoctoresDevuelveElNmeroTotalDeDoctoresRegistradosEnElSistema
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 10
+                properties:
+                  total:
+                    type: integer
+                    example: 10
+      tags:
+        - 'Gestión de Usuarios [ADMIN]'
+  /api/doctores:
+    get:
+      summary: "Listar doctores\n\nDevuelve la lista completa de doctores registrados en el sistema."
+      operationId: listarDoctoresDevuelveLaListaCompletaDeDoctoresRegistradosEnElSistema
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    nombres: Pedro
+                    apellidos: López
+                    especialidad: Cardiología
+      tags:
+        - 'Gestión de Usuarios [ADMIN]'
+  /api/mi-perfil-doctor:
+    get:
+      summary: "Ver mi información (Doctor)\n\nDevuelve los datos del doctor autenticado."
+      operationId: verMiInformacinDoctorDevuelveLosDatosDelDoctorAutenticado
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Pedro
+                  apellidos: López
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Pedro
+                  apellidos:
+                    type: string
+                    example: López
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Gestión de Usuarios [AUTENTICADO]'
+    put:
+      summary: "Actualizar mi información (Doctor)\n\nPermite al doctor autenticado actualizar sus propios datos."
+      operationId: actualizarMiInformacinDoctorPermiteAlDoctorAutenticadoActualizarSusPropiosDatos
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombres: Pedro
+                  apellidos: López
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombres:
+                    type: string
+                    example: Pedro
+                  apellidos:
+                    type: string
+                    example: López
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    nombres:
+                      - 'El campo nombres debe ser una cadena de texto'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      nombres:
+                        type: array
+                        example:
+                          - 'El campo nombres debe ser una cadena de texto'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión de Usuarios [AUTENTICADO]'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                  description: 'Nombre del doctor.'
+                  example: Pedro
+                  nullable: false
+                apellidos:
+                  type: string
+                  description: 'Apellido del doctor.'
+                  example: López
                   nullable: false
                 telefono:
                   type: string
                   description: 'Número telefónico.'
-                  example: '3001234567'
+                  example: '3012345678'
                   nullable: false
-                alergias:
+  '/api/doctores/especialidad/{id}':
+    get:
+      summary: ''
+      operationId: getApiDoctoresEspecialidadId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    nombres: Juan
+                    apellidos: López
+                    especialidad: Cardiología
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Especialidad no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Especialidad no encontrada'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID de la especialidad.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 3
+  '/api/doctor/{id}/disponibilidad':
+    get:
+      summary: ''
+      operationId: getApiDoctorIdDisponibilidad
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    dia: 1
+                    hora_inicio: '08:00'
+                    hora_fin: '08:30'
+                    disponible: true
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID del doctor.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 2
+  /api/citas/mis-citas:
+    get:
+      summary: ''
+      operationId: getApiCitasMisCitas
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "[\n   { \"id\": 1, \"fecha_cita\": \"2025-09-10\", \"hora_cita\": \"10:00\", \"lugar\": \"Consultorio 1\", \"motivo\": \"Chequeo general\", \"id_doctor\": 1, \"id_paciente\": 1, \"doctor\": {...}, \"paciente\": {...} }\n]"
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Acceso denegado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Acceso denegado'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Paciente no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Paciente no encontrado'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error interno del servidor'
+                properties:
+                  message:
+                    type: string
+                    example: 'Error interno del servidor'
+      tags:
+        - 'Gestión del Sistema'
+  /api/especialidades:
+    post:
+      summary: ''
+      operationId: postApiEspecialidades
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombre: Cardiología
+                  descripcion: 'Especialidad del corazón'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: Cardiología
+                  descripcion:
+                    type: string
+                    example: 'Especialidad del corazón'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    nombre:
+                      - 'El campo nombre es obligatorio'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      nombre:
+                        type: array
+                        example:
+                          - 'El campo nombre es obligatorio'
+                        items:
+                          type: string
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error interno del servidor'
+                properties:
+                  message:
+                    type: string
+                    example: 'Error interno del servidor'
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
                   type: string
-                  description: 'Alergias conocidas.'
-                  example: Ninguna
-                  nullable: true
-                comentarios:
+                  description: 'Nombre de la especialidad.'
+                  example: Cardiología
+                  nullable: false
+                descripcion:
                   type: string
-                  description: 'Comentarios adicionales.'
-                  example: 'Paciente estable'
-                  nullable: true
+                  description: 'Descripción de la especialidad.'
+                  example: 'Tratamiento del corazón'
+                  nullable: false
+              required:
+                - nombre
+                - descripcion
+    get:
+      summary: ''
+      operationId: getApiEspecialidades
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    nombre: Cardiología
+                    descripcion: 'Especialidad del corazón'
+      tags:
+        - 'Gestión del Sistema'
+  '/api/especialidades/{id}':
+    put:
+      summary: ''
+      operationId: putApiEspecialidadesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombre: Cardiología
+                  descripcion: 'Especialidad actualizada'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: Cardiología
+                  descripcion:
+                    type: string
+                    example: 'Especialidad actualizada'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Especialidad no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Especialidad no encontrada'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    nombre:
+                      - 'El campo nombre debe ser una cadena'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      nombre:
+                        type: array
+                        example:
+                          - 'El campo nombre debe ser una cadena'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  description: 'Nombre de la especialidad (opcional).'
+                  example: Cardiología
+                  nullable: false
+                descripcion:
+                  type: string
+                  description: 'Descripción de la especialidad (opcional).'
+                  example: 'Tratamiento del corazón'
+                  nullable: false
+    delete:
+      summary: ''
+      operationId: deleteApiEspecialidadesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Especialidad eliminada con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Especialidad eliminada con éxito'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Especialidad no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Especialidad no encontrada'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error interno del servidor'
+                properties:
+                  message:
+                    type: string
+                    example: 'Error interno del servidor'
+      tags:
+        - 'Gestión del Sistema'
+    get:
+      summary: ''
+      operationId: getApiEspecialidadesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombre: Cardiología
+                  descripcion: 'Especialidad del corazón'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: Cardiología
+                  descripcion:
+                    type: string
+                    example: 'Especialidad del corazón'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Especialidad no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Especialidad no encontrada'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID de la especialidad.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  /api/countEspecialidades:
+    get:
+      summary: ''
+      operationId: getApiCountEspecialidades
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 10
+                properties:
+                  total:
+                    type: integer
+                    example: 10
+      tags:
+        - 'Gestión del Sistema'
+  /api/horarios:
+    get:
+      summary: ''
+      operationId: getApiHorarios
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    nombre: 'Horario Mañana'
+                    hora_inicio: '08:00'
+                    hora_fin: '12:00'
+                    dias:
+                      - 1
+                      - 3
+                      - 5
+      tags:
+        - 'Gestión del Sistema'
+    post:
+      summary: ''
+      operationId: postApiHorarios
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombre: 'Horario Mañana'
+                  hora_inicio: '08:00'
+                  hora_fin: '12:00'
+                  dias:
+                    - 1
+                    - 3
+                    - 5
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: 'Horario Mañana'
+                  hora_inicio:
+                    type: string
+                    example: '08:00'
+                  hora_fin:
+                    type: string
+                    example: '12:00'
+                  dias:
+                    type: array
+                    example:
+                      - 1
+                      - 3
+                      - 5
+                    items:
+                      type: integer
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    nombre:
+                      - 'El campo nombre es obligatorio'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      nombre:
+                        type: array
+                        example:
+                          - 'El campo nombre es obligatorio'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  description: 'Nombre de la plantilla.'
+                  example: 'Horario Mañana'
+                  nullable: false
+                dias:
+                  type: array
+                  description: 'Lista de días (1=Lunes, 7=Domingo).'
+                  example:
+                    - 1
+                    - 3
+                    - 5
+                  items:
+                    type: string
+                hora_inicio:
+                  type: string
+                  description: 'Hora de inicio (HH:mm).'
+                  example: '08:00'
+                  nullable: false
+                hora_fin:
+                  type: string
+                  description: 'Hora de fin (HH:mm).'
+                  example: '12:00'
+                  nullable: false
+              required:
+                - nombre
+                - dias
+                - hora_inicio
+                - hora_fin
+  '/api/horarios/{id}':
+    get:
+      summary: ''
+      operationId: getApiHorariosId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombre: 'Horario Mañana'
+                  hora_inicio: '08:00'
+                  hora_fin: '12:00'
+                  dias:
+                    - 1
+                    - 3
+                    - 5
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: 'Horario Mañana'
+                  hora_inicio:
+                    type: string
+                    example: '08:00'
+                  hora_fin:
+                    type: string
+                    example: '12:00'
+                  dias:
+                    type: array
+                    example:
+                      - 1
+                      - 3
+                      - 5
+                    items:
+                      type: integer
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Horario no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Horario no encontrado'
+      tags:
+        - 'Gestión del Sistema'
+    put:
+      summary: ''
+      operationId: putApiHorariosId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  nombre: 'Horario Mañana'
+                  hora_inicio: '09:00'
+                  hora_fin: '13:00'
+                  dias:
+                    - 1
+                    - 3
+                    - 5
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: 'Horario Mañana'
+                  hora_inicio:
+                    type: string
+                    example: '09:00'
+                  hora_fin:
+                    type: string
+                    example: '13:00'
+                  dias:
+                    type: array
+                    example:
+                      - 1
+                      - 3
+                      - 5
+                    items:
+                      type: integer
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Plantilla de horario no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Plantilla de horario no encontrada'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    hora_inicio:
+                      - 'El formato de hora no es válido'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      hora_inicio:
+                        type: array
+                        example:
+                          - 'El formato de hora no es válido'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  description: 'Nombre de la plantilla (opcional).'
+                  example: 'Horario Mañana'
+                  nullable: false
+                dias:
+                  type: array
+                  description: 'Lista de días (opcional).'
+                  example:
+                    - 1
+                    - 3
+                    - 5
+                  items:
+                    type: string
+                hora_inicio:
+                  type: string
+                  description: 'Hora de inicio (opcional).'
+                  example: '09:00'
+                  nullable: false
+                hora_fin:
+                  type: string
+                  description: 'Hora de fin (opcional).'
+                  example: '13:00'
+                  nullable: false
+    delete:
+      summary: ''
+      operationId: deleteApiHorariosId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Horario eliminado con éxito'
+                properties:
+                  message:
+                    type: string
+                    example: 'Horario eliminado con éxito'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Horario no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Horario no encontrado'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID del horario.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  /api/asignar-horario:
+    post:
+      summary: ''
+      operationId: postApiAsignarHorario
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id_horario: 1
+                    id_doctor: 1
+                    dia: 1
+                    hora_inicio: '08:00'
+                    hora_fin: '08:30'
+                    disponible: true
+        422:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"error\": \"Conflicto de horarios detectado\",\n   \"conflictos\": [...],\n   \"message\": \"No se puede asignar este horario porque hay conflictos.\"\n}"
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_horario:
+                  type: integer
+                  description: 'ID de la plantilla de horario.'
+                  example: 1
+                  nullable: false
+                id_doctor:
+                  type: integer
+                  description: 'ID del doctor.'
+                  example: 1
+                  nullable: false
+              required:
+                - id_horario
+                - id_doctor
+  /api/desasignar-horario:
+    post:
+      summary: ''
+      operationId: postApiDesasignarHorario
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Horario desasignado correctamente'
+                properties:
+                  message:
+                    type: string
+                    example: 'Horario desasignado correctamente'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    id_horario:
+                      - 'El campo id_horario es obligatorio'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      id_horario:
+                        type: array
+                        example:
+                          - 'El campo id_horario es obligatorio'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_horario:
+                  type: integer
+                  description: 'ID de la plantilla de horario.'
+                  example: 1
+                  nullable: false
+                id_doctor:
+                  type: integer
+                  description: 'ID del doctor.'
+                  example: 1
+                  nullable: false
+              required:
+                - id_horario
+                - id_doctor
+  /api/verificar-conflicto-horario:
+    post:
+      summary: ''
+      operationId: postApiVerificarConflictoHorario
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  conflictos: []
+                properties:
+                  conflictos:
+                    type: array
+                    example: []
+        422:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"conflictos\": [\n      {\n         \"dia\": 1,\n         \"horario_conflictivo\": {...},\n         \"horario_nuevo\": {...}\n      }\n   ]\n}"
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_doctor:
+                  type: integer
+                  description: 'ID del doctor.'
+                  example: 1
+                  nullable: false
+                id_horario:
+                  type: integer
+                  description: 'ID de la plantilla de horario.'
+                  example: 1
+                  nullable: false
+              required:
+                - id_doctor
+                - id_horario
+  '/api/horarios-doctor/{id_doctor}':
+    get:
+      summary: ''
+      operationId: getApiHorariosDoctorId_doctor
+      description: ''
+      parameters:
+        -
+          in: query
+          name: id_horario
+          description: 'ID de la plantilla de horario (opcional).'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'ID de la plantilla de horario (opcional).'
+            example: 1
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    dia: 1
+                    hora_inicio: '08:00'
+                    hora_fin: '08:30'
+                    disponible: true
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id_doctor
+        description: 'Optional parameter. ID del doctor.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  /api/countHorarios:
+    get:
+      summary: ''
+      operationId: getApiCountHorarios
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  total: 3
+                properties:
+                  total:
+                    type: integer
+                    example: 3
+      tags:
+        - 'Gestión del Sistema'
+  /api/notificaciones:
+    get:
+      summary: ''
+      operationId: getApiNotificaciones
+      description: ''
+      parameters:
+        -
+          in: query
+          name: doctor_id
+          description: 'ID del doctor (opcional).'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'ID del doctor (opcional).'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: fecha_solicitada
+          description: 'date Fecha solicitada (opcional).'
+          example: '2025-10-10'
+          required: false
+          schema:
+            type: string
+            description: 'date Fecha solicitada (opcional).'
+            example: '2025-10-10'
+            nullable: false
+        -
+          in: query
+          name: per_page
+          description: 'Número de elementos por página (opcional, default 15).'
+          example: 10
+          required: false
+          schema:
+            type: integer
+            description: 'Número de elementos por página (opcional, default 15).'
+            example: 10
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"current_page\": 1,\n   \"data\": [\n      {\n         \"id\": 1,\n         \"doctor_id\": 1,\n         \"fecha_solicitada\": \"2025-10-10\",\n         \"slots\": [...],\n         \"estado\": \"pendiente\",\n         \"doctor\": {...}\n      }\n   ],\n   \"per_page\": 15,\n   \"total\": 1\n}"
+      tags:
+        - 'Gestión del Sistema'
+    post:
+      summary: ''
+      operationId: postApiNotificaciones
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"id\": 1,\n   \"doctor_id\": 1,\n   \"fecha_solicitada\": \"2025-10-15\",\n   \"slots\": [...],\n   \"estado\": \"pendiente\"\n}"
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    fecha_solicitada:
+                      - 'El campo fecha_solicitada es obligatorio'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      fecha_solicitada:
+                        type: array
+                        example:
+                          - 'El campo fecha_solicitada es obligatorio'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fecha_solicitada:
+                  type: date
+                  description: 'Fecha para la que se solicita el apartado.'
+                  example: '2025-10-15'
+                  nullable: false
+                slots:
+                  type: array
+                  description: 'Lista de slots a apartar.'
+                  example:
+                    -
+                      fecha: '2025-10-15'
+                      hora: '10:00-10:30'
+                  items:
+                    type: string
+              required:
+                - fecha_solicitada
+                - slots
+  '/api/notificaciones/{id}':
+    put:
+      summary: ''
+      operationId: putApiNotificacionesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notificación aprobada y slots apartados'
+                properties:
+                  message:
+                    type: string
+                    example: 'Notificación aprobada y slots apartados'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notificación no encontrada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Notificación no encontrada'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    estado:
+                      - 'El estado debe ser aprobada o rechazada'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      estado:
+                        type: array
+                        example:
+                          - 'El estado debe ser aprobada o rechazada'
+                        items:
+                          type: string
+      tags:
+        - 'Gestión del Sistema'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: string
+                  description: 'Estado a actualizar (aprobada o rechazada).'
+                  example: aprobada
+                  nullable: false
+              required:
+                - estado
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID de la notificación.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  /api/reportes/citas-por-especialidad:
+    get:
+      summary: ''
+      operationId: getApiReportesCitasPorEspecialidad
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    especialidad: Cardiología
+                    total_citas: 15
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Acceso denegado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Acceso denegado'
+      tags:
+        - 'Gestión del Sistema'
+  /api/notificaciones/activas:
+    get:
+      summary: ''
+      operationId: getApiNotificacionesActivas
+      description: ''
+      parameters:
+        -
+          in: query
+          name: doctor_id
+          description: 'ID del doctor (opcional).'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'ID del doctor (opcional).'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: fecha_solicitada
+          description: 'date Fecha solicitada (opcional).'
+          example: '2025-10-10'
+          required: false
+          schema:
+            type: string
+            description: 'date Fecha solicitada (opcional).'
+            example: '2025-10-10'
+            nullable: false
+        -
+          in: query
+          name: per_page
+          description: 'Número de elementos por página (opcional, default 15).'
+          example: 10
+          required: false
+          schema:
+            type: integer
+            description: 'Número de elementos por página (opcional, default 15).'
+            example: 10
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"current_page\": 1,\n   \"data\": [\n      {\n         \"id\": 1,\n         \"doctor_id\": 1,\n         \"fecha_solicitada\": \"2025-10-10\",\n         \"slots\": [...],\n         \"estado\": \"pendiente\",\n         \"doctor\": {...}\n      }\n   ],\n   \"per_page\": 15,\n   \"total\": 1\n}"
+      tags:
+        - 'Gestión del Sistema'
+  /api/notificaciones/historial:
+    get:
+      summary: ''
+      operationId: getApiNotificacionesHistorial
+      description: ''
+      parameters:
+        -
+          in: query
+          name: doctor_id
+          description: 'ID del doctor (opcional).'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'ID del doctor (opcional).'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: fecha_solicitada
+          description: 'date Fecha solicitada (opcional).'
+          example: '2025-10-10'
+          required: false
+          schema:
+            type: string
+            description: 'date Fecha solicitada (opcional).'
+            example: '2025-10-10'
+            nullable: false
+        -
+          in: query
+          name: per_page
+          description: 'Número de elementos por página (opcional, default 15).'
+          example: 10
+          required: false
+          schema:
+            type: integer
+            description: 'Número de elementos por página (opcional, default 15).'
+            example: 10
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"current_page\": 1,\n   \"data\": [\n      {\n         \"id\": 1,\n         \"doctor_id\": 1,\n         \"fecha_solicitada\": \"2025-10-10\",\n         \"slots\": [...],\n         \"estado\": \"aprobada\",\n         \"admin_id\": 1,\n         \"doctor\": {...},\n         \"administrador\": {...}\n      }\n   ],\n   \"per_page\": 15,\n   \"total\": 1\n}"
+      tags:
+        - 'Gestión del Sistema'
+    delete:
+      summary: ''
+      operationId: deleteApiNotificacionesHistorial
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Historial eliminado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Historial eliminado'
+      tags:
+        - 'Gestión del Sistema'
+  '/api/notificaciones/{id}/aprobar':
+    post:
+      summary: ''
+      operationId: postApiNotificacionesIdAprobar
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notificación aprobada y slots apartados'
+                properties:
+                  message:
+                    type: string
+                    example: 'Notificación aprobada y slots apartados'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notificación no encontrada o no pendiente'
+                properties:
+                  message:
+                    type: string
+                    example: 'Notificación no encontrada o no pendiente'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error interno del servidor'
+                properties:
+                  message:
+                    type: string
+                    example: 'Error interno del servidor'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID de la notificación.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  '/api/notificaciones/{id}/rechazar':
+    post:
+      summary: ''
+      operationId: postApiNotificacionesIdRechazar
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notificación rechazada'
+                properties:
+                  message:
+                    type: string
+                    example: 'Notificación rechazada'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notificación no encontrada o no pendiente'
+                properties:
+                  message:
+                    type: string
+                    example: 'Notificación no encontrada o no pendiente'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. ID de la notificación.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 1
+  /api/notificaciones/contadores:
+    get:
+      summary: ''
+      operationId: getApiNotificacionesContadores
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  pendientes: 5
+                  aprobadas: 10
+                  rechazadas: 2
+                properties:
+                  pendientes:
+                    type: integer
+                    example: 5
+                  aprobadas:
+                    type: integer
+                    example: 10
+                  rechazadas:
+                    type: integer
+                    example: 2
+      tags:
+        - 'Gestión del Sistema'
+  '/api/horarios/compactados/{id_doctor}':
+    get:
+      summary: ''
+      operationId: getApiHorariosCompactadosId_doctor
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    dia: 1
+                    rango: '08:00 - 12:00'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Doctor no encontrado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Doctor no encontrado'
+      tags:
+        - 'Gestión del Sistema'
+    parameters:
+      -
+        in: path
+        name: id_doctor
+        description: 'Optional parameter. ID del doctor.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 2
+  /api/mis-horarios:
+    get:
+      summary: ''
+      operationId: getApiMisHorarios
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    dia: 1
+                    hora_inicio: '08:00'
+                    hora_fin: '08:30'
+                    disponible: true
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Acceso denegado'
+                properties:
+                  message:
+                    type: string
+                    example: 'Acceso denegado'
+      tags:
+        - 'Gestión del Sistema'
+  /api/mis-notificaciones:
+    get:
+      summary: ''
+      operationId: getApiMisNotificaciones
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "[\n   {\n      \"id\": 1,\n      \"doctor_id\": 1,\n      \"fecha_solicitada\": \"2025-10-15\",\n      \"slots\": [...],\n      \"estado\": \"pendiente\",\n      \"administrador\": {...}\n   }\n]"
+      tags:
+        - 'Gestión del Sistema'
+  /api/doctor/mis-pacientes:
+    get:
+      summary: ''
+      operationId: getApiDoctorMisPacientes
+      description: ''
+      parameters:
+        -
+          in: query
+          name: fecha_inicio
+          description: 'date Fecha inicial del filtro (opcional).'
+          example: '2025-09-01'
+          required: false
+          schema:
+            type: string
+            description: 'date Fecha inicial del filtro (opcional).'
+            example: '2025-09-01'
+            nullable: false
+        -
+          in: query
+          name: fecha_fin
+          description: 'date Fecha final del filtro (opcional).'
+          example: '2025-09-30'
+          required: false
+          schema:
+            type: string
+            description: 'date Fecha final del filtro (opcional).'
+            example: '2025-09-30'
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "[\n   { \"id\": 1, \"fecha_cita\": \"2025-09-05\", \"paciente\": {...}, \"doctor\": {...} }\n]"
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error interno del servidor'
+                properties:
+                  message:
+                    type: string
+                    example: 'Error interno del servidor'
+      tags:
+        - 'Gestión del Sistema'

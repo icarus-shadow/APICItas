@@ -18,7 +18,8 @@ use Throwable;
 class authcontroller extends Controller
 {
     /**
-     * @group Pacientes
+     * @group Autenticación
+     * @subgroup Registro de Pacientes
      *
      * Registrar un nuevo paciente
      *
@@ -135,7 +136,8 @@ class authcontroller extends Controller
 
 
     /**
-     * @group Administradores
+     * @group Autenticación
+     * @subgroup Registro de Administradores
      *
      * Registrar un nuevo administrador
      *
@@ -227,7 +229,8 @@ class authcontroller extends Controller
     }
 
     /**
-     * @group Doctores
+     * @group Autenticación
+     * @subgroup Registro de Doctores
      *
      * Registrar un nuevo doctor
      *
@@ -369,6 +372,34 @@ class authcontroller extends Controller
     }
 
 
+    /**
+     * @group Autenticación
+     * @subgroup Inicio de Sesión
+     *
+     * Iniciar sesión
+     *
+     * Este endpoint permite a un usuario autenticarse en el sistema y obtener un token de acceso.
+     *
+     * @bodyParam email string required Correo electrónico del usuario. Example: user@example.com
+     * @bodyParam password string required Contraseña del usuario. Example: secret123
+     *
+     * @response 200 {
+     *   "access_token": "1|abc123...",
+     *   "token_type": "Bearer",
+     *   "user": {
+     *       "id": 1,
+     *       "email": "user@example.com",
+     *       "id_rol": 1
+     *   }
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *       "email": ["Credenciales incorrectas"]
+     *   }
+     * }
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -393,6 +424,24 @@ class authcontroller extends Controller
         ]);
     }
 
+    /**
+     * @group Autenticación
+     * @subgroup Cierre de Sesión
+     *
+     * Cerrar sesión
+     *
+     * Este endpoint permite a un usuario autenticado cerrar su sesión actual, revocando todos sus tokens.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *   "message": "Sesión cerrada correctamente"
+     * }
+     *
+     * @response 401 {
+     *   "message": "Usuario no autenticado"
+     * }
+     */
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
@@ -401,7 +450,8 @@ class authcontroller extends Controller
     }
 
     /**
-     * @group Authentication
+     * @group Autenticación
+     * @subgroup Gestión de Contraseña
      *
      * Cambiar contraseña del usuario
      *
@@ -411,11 +461,21 @@ class authcontroller extends Controller
      * @bodyParam new_password string required Nueva contraseña del usuario, mínimo 6 caracteres. Example: newpassword123
      *
      * @response 200 {
-     *   "Message": "Contraseña actualizada correctamente"
+     *   "message": "Contraseña actualizada correctamente"
+     * }
+     *
+     * @response 401 {
+     *   "message": "Usuario no autenticado"
+     * }
+     *
+     * @response 409 {
+     *   "message": "La contraseña actual es incorrecta"
      * }
      *
      * @response 422 {
-     *   "message": "La contraseña actual es incorrecta"
+     *   "errors": {
+     *       "new_password": ["La nueva contraseña debe tener al menos 6 caracteres"]
+     *   }
      * }
      *
      * @authenticated
@@ -454,7 +514,8 @@ class authcontroller extends Controller
     }
 
     /**
-     * @group Authentication
+     * @group Autenticación
+     * @subgroup Eliminación de Cuenta
      *
      * Eliminar cuenta de usuario
      *
@@ -473,6 +534,11 @@ class authcontroller extends Controller
      *
      * @response 422 {
      *   "message": "La contraseña es incorrecta"
+     * }
+     *
+     * @response 500 {
+     *   "message": "Error al eliminar la cuenta",
+     *   "error": "Detalle del error interno"
      * }
      *
      * @authenticated

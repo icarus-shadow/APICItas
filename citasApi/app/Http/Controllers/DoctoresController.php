@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class DoctoresController extends Controller
 {
     /**
-     * @group Doctores [ADMIN]
+     * @group Gestión de Usuarios [ADMIN]
      *
      * Listar doctores
      *
@@ -48,7 +48,7 @@ class DoctoresController extends Controller
     }
 
     /**
-     * @group Doctores [ADMIN]
+     * @group Gestión de Usuarios [ADMIN]
      *
      * Ver un doctor
      *
@@ -78,7 +78,7 @@ class DoctoresController extends Controller
     }
 
     /**
-     * @group Doctores [ADMIN]
+     * @group Gestión de Usuarios [ADMIN]
      *
      * Actualizar un doctor
      *
@@ -152,7 +152,7 @@ class DoctoresController extends Controller
 
 
     /**
-     * @group Doctores [ADMIN]
+     * @group Gestión de Usuarios [ADMIN]
      *
      * Eliminar un doctor
      *
@@ -180,7 +180,7 @@ class DoctoresController extends Controller
     }
 
     /**
-     * @group Doctores [AUTENTICADO]
+     * @group Gestión de Usuarios [AUTENTICADO]
      *
      * Ver mi información (Doctor)
      *
@@ -207,7 +207,7 @@ class DoctoresController extends Controller
     }
 
     /**
-     * @group Doctores [AUTENTICADO]
+     * @group Gestión de Usuarios [AUTENTICADO]
      *
      * Actualizar mi información (Doctor)
      *
@@ -256,7 +256,7 @@ class DoctoresController extends Controller
     }
 
     /**
-     * @group Doctores [ADMIN]
+     * @group Gestión de Usuarios [ADMIN]
      *
      * Contar doctores
      *

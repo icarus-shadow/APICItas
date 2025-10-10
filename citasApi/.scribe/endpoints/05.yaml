@@ -1,4 +1,4 @@
-name: 'Doctores [ADMIN]'
+name: 'Gestión de Usuarios [ADMIN]'
 description: ''
 endpoints:
   -
@@ -6,7 +6,7 @@ endpoints:
       - GET
     uri: 'api/doctor/{id}'
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Gestión de Usuarios [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -76,7 +76,7 @@ endpoints:
       - PUT
     uri: 'api/doctor/{id}'
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Gestión de Usuarios [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -128,6 +128,26 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         custom: []
+      cedula:
+        name: cedula
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      lugar_trabajo:
+        name: lugar_trabajo
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: qxbajwbpilpmufinllwlo
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       telefono:
         name: telefono
         description: 'Número telefónico.'
@@ -138,9 +158,29 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         custom: []
-      especialidad_id:
-        name: especialidad_id
-        description: 'The <code>id</code> of an existing record in the especialidades table.'
+      especialidad:
+        name: especialidad
+        description: 'ID de la especialidad.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      horarios_asignados:
+        name: horarios_asignados
+        description: ''
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'horarios_asignados[].id':
+        name: 'horarios_asignados[].id'
+        description: 'The <code>id</code> of an existing record in the horarios table.'
         required: false
         example: 17
         type: integer
@@ -148,11 +188,37 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
+      'horarios_asignados[].nombre':
+        name: 'horarios_asignados[].nombre'
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      horario:
+        name: horario
+        description: 'ID del horario a asignar (opcional).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
     cleanBodyParameters:
       nombres: Pedro
       apellidos: López
+      lugar_trabajo: qxbajwbpilpmufinllwlo
       telefono: '3012345678'
-      especialidad_id: 17
+      especialidad: 1
+      horarios_asignados:
+        -
+          id: 17
+          nombre: consequatur
+      horario: 1
     fileParameters: []
     responses:
       -
@@ -175,6 +241,15 @@ endpoints:
         headers: []
         description: ''
         custom: []
+      -
+        status: 422
+        content: |-
+          {
+             "error": "Conflicto de horarios detectado"
+          }
+        headers: []
+        description: ''
+        custom: []
     responseFields: []
     auth:
       - headers
@@ -189,7 +264,7 @@ endpoints:
       - DELETE
     uri: 'api/doctor/{id}'
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Gestión de Usuarios [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -256,7 +331,7 @@ endpoints:
       - GET
     uri: api/countDoctores
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Gestión de Usuarios [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -303,7 +378,7 @@ endpoints:
       - GET
     uri: api/doctores
     metadata:
-      groupName: 'Doctores [ADMIN]'
+      groupName: 'Gestión de Usuarios [ADMIN]'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''

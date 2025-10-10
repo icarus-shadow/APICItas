@@ -12,23 +12,29 @@ use Illuminate\Support\Facades\DB;
 class CitasController extends Controller
 {
     /**
-     * @group Citas [ADMIN]
+     * @group Citas
+     * @subgroup Administrador
      *
      * Listar todas las citas
      *
-     * Devuelve todas las citas registradas en el sistema.
+     * Obtiene una lista de todas las citas registradas en el sistema. Este endpoint está restringido a administradores.
      *
      * @authenticated
      *
      * @response 200 [
      *   {
-     *      "id": 1,
-     *      "id_paciente": 3,
-     *      "id_doctor": 2,
-     *      "id_horario": 5,
-     *      "motivo": "Consulta general"
+     *     "id": 1,
+     *     "id_paciente": 3,
+     *     "id_doctor": 2,
+     *     "fecha_cita": "2025-10-01",
+     *     "hora_cita": "14:30:00",
+     *     "lugar": "Consultorio 101",
+     *     "motivo": "Consulta general",
+     *     "created_at": "2025-09-01T10:00:00.000000Z",
+     *     "updated_at": "2025-09-01T10:00:00.000000Z"
      *   }
      * ]
+     * @response 401 {"message": "No autenticado."}
      */
     public function index()
     {
@@ -37,19 +43,30 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [ADMIN]
+     * @group Citas
+     * @subgroup Admin
      *
-     * Ver una cita
+     * Get appointment details
      *
-     * Devuelve los detalles de una cita específica.
+     * Retrieves the details of a specific appointment by its ID. This endpoint is restricted to administrators.
      *
      * @authenticated
      *
-     * @urlParam id integer ID de la cita. Example: 1
+     * @urlParam id integer required The ID of the appointment. Example: 1
      *
      * @response 200 {
-     *
+     *   "id": 1,
+     *   "id_paciente": 3,
+     *   "id_doctor": 2,
+     *   "fecha_cita": "2025-10-01",
+     *   "hora_cita": "14:30:00",
+     *   "lugar": "Consultorio 101",
+     *   "motivo": "Consulta general",
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Cita no encontrada"}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function show($id)
     {
@@ -61,29 +78,25 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [PACIENTE]
+     * @group Citas
+     * @subgroup Patient
      *
-     * Crear cita
+     * Create appointment
      *
-     * Crea una cita en un horario disponible para el doctor seleccionado.
+     * Creates a new appointment for the authenticated patient in an available time slot for the selected doctor. Automatically reserves the slot.
      *
      * @authenticated
      *
-     * @bodyParam id_doctor integer required ID del doctor. Example: 2
-     * @bodyParam fecha_cita date required Fecha de la cita (YYYY-MM-DD). Example: 2025-10-01
-     * @bodyParam hora_cita time required Hora de la cita (HH:MM). Example: 14:30
-     * @bodyParam lugar string required Lugar de la cita. Example: Consultorio 101
-     * @bodyParam motivo string required Motivo de la cita. Example: Dolor de cabeza
+     * @bodyParam id_paciente integer required The ID of the patient. Example: 3
+     * @bodyParam id_doctor integer required The ID of the doctor. Example: 2
+     * @bodyParam fecha_cita date required The appointment date (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time required The appointment time (HH:MM). Example: 14:30
+     * @bodyParam lugar string required The appointment location. Example: Consultorio 101
+     * @bodyParam motivo string required The reason for the appointment. Example: Dolor de cabeza
      *
-     * @response 201 {
-     *    "id": 10,
-     *    "id_paciente": 3,
-     *    "id_doctor": 2,
-     *    "fecha_cita": "2025-10-01",
-     *    "hora_cita": "14:30",
-     *    "lugar": "Consultorio 101",
-     *    "motivo": "Dolor de cabeza"
-     * }
+     * @response 201 {"message": "Cita creada con éxito"}
+     * @response 422 {"errors": {"fecha_cita": ["The fecha cita field is required."]}}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function store(Request $request)
     {
@@ -133,22 +146,29 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [PACIENTE]
+     * @group Citas
+     * @subgroup Patient
      *
-     * Listar mis citas
+     * List my appointments
      *
-     * Devuelve todas las citas del paciente autenticado.
+     * Retrieves all appointments for the authenticated patient.
      *
      * @authenticated
      *
      * @response 200 [
      *   {
-     *      "id": 1,
-     *      "id_doctor": 2,
-     *      "id_horario": 5,
-     *      "motivo": "Consulta general"
+     *     "id": 1,
+     *     "id_paciente": 3,
+     *     "id_doctor": 2,
+     *     "fecha_cita": "2025-10-01",
+     *     "hora_cita": "14:30:00",
+     *     "lugar": "Consultorio 101",
+     *     "motivo": "Consulta general",
+     *     "created_at": "2025-09-01T10:00:00.000000Z",
+     *     "updated_at": "2025-09-01T10:00:00.000000Z"
      *   }
      * ]
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function listOwn()
     {
@@ -157,22 +177,29 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [DOCTOR]
+     * @group Citas
+     * @subgroup Doctor
      *
-     * Listar mis citas (Doctor)
+     * List my appointments (Doctor)
      *
-     * Devuelve todas las citas asignadas al doctor autenticado.
+     * Retrieves all appointments assigned to the authenticated doctor.
      *
      * @authenticated
      *
      * @response 200 [
      *   {
-     *      "id": 1,
-     *      "id_paciente": 3,
-     *      "id_horario": 5,
-     *      "motivo": "Consulta general"
+     *     "id": 1,
+     *     "id_paciente": 3,
+     *     "id_doctor": 2,
+     *     "fecha_cita": "2025-10-01",
+     *     "hora_cita": "14:30:00",
+     *     "lugar": "Consultorio 101",
+     *     "motivo": "Consulta general",
+     *     "created_at": "2025-09-01T10:00:00.000000Z",
+     *     "updated_at": "2025-09-01T10:00:00.000000Z"
      *   }
      * ]
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function listDoctor()
     {
@@ -181,27 +208,35 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [PACIENTE]
+     * @group Citas
+     * @subgroup Patient
      *
-     * Editar mi cita
+     * Update my appointment
      *
-     * Permite al paciente editar su propia cita, manejando automáticamente la liberación y reserva de slots.
+     * Allows the authenticated patient to update their own appointment, automatically handling slot release and reservation.
      *
      * @authenticated
      *
-     * @urlParam id integer ID de la cita. Example: 1
-     * @bodyParam fecha_cita date Fecha de la cita (YYYY-MM-DD). Example: 2025-10-01
-     * @bodyParam hora_cita time Hora de la cita (HH:MM). Example: 14:30
-     * @bodyParam lugar string Lugar de la cita. Example: Consultorio 101
-     * @bodyParam motivo string Motivo de la cita. Example: Dolor de estómago
+     * @urlParam id integer required The ID of the appointment. Example: 1
+     * @bodyParam fecha_cita date required The appointment date (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time required The appointment time (HH:MM). Example: 14:30
+     * @bodyParam lugar string required The appointment location. Example: Consultorio 101
+     * @bodyParam motivo string required The reason for the appointment. Example: Dolor de estómago
      *
      * @response 200 {
-     *    "id": 1,
-     *    "fecha_cita": "2025-10-01",
-     *    "hora_cita": "14:30",
-     *    "lugar": "Consultorio 101",
-     *    "motivo": "Dolor de estómago"
+     *   "id": 1,
+     *   "id_paciente": 3,
+     *   "id_doctor": 2,
+     *   "fecha_cita": "2025-10-01",
+     *   "hora_cita": "14:30:00",
+     *   "lugar": "Consultorio 101",
+     *   "motivo": "Dolor de estómago",
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Cita no encontrada o no autorizada"}
+     * @response 422 {"errors": {"fecha_cita": ["The fecha cita field is required."]}}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function updateOwn(Request $request, $id)
     {
@@ -289,19 +324,20 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [PACIENTE]
+     * @group Citas
+     * @subgroup Patient
      *
-     * Eliminar mi cita
+     * Delete my appointment
      *
-     * Permite al paciente eliminar su cita y liberar el horario.
+     * Allows the authenticated patient to delete their own appointment and release the associated time slot.
      *
      * @authenticated
      *
-     * @urlParam id integer ID de la cita. Example: 1
+     * @urlParam id integer required The ID of the appointment. Example: 1
      *
-     * @response 200 {
-     *    "message": "Cita eliminada con éxito"
-     * }
+     * @response 200 {"message": "Cita eliminada con éxito"}
+     * @response 404 {"message": "Cita no encontrada o no autorizada"}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function destroyOwn($id)
     {
@@ -333,29 +369,36 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [ADMIN]
+     * @group Citas
+     * @subgroup Admin
      *
-     * Editar cualquier cita
+     * Update any appointment
      *
-     * Permite al administrador modificar una cita, manejando automáticamente la liberación y reserva de slots.
+     * Allows the administrator to modify any appointment, automatically handling slot release and reservation.
      *
      * @authenticated
      *
-     * @urlParam id integer ID de la cita. Example: 1
-     * @bodyParam id_paciente integer ID del paciente. Example: 3
-     * @bodyParam id_doctor integer ID del doctor. Example: 2
-     * @bodyParam fecha_cita date Fecha de la cita (YYYY-MM-DD). Example: 2025-10-01
-     * @bodyParam hora_cita time Hora de la cita (HH:MM). Example: 14:30
-     * @bodyParam lugar string Lugar de la cita. Example: Consultorio 101
+     * @urlParam id integer required The ID of the appointment. Example: 1
+     * @bodyParam id_paciente integer required The ID of the patient. Example: 3
+     * @bodyParam id_doctor integer required The ID of the doctor. Example: 2
+     * @bodyParam fecha_cita date required The appointment date (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time required The appointment time (HH:MM). Example: 14:30
+     * @bodyParam lugar string required The appointment location. Example: Consultorio 101
      *
      * @response 200 {
-     *    "id": 1,
-     *    "id_paciente": 3,
-     *    "id_doctor": 2,
-     *    "fecha_cita": "2025-10-01",
-     *    "hora_cita": "14:30",
-     *    "lugar": "Consultorio 101"
+     *   "id": 1,
+     *   "id_paciente": 3,
+     *   "id_doctor": 2,
+     *   "fecha_cita": "2025-10-01",
+     *   "hora_cita": "14:30:00",
+     *   "lugar": "Consultorio 101",
+     *   "motivo": "Consulta general",
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Cita no encontrada"}
+     * @response 422 {"errors": {"id_paciente": ["The id paciente field is required."]}}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function update(Request $request, $id)
     {
@@ -435,19 +478,20 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [ADMIN]
+     * @group Citas
+     * @subgroup Admin
      *
-     * Eliminar una cita
+     * Delete an appointment
      *
-     * Permite al administrador eliminar una cita y liberar el slot correspondiente.
+     * Allows the administrator to delete an appointment and release the associated time slot.
      *
      * @authenticated
      *
-     * @urlParam id integer ID de la cita. Example: 1
+     * @urlParam id integer required The ID of the appointment. Example: 1
      *
-     * @response 200 {
-     *    "message": "Cita eliminada con éxito"
-     * }
+     * @response 200 {"message": "Cita eliminada con éxito"}
+     * @response 404 {"message": "Cita no encontrada"}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function destroy($id)
     {
@@ -478,17 +522,17 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [ADMIN]
+     * @group Citas
+     * @subgroup Admin
      *
-     * Contar citas
+     * Count appointments
      *
-     * Devuelve el número total de citas registradas en el sistema.
+     * Returns the total number of appointments registered in the system.
      *
      * @authenticated
      *
-     * @response 200 {
-     *    "total": 150
-     * }
+     * @response 200 {"total": 150}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function countCitas()
     {
@@ -497,25 +541,28 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [GENERAL]
+     * @group Citas
+     * @subgroup General
      *
-     * Obtener slots disponibles para un doctor en un rango de fechas
+     * Get available slots for a doctor in a date range
      *
-     * Devuelve los slots disponibles para agendar citas.
+     * Returns the available time slots for scheduling appointments for a specific doctor within a given date range.
      *
-     * @urlParam doctorId integer ID del doctor. Example: 1
-     * @queryParam startDate date Fecha de inicio (YYYY-MM-DD). Example: 2025-10-10
-     * @queryParam endDate date Fecha de fin (YYYY-MM-DD). Example: 2025-10-10
+     * @urlParam doctorId integer required The ID of the doctor. Example: 1
+     * @queryParam startDate date required The start date (YYYY-MM-DD). Example: 2025-10-10
+     * @queryParam endDate date required The end date (YYYY-MM-DD). Example: 2025-10-10
      *
      * @response 200 [
      *   {
-     *      "id": 1,
-     *      "fecha": "2025-10-10",
-     *      "hora_inicio": "09:00",
-     *      "hora_fin": "10:00",
-     *      "disponible": true
+     *     "id": 1,
+     *     "fecha": "2025-10-10",
+     *     "hora_inicio": "09:00",
+     *     "hora_fin": "10:00",
+     *     "disponible": true
      *   }
      * ]
+     * @response 404 {"message": "Doctor no encontrado"}
+     * @response 400 {"message": "Fechas requeridas"}
      */
     public function getAvailableSlots(Request $request, $doctorId)
     {
@@ -537,19 +584,20 @@ class CitasController extends Controller
     }
 
     /**
-     * @group Citas [GENERAL]
+     * @group Citas
+     * @subgroup General
      *
-     * Validar si un slot está disponible
+     * Validate if a slot is available
      *
-     * Verifica en tiempo real si un horario específico está disponible para un doctor.
+     * Checks in real-time if a specific time slot is available for a doctor on a given date and time.
      *
-     * @urlParam doctorId integer ID del doctor. Example: 1
-     * @bodyParam fecha date Fecha (YYYY-MM-DD). Example: 2025-10-10
-     * @bodyParam hora time Hora (HH:MM). Example: 09:00
+     * @urlParam doctorId integer required The ID of the doctor. Example: 1
+     * @bodyParam fecha date required The date (YYYY-MM-DD). Example: 2025-10-10
+     * @bodyParam hora time required The time (HH:MM). Example: 09:00
      *
-     * @response 200 {
-     *    "available": true
-     * }
+     * @response 200 {"available": true}
+     * @response 404 {"message": "Doctor no encontrado"}
+     * @response 422 {"errors": {"fecha": ["The fecha field is required."]}}
      */
     public function validateSlot(Request $request, $doctorId)
     {

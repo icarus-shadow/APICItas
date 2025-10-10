@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Auth;
 class ConsultaController extends Controller
 {
     /**
-     * @group Consultas
+     * @group Gestión del Sistema
+     * @subgroup Consulta
      *
      * Doctores por especialidad
      *
@@ -25,6 +26,9 @@ class ConsultaController extends Controller
      * @response 200 [
      *    { "id": 1, "nombres": "Juan", "apellidos": "López", "especialidad": "Cardiología" }
      * ]
+     * @response 404 {
+     *    "message": "Especialidad no encontrada"
+     * }
      */
     public function doctoresPorEspecialidad($id)
     {
@@ -33,7 +37,8 @@ class ConsultaController extends Controller
     }
 
     /**
-     * @group Consultas
+     * @group Gestión del Sistema
+     * @subgroup Consulta
      *
      * Disponibilidad de un doctor
      *
@@ -45,6 +50,9 @@ class ConsultaController extends Controller
      * @response 200 [
      *    { "dia": 1, "hora_inicio": "08:00", "hora_fin": "08:30", "disponible": true }
      * ]
+     * @response 404 {
+     *    "message": "Doctor no encontrado"
+     * }
      */
     public function disponibilidadDoctor($id)
     {
@@ -53,17 +61,27 @@ class ConsultaController extends Controller
     }
 
     /**
-     * @group Consultas
+     * @group Gestión del Sistema
+     * @subgroup Consulta
      *
      * Mis citas
      *
-     * Muestra el historial de citas del usuario autenticado (paciente o doctor).
+     * Muestra el historial de citas del usuario autenticado (paciente).
      *
      * @authenticated
      *
      * @response 200 [
-     *    { "fecha": "2025-09-10", "estado": "pendiente", "doctor": "Juan Pérez" }
+     *    { "id": 1, "fecha_cita": "2025-09-10", "hora_cita": "10:00", "lugar": "Consultorio 1", "motivo": "Chequeo general", "id_doctor": 1, "id_paciente": 1, "doctor": {...}, "paciente": {...} }
      * ]
+     * @response 403 {
+     *    "message": "Acceso denegado"
+     * }
+     * @response 404 {
+     *    "message": "Paciente no encontrado"
+     * }
+     * @response 500 {
+     *    "message": "Error interno del servidor"
+     * }
      */
     public function misCitas()
     {
@@ -114,19 +132,23 @@ class ConsultaController extends Controller
 
 
     /**
-     * @group Consultas
+     * @group Gestión del Sistema
+     * @subgroup Consulta
      *
      * Pacientes atendidos por doctor
      *
      * Devuelve un listado de pacientes que el doctor autenticado ha atendido, con filtro opcional por fechas.
      *
      * @authenticated
-     * @queryParam fecha_inicio date Fecha inicial del filtro. Example: 2025-09-01
-     * @queryParam fecha_fin date Fecha final del filtro. Example: 2025-09-30
+     * @queryParam fecha_inicio date Fecha inicial del filtro (opcional). Example: 2025-09-01
+     * @queryParam fecha_fin date Fecha final del filtro (opcional). Example: 2025-09-30
      *
      * @response 200 [
-     *    { "paciente": "María Gómez", "fecha": "2025-09-05" }
+     *    { "id": 1, "fecha_cita": "2025-09-05", "paciente": {...}, "doctor": {...} }
      * ]
+     * @response 500 {
+     *    "message": "Error interno del servidor"
+     * }
      */
     public function pacientesPorDoctor(Request $request)
     {
@@ -142,17 +164,21 @@ class ConsultaController extends Controller
     }
 
     /**
-     * @group Consultas [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Consulta
      *
      * Reporte de citas por especialidad
      *
-     * Devuelve el total de citas agrupadas por especialidad.
+     * Devuelve el total de citas agrupadas por especialidad (solo para administradores).
      *
      * @authenticated
      *
      * @response 200 [
      *    { "especialidad": "Cardiología", "total_citas": 15 }
      * ]
+     * @response 403 {
+     *    "message": "Acceso denegado"
+     * }
      */
     public function reporteCitasPorEspecialidad()
     {
@@ -166,7 +192,8 @@ class ConsultaController extends Controller
     }
 
     /**
-     * @group Consultas
+     * @group Gestión del Sistema
+     * @subgroup Consulta
      *
      * Horarios compactados por doctor
      *
@@ -178,6 +205,9 @@ class ConsultaController extends Controller
      * @response 200 [
      *    { "dia": 1, "rango": "08:00 - 12:00" }
      * ]
+     * @response 404 {
+     *    "message": "Doctor no encontrado"
+     * }
      */
     public function horariosCompactados($id_doctor)
     {

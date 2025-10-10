@@ -1,19 +1,21 @@
-name: 'Administradores [ADMIN]'
+name: Autenticación
 description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: api/mi-perfil-admin
+      - POST
+    uri: api/logout
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: Autenticación
       groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Ver mi perfil
+      subgroup: |-
+        Cierre de Sesión
 
-        Devuelve los datos del administrador autenticado.
+        Cerrar sesión
+
+        Este endpoint permite a un usuario autenticado cerrar su sesión actual, revocando todos sus tokens.
+      subgroupDescription: ''
+      title: ''
       description: ''
       authenticated: true
       deprecated: false
@@ -34,12 +36,16 @@ endpoints:
         status: 200
         content: |-
           {
-             "id": 1,
-             "nombres": "Carlos",
-             "apellidos": "Pérez",
-             "cedula": "12345678",
-             "telefono": "3001234567",
-             "user_id": 5
+            "message": "Sesión cerrada correctamente"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "message": "Usuario no autenticado"
           }
         headers: []
         description: ''
@@ -55,17 +61,19 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - PUT
-    uri: api/mi-perfil-admin
+      - POST
+    uri: api/change-password
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: Autenticación
       groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Actualizar mi perfil
+      subgroup: |-
+        Gestión de Contraseña
 
-        Permite al administrador autenticado modificar sus propios datos.
+        Cambiar contraseña del usuario
+
+        Este endpoint permite que un usuario autenticado cambie su propia contraseña.
+      subgroupDescription: ''
+      title: ''
       description: ''
       authenticated: true
       deprecated: false
@@ -79,287 +87,65 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      nombres:
-        name: nombres
-        description: 'Nombres del administrador.'
-        required: false
-        example: Carlos
+      current_password:
+        name: current_password
+        description: 'Contraseña actual del usuario.'
+        required: true
+        example: oldpassword123
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      apellidos:
-        name: apellidos
-        description: 'Apellidos del administrador.'
-        required: false
-        example: Pérez
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      cedula:
-        name: cedula
-        description: 'Cédula del administrador.'
-        required: false
-        example: '12345678'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      telefono:
-        name: telefono
-        description: 'Teléfono del administrador.'
-        required: false
-        example: '3001234567'
+      new_password:
+        name: new_password
+        description: 'Nueva contraseña del usuario, mínimo 6 caracteres.'
+        required: true
+        example: newpassword123
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanBodyParameters:
-      nombres: Carlos
-      apellidos: Pérez
-      cedula: '12345678'
-      telefono: '3001234567'
+      current_password: oldpassword123
+      new_password: newpassword123
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-             "id": 1,
-             "nombres": "Carlos",
-             "apellidos": "Pérez",
-             "cedula": "12345678",
-             "telefono": "3001234567",
-             "user_id": 5
+            "message": "Contraseña actualizada correctamente"
           }
         headers: []
         description: ''
         custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/administradores
-    metadata:
-      groupName: 'Administradores [ADMIN]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Listar administradores
-
-        Devuelve una lista de todos los administradores registrados.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
       -
-        status: 200
+        status: 401
         content: |-
-          [
-            {
-               "id": 1,
-               "nombres": "Carlos",
-               "apellidos": "Pérez",
-               "cedula": "12345678",
-               "telefono": "3001234567",
-               "user_id": 5
+          {
+            "message": "Usuario no autenticado"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 409
+        content: |-
+          {
+            "message": "La contraseña actual es incorrecta"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "errors": {
+                "new_password": ["La nueva contraseña debe tener al menos 6 caracteres"]
             }
-          ]
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/administradores/{id}'
-    metadata:
-      groupName: 'Administradores [ADMIN]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Ver administrador
-
-        Devuelve los datos de un administrador específico.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID del administrador.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-             "id": 1,
-             "nombres": "Carlos",
-             "apellidos": "Pérez",
-             "cedula": "12345678",
-             "telefono": "3001234567",
-             "user_id": 5
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/administradores/{id}'
-    metadata:
-      groupName: 'Administradores [ADMIN]'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Actualizar administrador
-
-        Permite modificar los datos de un administrador.
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID del administrador.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      nombres:
-        name: nombres
-        description: 'Nombres del administrador.'
-        required: false
-        example: Carlos
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      apellidos:
-        name: apellidos
-        description: 'Apellidos del administrador.'
-        required: false
-        example: Pérez
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      cedula:
-        name: cedula
-        description: 'Cédula del administrador.'
-        required: false
-        example: '12345678'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      telefono:
-        name: telefono
-        description: 'Teléfono del administrador.'
-        required: false
-        example: '3001234567'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      nombres: Carlos
-      apellidos: Pérez
-      cedula: '12345678'
-      telefono: '3001234567'
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-             "id": 1,
-             "nombres": "Carlos",
-             "apellidos": "Pérez",
-             "cedula": "12345678",
-             "telefono": "3001234567",
-             "user_id": 5
           }
         headers: []
         description: ''
@@ -376,16 +162,19 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/administradores/{id}'
+    uri: api/delete-account
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: Autenticación
       groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Eliminar administrador
+      subgroup: |-
+        Eliminación de Cuenta
 
-        Permite eliminar un administrador del sistema.
+        Eliminar cuenta de usuario
+
+        Este endpoint permite que un usuario autenticado elimine su propia cuenta y todos los datos asociados.
+        Se ejecuta dentro de una transacción para garantizar la integridad de los datos.
+      subgroupDescription: ''
+      title: ''
       description: ''
       authenticated: true
       deprecated: false
@@ -394,30 +183,58 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID del administrador.'
-        required: false
-        example: 1
-        type: integer
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: 'Contraseña actual del usuario para confirmar la eliminación.'
+        required: true
+        example: mypassword123
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    cleanBodyParameters:
+      password: mypassword123
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-             "message": "Administrador eliminado con éxito"
+            "message": "Cuenta eliminada correctamente"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "message": "Usuario no autenticado"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "La contraseña es incorrecta"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Error al eliminar la cuenta",
+            "error": "Detalle del error interno"
           }
         headers: []
         description: ''
@@ -433,47 +250,625 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: api/countAdministradores
+      - POST
+    uri: api/registrar-doctor
     metadata:
-      groupName: 'Administradores [ADMIN]'
+      groupName: Autenticación
       groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Contar administradores
+      subgroup: |-
+        Registro de Doctores
 
-        Devuelve el número total de administradores registrados.
+        Registrar un nuevo doctor
+
+        Este endpoint permite crear un doctor y su usuario asociado en el sistema. Se ejecuta dentro de
+        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de doctor (id_rol = 2).
+      subgroupDescription: ''
+      title: ''
       description: ''
-      authenticated: true
+      authenticated: false
       deprecated: false
       custom: []
     headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Correo electrónico único del usuario.'
+        required: true
+        example: doctor@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Contraseña del usuario, mínimo 6 caracteres.'
+        required: true
+        example: secret123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      nombres:
+        name: nombres
+        description: 'Nombres completos del doctor.'
+        required: true
+        example: Andrés
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      apellidos:
+        name: apellidos
+        description: 'Apellidos completos del doctor.'
+        required: true
+        example: 'García López'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      cedula:
+        name: cedula
+        description: 'Cédula única del doctor.'
+        required: true
+        example: '1122334455'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_especialidades:
+        name: id_especialidades
+        description: 'ID de la especialidad a la que pertenece el doctor.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      id_horario:
+        name: id_horario
+        description: 'ID de la plantilla de horario a asignar (opcional).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      lugar_trabajo:
+        name: lugar_trabajo
+        description: 'Lugar donde atiende el doctor.'
+        required: false
+        example: 'Hospital Central'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      email: doctor@example.com
+      password: secret123
+      nombres: Andrés
+      apellidos: 'García López'
+      cedula: '1122334455'
+      id_especialidades: 1
+      id_horario: 1
+      lugar_trabajo: 'Hospital Central'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "message": "Doctor registrado correctamente",
+            "user": {
+                "id": 15,
+                "email": "doctor@example.com",
+                "id_rol": 2,
+                "created_at": "2025-09-05T10:00:00.000000Z"
+            },
+            "doctor": {
+                "id": 7,
+                "user_id": 15,
+                "nombres": "Andrés",
+                "apellidos": "García López",
+                "cedula": "1122334455",
+                "id_especialidades": 1,
+                "horario": "Lunes a Viernes 8:00 AM - 4:00 PM",
+                "lugar_trabajo": "Hospital Central"
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+                "email": ["El campo email es obligatorio."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Error al registrar doctor",
+            "error": "Detalle del error interno"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/registrar-administrador
+    metadata:
+      groupName: Autenticación
+      groupDescription: ''
+      subgroup: |-
+        Registro de Administradores
+
+        Registrar un nuevo administrador
+
+        Este endpoint permite crear un administrador y su usuario asociado en el sistema. Se ejecuta dentro de
+        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de administrador (id_rol = 3).
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Correo electrónico único del usuario.'
+        required: true
+        example: admin@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Contraseña del usuario, mínimo 6 caracteres.'
+        required: true
+        example: secret123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      nombres:
+        name: nombres
+        description: 'Nombres completos del administrador.'
+        required: true
+        example: María
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      apellidos:
+        name: apellidos
+        description: 'Apellidos completos del administrador.'
+        required: true
+        example: 'Rodríguez López'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      cedula:
+        name: cedula
+        description: 'Cédula única del administrador.'
+        required: true
+        example: '987654321'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      telefono:
+        name: telefono
+        description: 'Teléfono de contacto del administrador.'
+        required: true
+        example: '3109876543'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: admin@example.com
+      password: secret123
+      nombres: María
+      apellidos: 'Rodríguez López'
+      cedula: '987654321'
+      telefono: '3109876543'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "message": "Administrador registrado correctamente",
+            "user": {
+                "id": 12,
+                "email": "admin@example.com",
+                "id_rol": 3,
+                "created_at": "2025-09-05T10:00:00.000000Z"
+            },
+            "administrador": {
+                "id": 3,
+                "user_id": 12,
+                "nombres": "María",
+                "apellidos": "Rodríguez López",
+                "cedula": "987654321",
+                "telefono": "3109876543"
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+                "email": ["El campo email es obligatorio."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Error al registrar administrador",
+            "error": "Detalle del error interno"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/login
+    metadata:
+      groupName: Autenticación
+      groupDescription: ''
+      subgroup: |-
+        Inicio de Sesión
+
+        Iniciar sesión
+
+        Este endpoint permite a un usuario autenticarse en el sistema y obtener un token de acceso.
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Correo electrónico del usuario.'
+        required: true
+        example: user@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Contraseña del usuario.'
+        required: true
+        example: secret123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: user@example.com
+      password: secret123
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-             "total": 5
+            "access_token": "1|abc123...",
+            "token_type": "Bearer",
+            "user": {
+                "id": 1,
+                "email": "user@example.com",
+                "id_rol": 1
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+                "email": ["Credenciales incorrectas"]
+            }
           }
         headers: []
         description: ''
         custom: []
     responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/registrar-paciente
+    metadata:
+      groupName: Autenticación
+      groupDescription: ''
+      subgroup: |-
+        Registro de Pacientes
+
+        Registrar un nuevo paciente
+
+        Este endpoint permite crear un paciente y su usuario asociado en el sistema. Se ejecuta dentro de
+        una transacción para garantizar la integridad de los datos. El usuario se crea con el rol de paciente (id_rol = 1).
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Correo electrónico único del usuario.'
+        required: true
+        example: paciente@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Contraseña del usuario, mínimo 6 caracteres.'
+        required: true
+        example: secret123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      nombres:
+        name: nombres
+        description: 'Nombres completos del paciente.'
+        required: true
+        example: Juan
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      apellidos:
+        name: apellidos
+        description: 'Apellidos completos del paciente.'
+        required: true
+        example: 'Pérez Gómez'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      documento:
+        name: documento
+        description: 'Número de documento único.'
+        required: true
+        example: '123456789'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      rh:
+        name: rh
+        description: 'Tipo de sangre del paciente.'
+        required: true
+        example: O+
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      fecha_nacimiento:
+        name: fecha_nacimiento
+        description: 'Fecha de nacimiento en formato Y-m-d.'
+        required: true
+        example: '1990-05-15'
+        type: date
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      genero:
+        name: genero
+        description: 'Género del paciente (M o F).'
+        required: true
+        example: M
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      edad:
+        name: edad
+        description: 'Edad del paciente.'
+        required: true
+        example: '33'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      telefono:
+        name: telefono
+        description: 'Teléfono de contacto del paciente.'
+        required: false
+        example: '3201234567'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      alergias:
+        name: alergias
+        description: 'Alergias conocidas del paciente.'
+        required: false
+        example: Penicilina
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      comentarios:
+        name: comentarios
+        description: 'Comentarios adicionales.'
+        required: false
+        example: Ninguno
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      email: paciente@example.com
+      password: secret123
+      nombres: Juan
+      apellidos: 'Pérez Gómez'
+      documento: '123456789'
+      rh: O+
+      fecha_nacimiento: '1990-05-15'
+      genero: M
+      edad: '33'
+      telefono: '3201234567'
+      alergias: Penicilina
+      comentarios: Ninguno
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "message": "Paciente registrado correctamente",
+            "user": {
+                "id": 10,
+                "email": "paciente@example.com",
+                "id_rol": 1,
+                "created_at": "2025-09-05T10:00:00.000000Z"
+            },
+            "paciente": {
+                "id": 5,
+                "user_id": 10,
+                "nombres": "Juan",
+                "apellidos": "Pérez Gómez",
+                "documento": "123456789",
+                "rh": "O+",
+                "fecha_nacimiento": "1990-05-15",
+                "genero": "M",
+                "edad": "33",
+                "telefono": "3201234567",
+                "alergias": "Penicilina",
+                "comentarios": "Ninguno"
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+                "email": ["El campo email es obligatorio."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Error al registrar paciente",
+            "error": "Detalle del error interno"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
     controller: null
     method: null
     route: null

@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Validator;
 class PacientesController extends Controller
 {
     /**
-     * @group Pacientes [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Listar todos los pacientes
      *
@@ -34,7 +35,8 @@ class PacientesController extends Controller
     }
 
     /**
-     * @group Pacientes [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Contar total de pacientes
      *
@@ -54,7 +56,8 @@ class PacientesController extends Controller
 
 
     /**
-     * @group Pacientes [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Ver un paciente específico
      *
@@ -85,7 +88,8 @@ class PacientesController extends Controller
     }
 
     /**
-     * @group Pacientes [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Actualizar un paciente
      *
@@ -150,7 +154,8 @@ class PacientesController extends Controller
     }
 
     /**
-     * @group Pacientes [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Eliminar un paciente
      *
@@ -178,7 +183,8 @@ class PacientesController extends Controller
     }
 
     /**
-     * @group Pacientes [AUTENTICADO]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Ver mi información
      *
@@ -207,7 +213,8 @@ class PacientesController extends Controller
     }
 
     /**
-     * @group Pacientes [AUTENTICADO]
+     * @group Gestión de Usuarios
+     * @subgroup Pacientes
      *
      * Actualizar mi información
      *

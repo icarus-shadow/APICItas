@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Validator;
 class HorariosController extends Controller
 {
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Listar todas las plantillas de horario
      *
-     * Devuelve todas las plantillas de horario disponibles.
+     * Devuelve todas las plantillas de horario disponibles para administradores.
      *
      * @authenticated
      *
@@ -35,11 +36,12 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Listar todos los horarios de doctores (compacto)
      *
-     * Devuelve todos los horarios de doctores con sus rangos.
+     * Devuelve todos los horarios asignados a doctores en formato compacto para administradores.
      *
      * @authenticated
      *
@@ -60,11 +62,12 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Listar horarios por doctor
      *
-     * Devuelve todos los intervalos de 30 minutos de un doctor específico, opcionalmente filtrados por plantilla de horario.
+     * Devuelve todos los intervalos de 30 minutos asignados a un doctor específico, opcionalmente filtrados por plantilla de horario.
      *
      * @authenticated
      *
@@ -79,6 +82,9 @@ class HorariosController extends Controller
      *      "disponible": true
      *   }
      * ]
+     * @response 404 {
+     *    "message": "Doctor no encontrado"
+     * }
      */
     public function listByDoctor(Request $request, $id_doctor)
     {
@@ -93,11 +99,12 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [DOCTOR]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Listar mis horarios
      *
-     * Devuelve todos los intervalos de 30 minutos del doctor autenticado.
+     * Devuelve todos los intervalos de 30 minutos asignados al doctor autenticado.
      *
      * @authenticated
      *
@@ -109,6 +116,9 @@ class HorariosController extends Controller
      *      "disponible": true
      *   }
      * ]
+     * @response 403 {
+     *    "message": "Acceso denegado"
+     * }
      */
     public function listOwn()
     {
@@ -117,18 +127,19 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Crear plantilla de horario
      *
-     * Crea una plantilla de horario con nombre, sin asignar a doctor.
+     * Crea una nueva plantilla de horario con nombre y configuración, sin asignar a ningún doctor.
      *
      * @authenticated
      *
-     * @bodyParam nombre string Nombre de la plantilla. Example: Horario Mañana
-     * @bodyParam dias array Lista de días (1=Lunes, 7=Domingo). Example: [1,3,5]
-     * @bodyParam hora_inicio string Hora de inicio (HH:mm). Example: 08:00
-     * @bodyParam hora_fin string Hora de fin (HH:mm). Example: 12:00
+     * @bodyParam nombre string required Nombre de la plantilla. Example: Horario Mañana
+     * @bodyParam dias array required Lista de días (1=Lunes, 7=Domingo). Example: [1,3,5]
+     * @bodyParam hora_inicio string required Hora de inicio (HH:mm). Example: 08:00
+     * @bodyParam hora_fin string required Hora de fin (HH:mm). Example: 12:00
      *
      * @response 201 {
      *    "id": 1,
@@ -136,6 +147,11 @@ class HorariosController extends Controller
      *    "hora_inicio": "08:00",
      *    "hora_fin": "12:00",
      *    "dias": [1,3,5]
+     * }
+     * @response 422 {
+     *    "errors": {
+     *       "nombre": ["El campo nombre es obligatorio"]
+     *    }
      * }
      */
     public function store(Request $request)
@@ -165,16 +181,17 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Asignar horario a doctor
      *
-     * Asigna una plantilla de horario a un doctor, creando los slots individuales de 30 minutos.
+     * Asigna una plantilla de horario a un doctor, creando automáticamente los slots individuales de 30 minutos.
      *
      * @authenticated
      *
-     * @bodyParam id_horario integer ID de la plantilla de horario. Example: 1
-     * @bodyParam id_doctor integer ID del doctor. Example: 1
+     * @bodyParam id_horario integer required ID de la plantilla de horario. Example: 1
+     * @bodyParam id_doctor integer required ID del doctor. Example: 1
      *
      * @response 201 [
      *   {
@@ -186,6 +203,11 @@ class HorariosController extends Controller
      *      "disponible": true
      *   }
      * ]
+     * @response 422 {
+     *    "error": "Conflicto de horarios detectado",
+     *    "conflictos": [...],
+     *    "message": "No se puede asignar este horario porque hay conflictos."
+     * }
      */
     public function assignToDoctor(Request $request)
     {
@@ -241,7 +263,8 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Desasignar horario de doctor
      *
@@ -249,11 +272,16 @@ class HorariosController extends Controller
      *
      * @authenticated
      *
-     * @bodyParam id_horario integer ID de la plantilla de horario. Example: 1
-     * @bodyParam id_doctor integer ID del doctor. Example: 1
+     * @bodyParam id_horario integer required ID de la plantilla de horario. Example: 1
+     * @bodyParam id_doctor integer required ID del doctor. Example: 1
      *
      * @response 200 {
      *    "message": "Horario desasignado correctamente"
+     * }
+     * @response 422 {
+     *    "errors": {
+     *       "id_horario": ["El campo id_horario es obligatorio"]
+     *    }
      * }
      */
     public function unassignFromDoctor(Request $request)
@@ -319,16 +347,17 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Verificar conflictos de horario antes de asignar
      *
-     * Verifica si asignar un horario a un doctor causaría conflictos.
+     * Verifica si asignar una plantilla de horario a un doctor causaría conflictos con horarios ya existentes.
      *
      * @authenticated
      *
-     * @bodyParam id_doctor integer ID del doctor. Example: 1
-     * @bodyParam id_horario integer ID de la plantilla de horario. Example: 1
+     * @bodyParam id_doctor integer required ID del doctor. Example: 1
+     * @bodyParam id_horario integer required ID de la plantilla de horario. Example: 1
      *
      * @response 200 {
      *    "conflictos": []
@@ -361,11 +390,12 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN/DOCTOR]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
      * Ver un horario
      *
-     * Devuelve la información de un intervalo de 30 minutos específico.
+     * Devuelve la información detallada de una plantilla de horario específica.
      *
      * @authenticated
      *
@@ -373,9 +403,13 @@ class HorariosController extends Controller
      *
      * @response 200 {
      *    "id": 1,
-     *    "dia": 1,
+     *    "nombre": "Horario Mañana",
      *    "hora_inicio": "08:00",
-     *    "hora_fin": "08:30"
+     *    "hora_fin": "12:00",
+     *    "dias": [1,3,5]
+     * }
+     * @response 404 {
+     *    "message": "Horario no encontrado"
      * }
      */
     public function show($id)
@@ -388,22 +422,35 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN/DOCTOR]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
-     * Editar un intervalo
+     * Editar una plantilla de horario
      *
-     * Permite editar un intervalo de 30 minutos específico.
+     * Permite editar los datos de una plantilla de horario existente.
      *
      * @authenticated
      *
      * @urlParam id integer ID del horario. Example: 1
-     * @bodyParam hora_inicio string Hora de inicio. Example: 09:00
-     * @bodyParam hora_fin string Hora de fin. Example: 09:30
+     * @bodyParam nombre string Nombre de la plantilla (opcional). Example: Horario Mañana
+     * @bodyParam dias array Lista de días (opcional). Example: [1,3,5]
+     * @bodyParam hora_inicio string Hora de inicio (opcional). Example: 09:00
+     * @bodyParam hora_fin string Hora de fin (opcional). Example: 13:00
      *
      * @response 200 {
      *    "id": 1,
+     *    "nombre": "Horario Mañana",
      *    "hora_inicio": "09:00",
-     *    "hora_fin": "09:30"
+     *    "hora_fin": "13:00",
+     *    "dias": [1,3,5]
+     * }
+     * @response 404 {
+     *    "message": "Plantilla de horario no encontrada"
+     * }
+     * @response 422 {
+     *    "errors": {
+     *       "hora_inicio": ["El formato de hora no es válido"]
+     *    }
      * }
      */
     public function update(Request $request, $id)
@@ -431,11 +478,12 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN/DOCTOR]
+     * @group Gestión del Sistema
+     * @subgroup Horarios
      *
-     * Eliminar un intervalo
+     * Eliminar una plantilla de horario
      *
-     * Permite eliminar un intervalo de 30 minutos.
+     * Permite eliminar una plantilla de horario del sistema.
      *
      * @authenticated
      *
@@ -443,6 +491,9 @@ class HorariosController extends Controller
      *
      * @response 200 {
      *    "message": "Horario eliminado con éxito"
+     * }
+     * @response 404 {
+     *    "message": "Horario no encontrado"
      * }
      */
     public function destroy($id)
@@ -456,18 +507,19 @@ class HorariosController extends Controller
     }
 
     /**
-     * @group Horarios [ADMIN]
-      *
-      * Contar plantillas de horarios
-      *
-      * Devuelve el número total de plantillas de horarios registradas.
-      *
-      * @authenticated
-      *
-      * @response 200 {
-      *    "total": 3
-      * }
-      */
+     * @group Gestión del Sistema
+     * @subgroup Horarios
+     *
+     * Contar plantillas de horarios
+     *
+     * Devuelve el número total de plantillas de horarios registradas en el sistema.
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *    "total": 3
+     * }
+     */
      public function count()
      {
          $total = Horarios::count();

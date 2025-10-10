@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Validator;
 class EspecialidadesController extends Controller
 {
     /**
-     * @group Especialidades [PUBLICO AUTENTICADO]
+     * @group Gestión del Sistema
+     * @subgroup Especialidades
      *
      * Listar todas las especialidades
      *
-     * Devuelve una lista de todas las especialidades registradas en el sistema.
+     * Devuelve una lista completa de todas las especialidades médicas registradas en el sistema.
      *
      * @authenticated
      *
@@ -32,11 +33,12 @@ class EspecialidadesController extends Controller
     }
 
     /**
-     * @group Especialidades [PUBLICO AUTENTICADO]
+     * @group Gestión del Sistema
+     * @subgroup Especialidades
      *
      * Ver una especialidad
      *
-     * Devuelve los detalles de una especialidad específica.
+     * Devuelve los detalles completos de una especialidad médica específica por su ID.
      *
      * @authenticated
      *
@@ -61,16 +63,17 @@ class EspecialidadesController extends Controller
     }
 
     /**
-     * @group Especialidades [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Especialidades
      *
      * Crear especialidad
      *
-     * Permite al administrador registrar una nueva especialidad.
+     * Permite a un administrador registrar una nueva especialidad médica en el sistema.
      *
      * @authenticated
      *
-     * @bodyParam nombre string Nombre de la especialidad. Example: Cardiología
-     * @bodyParam descripcion string Descripción de la especialidad. Example: Tratamiento del corazón
+     * @bodyParam nombre string required Nombre de la especialidad. Example: Cardiología
+     * @bodyParam descripcion string required Descripción de la especialidad. Example: Tratamiento del corazón
      *
      * @response 201 {
      *    "id": 1,
@@ -81,6 +84,9 @@ class EspecialidadesController extends Controller
      *    "errors": {
      *       "nombre": ["El campo nombre es obligatorio"]
      *    }
+     * }
+     * @response 500 {
+     *    "message": "Error interno del servidor"
      * }
      */
     public function store(Request $request)
@@ -99,17 +105,18 @@ class EspecialidadesController extends Controller
     }
 
     /**
-     * @group Especialidades [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Especialidades
      *
      * Actualizar especialidad
      *
-     * Permite al administrador actualizar los datos de una especialidad.
+     * Permite a un administrador actualizar los datos de una especialidad médica existente.
      *
      * @authenticated
      *
      * @urlParam id integer ID de la especialidad. Example: 1
-     * @bodyParam nombre string Nombre de la especialidad. Example: Cardiología
-     * @bodyParam descripcion string Descripción de la especialidad. Example: Tratamiento del corazón
+     * @bodyParam nombre string Nombre de la especialidad (opcional). Example: Cardiología
+     * @bodyParam descripcion string Descripción de la especialidad (opcional). Example: Tratamiento del corazón
      *
      * @response 200 {
      *    "id": 1,
@@ -118,6 +125,11 @@ class EspecialidadesController extends Controller
      * }
      * @response 404 {
      *    "message": "Especialidad no encontrada"
+     * }
+     * @response 422 {
+     *    "errors": {
+     *       "nombre": ["El campo nombre debe ser una cadena"]
+     *    }
      * }
      */
     public function update(Request $request, $id)
@@ -142,11 +154,12 @@ class EspecialidadesController extends Controller
     }
 
     /**
-     * @group Especialidades [ADMIN]
+     * @group Gestión del Sistema
+     * @subgroup Especialidades
      *
      * Eliminar especialidad
      *
-     * Permite al administrador eliminar una especialidad del sistema.
+     * Permite a un administrador eliminar una especialidad médica del sistema de forma permanente.
      *
      * @authenticated
      *
@@ -157,6 +170,9 @@ class EspecialidadesController extends Controller
      * }
      * @response 404 {
      *    "message": "Especialidad no encontrada"
+     * }
+     * @response 500 {
+     *    "message": "Error interno del servidor"
      * }
      */
     public function destroy($id)
@@ -170,11 +186,12 @@ class EspecialidadesController extends Controller
     }
 
     /**
-     * @group Especialidades [PUBLICO AUTENTICADO]
+     * @group Gestión del Sistema
+     * @subgroup Especialidades
      *
      * Contar especialidades
      *
-     * Devuelve el número total de especialidades registradas en el sistema.
+     * Devuelve el número total de especialidades médicas registradas en el sistema.
      *
      * @authenticated
      *

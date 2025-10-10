@@ -10,24 +10,28 @@ use Illuminate\Support\Facades\Auth;
 class AdministradoresController extends Controller
 {
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
      *
-     * Listar administradores
+     * List all administrators
      *
-     * Devuelve una lista de todos los administradores registrados.
+     * Retrieves a list of all registered administrators in the system.
      *
      * @authenticated
      *
      * @response 200 [
      *   {
-     *      "id": 1,
-     *      "nombres": "Carlos",
-     *      "apellidos": "Pérez",
-     *      "cedula": "12345678",
-     *      "telefono": "3001234567",
-     *      "user_id": 5
+     *     "id": 1,
+     *     "nombres": "Carlos",
+     *     "apellidos": "Pérez",
+     *     "cedula": "12345678",
+     *     "telefono": "3001234567",
+     *     "user_id": 5,
+     *     "created_at": "2025-09-01T10:00:00.000000Z",
+     *     "updated_at": "2025-09-01T10:00:00.000000Z"
      *   }
      * ]
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function index()
     {
@@ -36,24 +40,29 @@ class AdministradoresController extends Controller
     }
 
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
      *
-     * Ver administrador
+     * Get administrator details
      *
-     * Devuelve los datos de un administrador específico.
+     * Retrieves the details of a specific administrator by their ID.
      *
      * @authenticated
      *
-     * @urlParam id integer ID del administrador. Example: 1
+     * @urlParam id integer required The ID of the administrator. Example: 1
      *
      * @response 200 {
-     *    "id": 1,
-     *    "nombres": "Carlos",
-     *    "apellidos": "Pérez",
-     *    "cedula": "12345678",
-     *    "telefono": "3001234567",
-     *    "user_id": 5
+     *   "id": 1,
+     *   "nombres": "Carlos",
+     *   "apellidos": "Pérez",
+     *   "cedula": "12345678",
+     *   "telefono": "3001234567",
+     *   "user_id": 5,
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Administrador no encontrado"}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function show($id)
     {
@@ -65,29 +74,34 @@ class AdministradoresController extends Controller
     }
 
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
      *
-     * Actualizar administrador
+     * Update administrator
      *
-     * Permite modificar los datos de un administrador.
+     * Allows updating the details of a specific administrator.
      *
      * @authenticated
      *
-     * @urlParam id integer ID del administrador. Example: 1
-     *
-     * @bodyParam nombres string Nombres del administrador. Example: Carlos
-     * @bodyParam apellidos string Apellidos del administrador. Example: Pérez
-     * @bodyParam cedula string Cédula del administrador. Example: 12345678
-     * @bodyParam telefono string Teléfono del administrador. Example: 3001234567
+     * @urlParam id integer required The ID of the administrator. Example: 1
+     * @bodyParam nombres string optional First names of the administrator. Example: Carlos
+     * @bodyParam apellidos string optional Last names of the administrator. Example: Pérez
+     * @bodyParam cedula string optional ID card number of the administrator. Example: 12345678
+     * @bodyParam telefono string optional Phone number of the administrator. Example: 3001234567
      *
      * @response 200 {
-     *    "id": 1,
-     *    "nombres": "Carlos",
-     *    "apellidos": "Pérez",
-     *    "cedula": "12345678",
-     *    "telefono": "3001234567",
-     *    "user_id": 5
+     *   "id": 1,
+     *   "nombres": "Carlos",
+     *   "apellidos": "Pérez",
+     *   "cedula": "12345678",
+     *   "telefono": "3001234567",
+     *   "user_id": 5,
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Administrador no encontrado"}
+     * @response 422 {"errors": {"cedula": ["The cedula has already been taken."]}}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function update(Request $request, $id)
     {
@@ -113,19 +127,20 @@ class AdministradoresController extends Controller
     }
 
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administratorsistrators
      *
-     * Eliminar administrador
+     * Delete administrator
      *
-     * Permite eliminar un administrador del sistema.
+     * Allows deleting an administrator from the system.
      *
      * @authenticated
      *
-     * @urlParam id integer ID del administrador. Example: 1
+     * @urlParam id integer required The ID of the administrator. Example: 1
      *
-     * @response 200 {
-     *    "message": "Administrador eliminado con éxito"
-     * }
+     * @response 200 {"message": "Administrador eliminado con éxito"}
+     * @response 404 {"message": "Administrador no encontrado"}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function destroy($id)
     {
@@ -140,22 +155,27 @@ class AdministradoresController extends Controller
     }
 
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
      *
-     * Ver mi perfil
+     * Get my profile
      *
-     * Devuelve los datos del administrador autenticado.
+     * Retrieves the profile information of the authenticated administrator.
      *
      * @authenticated
      *
      * @response 200 {
-     *    "id": 1,
-     *    "nombres": "Carlos",
-     *    "apellidos": "Pérez",
-     *    "cedula": "12345678",
-     *    "telefono": "3001234567",
-     *    "user_id": 5
+     *   "id": 1,
+     *   "nombres": "Carlos",
+     *   "apellidos": "Pérez",
+     *   "cedula": "12345678",
+     *   "telefono": "3001234567",
+     *   "user_id": 5,
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Administrador no encontrado"}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function showOwn()
     {
@@ -167,27 +187,33 @@ class AdministradoresController extends Controller
     }
 
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
      *
-     * Actualizar mi perfil
+     * Update my profile
      *
-     * Permite al administrador autenticado modificar sus propios datos.
+     * Allows the authenticated administrator to update their own profile information.
      *
      * @authenticated
      *
-     * @bodyParam nombres string Nombres del administrador. Example: Carlos
-     * @bodyParam apellidos string Apellidos del administrador. Example: Pérez
-     * @bodyParam cedula string Cédula del administrador. Example: 12345678
-     * @bodyParam telefono string Teléfono del administrador. Example: 3001234567
+     * @bodyParam nombres string optional First names of the administrator. Example: Carlos
+     * @bodyParam apellidos string optional Last names of the administrator. Example: Pérez
+     * @bodyParam cedula string optional ID card number of the administrator. Example: 12345678
+     * @bodyParam telefono string optional Phone number of the administrator. Example: 3001234567
      *
      * @response 200 {
-     *    "id": 1,
-     *    "nombres": "Carlos",
-     *    "apellidos": "Pérez",
-     *    "cedula": "12345678",
-     *    "telefono": "3001234567",
-     *    "user_id": 5
+     *   "id": 1,
+     *   "nombres": "Carlos",
+     *   "apellidos": "Pérez",
+     *   "cedula": "12345678",
+     *   "telefono": "3001234567",
+     *   "user_id": 5,
+     *   "created_at": "2025-09-01T10:00:00.000000Z",
+     *   "updated_at": "2025-09-01T10:00:00.000000Z"
      * }
+     * @response 404 {"message": "Administrador no encontrado"}
+     * @response 422 {"errors": {"cedula": ["The cedula has already been taken."]}}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function updateOwn(Request $request)
     {
@@ -213,17 +239,17 @@ class AdministradoresController extends Controller
     }
 
     /**
-     * @group Administradores [ADMIN]
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
      *
-     * Contar administradores
+     * Count administrators
      *
-     * Devuelve el número total de administradores registrados.
+     * Returns the total number of registered administrators in the system.
      *
      * @authenticated
      *
-     * @response 200 {
-     *    "total": 5
-     * }
+     * @response 200 {"total": 5}
+     * @response 401 {"message": "Unauthenticated."}
      */
     public function count()
     {
