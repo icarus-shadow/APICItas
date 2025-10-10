@@ -199,11 +199,13 @@ class DoctoresController extends Controller
      */
     public function showOwn()
     {
-        $doctor = Doctores::where('user_id', auth()->id())->first();
+        $doctor = Doctores::with('especialidad')->where('user_id', auth()->id())->first();
         if (!$doctor) {
             return response()->json(['message' => 'Doctor no encontrado'], 404);
         }
-        return response()->json($doctor);
+        $data = $doctor->toArray();
+        $data['especialidades'] = $doctor->especialidad ? $doctor->especialidad->nombre : null;
+        return response()->json($data);
     }
 
     /**
