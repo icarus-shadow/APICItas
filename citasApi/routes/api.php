@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
     Route::post('/citas', [CitasController::class, 'store']);
     Route::put('/citas/paciente/{id}', [CitasController::class, 'updateOwn']);
-    Route::delete('/citas/{id}', [CitasController::class, 'destroyOwn']);
+    Route::delete('/citas/paciente/{id}', [CitasController::class, 'destroyOwn']);
 
 
 });
