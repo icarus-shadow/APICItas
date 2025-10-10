@@ -120,6 +120,10 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/mis-notificaciones', [\App\Http\Controllers\NotificacionesController::class, 'myNotifications']); // Ver mis notificaciones
 
     // Doctor autenticado
+    // Contadores para doctores
+    Route::get('/doctor/{doctorId}/count-citas-asignadas', [DoctoresController::class, 'countCitasAsignadas']);
+    Route::get('/doctor/{doctorId}/count-citas-proximas', [DoctoresController::class, 'countCitasProximas']);
+    Route::get('/doctor/{doctorId}/count-pacientes-atendidos', [DoctoresController::class, 'countPacientesAtendidos']);
     Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);// Eliminar un bloque mío
 });
 

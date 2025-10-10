@@ -275,5 +275,72 @@ class DoctoresController extends Controller
         $total = Doctores::count();
         return response()->json(['total' => $total]);
     }
+    /**
+     * @group Gestión de Doctores [DOCTOR]
+     *
+     * Contar citas asignadas a un doctor
+     *
+     * Devuelve el número total de citas asignadas a un doctor específico.
+     *
+     * @authenticated
+     *
+     * @urlParam doctorId integer ID del doctor. Example: 1
+     *
+     * @response 200 {
+     *    "total": 5
+     * }
+     */
+    public function countCitasAsignadas($doctorId)
+    {
+        $total = \App\Models\Citas::where('id_doctor', $doctorId)->count();
+        return response()->json(['total' => $total]);
+    }
+
+    /**
+     * @group Gestión de Doctores [DOCTOR]
+     *
+     * Contar citas próximas de un doctor
+     *
+     * Devuelve el número de citas próximas (futuras) asignadas a un doctor específico.
+     *
+     * @authenticated
+     *
+     * @urlParam doctorId integer ID del doctor. Example: 1
+     *
+     * @response 200 {
+     *    "total": 3
+     * }
+     */
+    public function countCitasProximas($doctorId)
+    {
+        $total = \App\Models\Citas::where('id_doctor', $doctorId)
+            ->whereRaw("CONCAT(fecha_cita, ' ', hora_cita) > NOW()")
+            ->count();
+        return response()->json(['total' => $total]);
+    }
+
+    /**
+     * @group Gestión de Doctores [DOCTOR]
+     *
+     * Contar pacientes atendidos por un doctor
+     *
+     * Devuelve el número de pacientes únicos atendidos (citas pasadas) por un doctor específico.
+     *
+     * @authenticated
+     *
+     * @urlParam doctorId integer ID del doctor. Example: 1
+     *
+     * @response 200 {
+     *    "total": 10
+     * }
+     */
+    public function countPacientesAtendidos($doctorId)
+    {
+        $total = \App\Models\Citas::where('id_doctor', $doctorId)
+            ->whereRaw("CONCAT(fecha_cita, ' ', hora_cita) < NOW()")
+            ->distinct('id_paciente')
+            ->count('id_paciente');
+        return response()->json(['total' => $total]);
+    }
 
 }
