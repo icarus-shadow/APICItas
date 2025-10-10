@@ -185,15 +185,21 @@ class CitasController extends Controller
      *
      * Editar mi cita
      *
-     * Permite al paciente editar el motivo de su propia cita.
+     * Permite al paciente editar su propia cita, manejando automáticamente la liberación y reserva de slots.
      *
      * @authenticated
      *
      * @urlParam id integer ID de la cita. Example: 1
-     * @bodyParam motivo string Motivo actualizado. Example: Dolor de estómago
+     * @bodyParam fecha_cita date Fecha de la cita (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time Hora de la cita (HH:MM). Example: 14:30
+     * @bodyParam lugar string Lugar de la cita. Example: Consultorio 101
+     * @bodyParam motivo string Motivo de la cita. Example: Dolor de estómago
      *
      * @response 200 {
      *    "id": 1,
+     *    "fecha_cita": "2025-10-01",
+     *    "hora_cita": "14:30",
+     *    "lugar": "Consultorio 101",
      *    "motivo": "Dolor de estómago"
      * }
      */
@@ -211,7 +217,7 @@ class CitasController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'fecha_cita' => 'required|date|after:today',
+            'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|date_format:H:i',
             'lugar' => 'required|string|max:255',
             'motivo' => 'required|string|max:255'
@@ -222,13 +228,64 @@ class CitasController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $oldData = $cita->toArray();
-        $cita->update($request->only(['fecha_cita', 'hora_cita', 'lugar', 'motivo']));
-        $newData = $cita->fresh()->toArray();
+        try {
+            DB::transaction(function () use ($request, $cita) {
+                $oldFecha = $cita->fecha_cita;
+                $oldHora = $cita->hora_cita;
+                $doctorId = $cita->id_doctor;
 
-        \Log::info('Cita actualizada exitosamente', ['old' => $oldData, 'new' => $newData]);
+                $newFecha = $request->fecha_cita;
+                $newHora = $request->hora_cita;
 
-        return response()->json($cita);
+                // Check if slot details changed
+                $slotChanged = ($oldFecha != $newFecha) || ($oldHora != $newHora);
+
+                if ($slotChanged) {
+                    // Release old slot
+                    $oldDia = date('w', strtotime($oldFecha));
+                    $oldSlot = DoctorHorario::where('id_doctor', $doctorId)
+                        ->where('dia', $oldDia)
+                        ->where('hora_inicio', '<=', $oldHora)
+                        ->where('hora_fin', '>=', $oldHora)
+                        ->first();
+
+                    if ($oldSlot) {
+                        $oldSlot->releaseSlot();
+                        \Log::info('Slot antiguo liberado en updateOwn', ['slot_id' => $oldSlot->id]);
+                    }
+
+                    // Check if new slot is available
+                    $newDia = date('w', strtotime($newFecha));
+                    $newSlot = DoctorHorario::where('id_doctor', $doctorId)
+                        ->where('dia', $newDia)
+                        ->where('hora_inicio', '<=', $newHora)
+                        ->where('hora_fin', '>=', $newHora)
+                        ->where('status', 'available')
+                        ->where('disponible', true)
+                        ->first();
+
+                    if (!$newSlot) {
+                        throw new \Exception('El nuevo horario no está disponible');
+                    }
+
+                    // Reserve new slot
+                    $newSlot->bookSlot();
+                    \Log::info('Nuevo slot reservado en updateOwn', ['slot_id' => $newSlot->id]);
+                }
+
+                // Update cita
+                $oldData = $cita->toArray();
+                $cita->update($request->only(['fecha_cita', 'hora_cita', 'lugar', 'motivo']));
+                $newData = $cita->fresh()->toArray();
+
+                \Log::info('Cita propia actualizada exitosamente', ['old' => $oldData, 'new' => $newData]);
+            });
+
+            return response()->json($cita->fresh());
+        } catch (\Exception $e) {
+            \Log::error('Error al actualizar cita propia', ['error' => $e->getMessage(), 'cita_id' => $cita->id]);
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
     }
 
     /**
@@ -280,16 +337,24 @@ class CitasController extends Controller
      *
      * Editar cualquier cita
      *
-     * Permite al administrador modificar el motivo de una cita.
+     * Permite al administrador modificar una cita, manejando automáticamente la liberación y reserva de slots.
      *
      * @authenticated
      *
      * @urlParam id integer ID de la cita. Example: 1
-     * @bodyParam motivo string Nuevo motivo. Example: Revisión general
+     * @bodyParam id_paciente integer ID del paciente. Example: 3
+     * @bodyParam id_doctor integer ID del doctor. Example: 2
+     * @bodyParam fecha_cita date Fecha de la cita (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time Hora de la cita (HH:MM). Example: 14:30
+     * @bodyParam lugar string Lugar de la cita. Example: Consultorio 101
      *
      * @response 200 {
      *    "id": 1,
-     *    "motivo": "Revisión general"
+     *    "id_paciente": 3,
+     *    "id_doctor": 2,
+     *    "fecha_cita": "2025-10-01",
+     *    "hora_cita": "14:30",
+     *    "lugar": "Consultorio 101"
      * }
      */
     public function update(Request $request, $id)
@@ -300,8 +365,9 @@ class CitasController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'id_paciente' => 'required|exists:pacientes,id',
             'id_doctor' => 'required|exists:doctores,id',
-            'fecha_cita' => 'required|date|after:today',
+            'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|date_format:H:i',
             'lugar' => 'required|string|max:255',
         ]);
@@ -310,9 +376,62 @@ class CitasController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $cita->update($request->only(['id_doctor', 'fecha_cita', 'hora_cita', 'lugar']));
+        try {
+            DB::transaction(function () use ($request, $cita) {
+                $oldDoctorId = $cita->id_doctor;
+                $oldFecha = $cita->fecha_cita;
+                $oldHora = $cita->hora_cita;
 
-        return response()->json($cita);
+                $newDoctorId = $request->id_doctor;
+                $newFecha = $request->fecha_cita;
+                $newHora = $request->hora_cita;
+
+                // Check if slot details changed
+                $slotChanged = ($oldDoctorId != $newDoctorId) || ($oldFecha != $newFecha) || ($oldHora != $newHora);
+
+                if ($slotChanged) {
+                    // Release old slot
+                    $oldDia = date('w', strtotime($oldFecha));
+                    $oldSlot = DoctorHorario::where('id_doctor', $oldDoctorId)
+                        ->where('dia', $oldDia)
+                        ->where('hora_inicio', '<=', $oldHora)
+                        ->where('hora_fin', '>=', $oldHora)
+                        ->first();
+
+                    if ($oldSlot) {
+                        $oldSlot->releaseSlot();
+                        \Log::info('Slot antiguo liberado', ['slot_id' => $oldSlot->id]);
+                    }
+
+                    // Check if new slot is available
+                    $newDia = date('w', strtotime($newFecha));
+                    $newSlot = DoctorHorario::where('id_doctor', $newDoctorId)
+                        ->where('dia', $newDia)
+                        ->where('hora_inicio', '<=', $newHora)
+                        ->where('hora_fin', '>=', $newHora)
+                        ->where('status', 'available')
+                        ->where('disponible', true)
+                        ->first();
+
+                    if (!$newSlot) {
+                        throw new \Exception('El nuevo horario no está disponible');
+                    }
+
+                    // Reserve new slot
+                    $newSlot->bookSlot();
+                    \Log::info('Nuevo slot reservado', ['slot_id' => $newSlot->id]);
+                }
+
+                // Update cita
+                                $cita->update($request->only(['id_paciente', 'id_doctor', 'fecha_cita', 'hora_cita', 'lugar']));
+                \Log::info('Cita actualizada', ['cita_id' => $cita->id]);
+            });
+
+            return response()->json($cita->fresh());
+        } catch (\Exception $e) {
+            \Log::error('Error al actualizar cita', ['error' => $e->getMessage(), 'cita_id' => $cita->id]);
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
     }
 
     /**
@@ -320,7 +439,7 @@ class CitasController extends Controller
      *
      * Eliminar una cita
      *
-     * Permite al administrador eliminar una cita y liberar el horario.
+     * Permite al administrador eliminar una cita y liberar el slot correspondiente.
      *
      * @authenticated
      *
@@ -337,12 +456,23 @@ class CitasController extends Controller
             return response()->json(['message' => 'Cita no encontrada'], 404);
         }
 
-        $horario = Horarios::find($cita->id_horario);
-        if ($horario) {
-            $horario->update(['disponible' => true]);
-        }
+        DB::transaction(function () use ($cita) {
+            // Release the slot
+            $dia = date('w', strtotime($cita->fecha_cita));
+            $slot = DoctorHorario::where('id_doctor', $cita->id_doctor)
+                ->where('dia', $dia)
+                ->where('hora_inicio', '<=', $cita->hora_cita)
+                ->where('hora_fin', '>=', $cita->hora_cita)
+                ->first();
 
-        $cita->delete();
+            if ($slot) {
+                $slot->releaseSlot();
+                \Log::info('Slot liberado al eliminar cita', ['slot_id' => $slot->id]);
+            }
+
+            $cita->delete();
+            \Log::info('Cita eliminada', ['cita_id' => $cita->id]);
+        });
 
         return response()->json(['message' => 'Cita eliminada con éxito']);
     }
