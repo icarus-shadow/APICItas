@@ -97,6 +97,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     Route::get('/reportes/citas-por-especialidad', [ConsultaController::class, 'reporteCitasPorEspecialidad']);
 
+    // Notificaciones
+    Route::get('/notificaciones/activas', [\App\Http\Controllers\NotificacionesController::class, 'index']);
+    Route::get('/notificaciones/historial', [\App\Http\Controllers\NotificacionesController::class, 'historial']);
+    Route::post('/notificaciones/{id}/aprobar', [\App\Http\Controllers\NotificacionesController::class, 'aprobar']);
+    Route::post('/notificaciones/{id}/rechazar', [\App\Http\Controllers\NotificacionesController::class, 'rechazar']);
+    Route::delete('/notificaciones/historial', [\App\Http\Controllers\NotificacionesController::class, 'eliminarHistorial']);
+    Route::get('/notificaciones/contadores', [\App\Http\Controllers\NotificacionesController::class, 'contadores']);
+
     // Horarios
     Route::get('/horarios/compactados/{id_doctor}', [ConsultaController::class, 'horariosCompactados']);
 });
@@ -108,7 +116,7 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
 
     // manejo de horarios disponibles por el doctor
     Route::get('/mis-horarios', [HorariosController::class, 'listOwn']);   // Listar mis horarios completos
-    Route::post('/solicitar-bloqueo', [\App\Http\Controllers\NotificacionesController::class, 'store']); // Solicitar bloqueo
+    Route::post('/notificaciones', [\App\Http\Controllers\NotificacionesController::class, 'store']); // Crear solicitud
     Route::get('/mis-notificaciones', [\App\Http\Controllers\NotificacionesController::class, 'myNotifications']); // Ver mis notificaciones
 
     // Doctor autenticado
