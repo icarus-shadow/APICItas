@@ -55,6 +55,7 @@ class Doctores extends Model
     public function getAvailableSlots($date)
     {
         $dayOfWeek = date('w', strtotime($date)); // 0=Sunday, 6=Saturday
+        if ($dayOfWeek == 0) $dayOfWeek = 7; // Adjust Sunday to 7
 
         return $this->doctorHorarios()
             ->where('dia', $dayOfWeek)

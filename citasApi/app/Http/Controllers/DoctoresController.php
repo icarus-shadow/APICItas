@@ -28,14 +28,14 @@ class DoctoresController extends Controller
      */
     public function index()
     {
-        $doctores = Doctores::with(['doctorHorarios.horario'])->get()->map(function ($doctor) {
+        $doctores = Doctores::with(['doctorHorarios.horario', 'user'])->get()->map(function ($doctor) {
             $horariosAsignados = $doctor->doctorHorarios->map(function($dh) { return $dh->horario->nombre; })->unique()->values();
             return [
                 'id' => $doctor->id,
                 'user_id' => $doctor->user_id,
                 'cedula' => $doctor->cedula,
-                'nombres' => $doctor->nombres,
-                'apellidos' => $doctor->apellidos,
+                'nombres' => $doctor->nombres ?: ($doctor->user ? $doctor->user->name : 'Sin nombre'),
+                'apellidos' => $doctor->apellidos ?: '',
                 'id_especialidades' => $doctor->id_especialidades,
                 'horario' => $doctor->horario,
                 'lugar_trabajo' => $doctor->lugar_trabajo,

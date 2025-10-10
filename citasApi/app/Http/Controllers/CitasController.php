@@ -87,7 +87,7 @@ class CitasController extends Controller
      *
      * @authenticated
      *
-     * @bodyParam id_paciente integer required The ID of the patient. Example: 3
+     * @bodyParam id_paciente integer optional The ID of the patient. If not provided, uses the authenticated patient's ID. Example: 3
      * @bodyParam id_doctor integer required The ID of the doctor. Example: 2
      * @bodyParam fecha_cita date required The appointment date (YYYY-MM-DD). Example: 2025-10-01
      * @bodyParam hora_cita time required The appointment time (HH:MM). Example: 14:30
@@ -102,11 +102,25 @@ class CitasController extends Controller
     {
         \Log::info('Intentando crear cita', ['request' => $request->all()]);
 
-        $validator = Validator::make($request->all(), Citas::rules());
+        // Custom validation rules for store method
+        $rules = [
+            'fecha_cita' => 'required|date|after_or_equal:today',
+            'hora_cita' => 'required|string',
+            'lugar' => 'required|string|max:255',
+            'id_doctor' => 'required|exists:doctores,id',
+            'id_paciente' => 'sometimes|exists:pacientes,id',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             \Log::error('Validación fallida en store', ['errors' => $validator->errors()]);
             return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // If id_paciente not provided, assign the authenticated patient's ID
+        if (!$request->has('id_paciente')) {
+            $request->merge(['id_paciente' => auth()->user()->paciente->id]);
         }
 
         $dia = date('w', strtotime($request->fecha_cita));
@@ -252,6 +266,7 @@ class CitasController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'id_doctor' => 'sometimes|exists:doctores,id',
             'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|date_format:H:i',
             'lugar' => 'required|string|max:255',
@@ -267,18 +282,21 @@ class CitasController extends Controller
             DB::transaction(function () use ($request, $cita) {
                 $oldFecha = $cita->fecha_cita;
                 $oldHora = $cita->hora_cita;
-                $doctorId = $cita->id_doctor;
+                $oldDoctorId = $cita->id_doctor;
 
                 $newFecha = $request->fecha_cita;
                 $newHora = $request->hora_cita;
+                $newDoctorId = $request->id_doctor ?? $oldDoctorId;
 
                 // Check if slot details changed
-                $slotChanged = ($oldFecha != $newFecha) || ($oldHora != $newHora);
+                $slotChanged = ($oldDoctorId != $newDoctorId) || ($oldFecha != $newFecha) || ($oldHora != $newHora);
 
                 if ($slotChanged) {
                     // Release old slot
                     $oldDia = date('w', strtotime($oldFecha));
-                    $oldSlot = DoctorHorario::where('id_doctor', $doctorId)
+                    if ($oldDia == 0) $oldDia = 7;
+                    \Log::info('Liberando slot antiguo', ['oldDoctorId' => $oldDoctorId, 'oldDia' => $oldDia, 'oldHora' => $oldHora]);
+                    $oldSlot = DoctorHorario::where('id_doctor', $oldDoctorId)
                         ->where('dia', $oldDia)
                         ->where('hora_inicio', '<=', $oldHora)
                         ->where('hora_fin', '>=', $oldHora)
@@ -287,11 +305,15 @@ class CitasController extends Controller
                     if ($oldSlot) {
                         $oldSlot->releaseSlot();
                         \Log::info('Slot antiguo liberado en updateOwn', ['slot_id' => $oldSlot->id]);
+                    } else {
+                        \Log::warning('Slot antiguo no encontrado para liberar', ['oldDoctorId' => $oldDoctorId, 'oldDia' => $oldDia, 'oldHora' => $oldHora]);
                     }
 
                     // Check if new slot is available
                     $newDia = date('w', strtotime($newFecha));
-                    $newSlot = DoctorHorario::where('id_doctor', $doctorId)
+                    if ($newDia == 0) $newDia = 7;
+                    \Log::info('Buscando nuevo slot', ['newDoctorId' => $newDoctorId, 'newDia' => $newDia, 'newHora' => $newHora]);
+                    $newSlot = DoctorHorario::where('id_doctor', $newDoctorId)
                         ->where('dia', $newDia)
                         ->where('hora_inicio', '<=', $newHora)
                         ->where('hora_fin', '>=', $newHora)
@@ -299,7 +321,14 @@ class CitasController extends Controller
                         ->where('disponible', true)
                         ->first();
 
+                    \Log::info('Resultado búsqueda nuevo slot', ['found' => $newSlot ? true : false, 'slot_id' => $newSlot ? $newSlot->id : null]);
+
                     if (!$newSlot) {
+                        // Log all available slots for this doctor and dia
+                        $allSlots = DoctorHorario::where('id_doctor', $newDoctorId)
+                            ->where('dia', $newDia)
+                            ->get();
+                        \Log::info('Todos los slots para doctor y dia', ['doctor' => $newDoctorId, 'dia' => $newDia, 'slots' => $allSlots->toArray()]);
                         throw new \Exception('El nuevo horario no está disponible');
                     }
 
@@ -310,7 +339,11 @@ class CitasController extends Controller
 
                 // Update cita
                 $oldData = $cita->toArray();
-                $cita->update($request->only(['fecha_cita', 'hora_cita', 'lugar', 'motivo']));
+                $updateData = $request->only(['fecha_cita', 'hora_cita', 'lugar', 'motivo']);
+                if ($request->has('id_doctor')) {
+                    $updateData['id_doctor'] = $request->id_doctor;
+                }
+                $cita->update($updateData);
                 $newData = $cita->fresh()->toArray();
 
                 \Log::info('Cita propia actualizada exitosamente', ['old' => $oldData, 'new' => $newData]);
