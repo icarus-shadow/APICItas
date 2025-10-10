@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Citas;
 use App\Models\Horarios;
+use App\Models\DoctorHorario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CitasController extends Controller
 {
@@ -85,28 +87,49 @@ class CitasController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id_paciente' => 'required|exists:pacientes,id',
-            'id_doctor' => 'required|exists:doctores,id',
-            'fecha_cita' => 'required|date|after:today',
-            'hora_cita' => 'required|date_format:H:i',
-            'lugar' => 'required|string|max:255',
-            'motivo' => 'required|string|max:255'
-        ]);
+        \Log::info('Intentando crear cita', ['request' => $request->all()]);
+
+        $validator = Validator::make($request->all(), Citas::rules());
 
         if ($validator->fails()) {
+            \Log::error('Validación fallida en store', ['errors' => $validator->errors()]);
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $cita = Citas::create([
-            'id_paciente' => $request->id_paciente,
-            'id_doctor' => $request->id_doctor,
-            'fecha_cita' => $request->fecha_cita,
-            'hora_cita' => $request->hora_cita,
-            'lugar' => $request->lugar,
-        ]);
+        $dia = date('w', strtotime($request->fecha_cita));
 
-        return response()->json($cita, 201);
+        DB::transaction(function () use ($request, $dia) {
+            // Find the available slot
+            $slot = DoctorHorario::where('id_doctor', $request->id_doctor)
+                ->where('dia', $dia)
+                ->where('hora_inicio', '<=', $request->hora_cita)
+                ->where('hora_fin', '>=', $request->hora_cita)
+                ->where('status', 'available')
+                ->where('disponible', true)
+                ->first();
+
+            if (!$slot) {
+                \Log::warning('Slot no disponible', ['doctor' => $request->id_doctor, 'dia' => $dia, 'hora' => $request->hora_cita]);
+                throw new \Exception('Slot no disponible');
+            }
+
+            // Book the slot
+            $slot->bookSlot();
+            \Log::info('Slot reservado', ['slot_id' => $slot->id]);
+
+            // Create the cita
+            $cita = Citas::create([
+                'id_paciente' => $request->id_paciente,
+                'id_doctor' => $request->id_doctor,
+                'fecha_cita' => $request->fecha_cita,
+                'hora_cita' => $request->hora_cita,
+                'lugar' => $request->lugar,
+            ]);
+
+            \Log::info('Cita creada', ['cita_id' => $cita->id]);
+        });
+
+        return response()->json(['message' => 'Cita creada con éxito'], 201);
     }
 
     /**
@@ -176,11 +199,14 @@ class CitasController extends Controller
      */
     public function updateOwn(Request $request, $id)
     {
+        \Log::info('Intentando actualizar cita propia', ['id' => $id, 'user_id' => auth()->id(), 'request' => $request->all()]);
+
         $cita = Citas::where('id', $id)
             ->where('id_paciente', auth()->user()->paciente->id)
             ->first();
 
         if (!$cita) {
+            \Log::warning('Cita no encontrada o no autorizada', ['id' => $id, 'user_id' => auth()->id()]);
             return response()->json(['message' => 'Cita no encontrada o no autorizada'], 404);
         }
 
@@ -192,10 +218,15 @@ class CitasController extends Controller
         ]);
 
         if ($validator->fails()) {
+            \Log::error('Validación fallida en updateOwn', ['errors' => $validator->errors()]);
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        $oldData = $cita->toArray();
         $cita->update($request->only(['fecha_cita', 'hora_cita', 'lugar', 'motivo']));
+        $newData = $cita->fresh()->toArray();
+
+        \Log::info('Cita actualizada exitosamente', ['old' => $oldData, 'new' => $newData]);
 
         return response()->json($cita);
     }
@@ -225,7 +256,21 @@ class CitasController extends Controller
             return response()->json(['message' => 'Cita no encontrada o no autorizada'], 404);
         }
 
-        $cita->delete();
+        DB::transaction(function () use ($cita) {
+            // Release the slot
+            $dia = date('w', strtotime($cita->fecha_cita));
+            $slot = DoctorHorario::where('id_doctor', $cita->id_doctor)
+                ->where('dia', $dia)
+                ->where('hora_inicio', '<=', $cita->hora_cita)
+                ->where('hora_fin', '>=', $cita->hora_cita)
+                ->first();
+
+            if ($slot) {
+                $slot->releaseSlot();
+            }
+
+            $cita->delete();
+        });
 
         return response()->json(['message' => 'Cita eliminada con éxito']);
     }
@@ -319,5 +364,85 @@ class CitasController extends Controller
     {
         $total = Citas::count();
         return response()->json(['total' => $total]);
+    }
+
+    /**
+     * @group Citas [GENERAL]
+     *
+     * Obtener slots disponibles para un doctor en un rango de fechas
+     *
+     * Devuelve los slots disponibles para agendar citas.
+     *
+     * @urlParam doctorId integer ID del doctor. Example: 1
+     * @queryParam startDate date Fecha de inicio (YYYY-MM-DD). Example: 2025-10-10
+     * @queryParam endDate date Fecha de fin (YYYY-MM-DD). Example: 2025-10-10
+     *
+     * @response 200 [
+     *   {
+     *      "id": 1,
+     *      "fecha": "2025-10-10",
+     *      "hora_inicio": "09:00",
+     *      "hora_fin": "10:00",
+     *      "disponible": true
+     *   }
+     * ]
+     */
+    public function getAvailableSlots(Request $request, $doctorId)
+    {
+        $doctor = \App\Models\Doctores::find($doctorId);
+        if (!$doctor) {
+            return response()->json(['message' => 'Doctor no encontrado'], 404);
+        }
+
+        $startDate = $request->query('startDate');
+        $endDate = $request->query('endDate');
+
+        if (!$startDate || !$endDate) {
+            return response()->json(['message' => 'Fechas requeridas'], 400);
+        }
+
+        $slots = $doctor->getAvailableSlots($startDate);
+
+        return response()->json($slots);
+    }
+
+    /**
+     * @group Citas [GENERAL]
+     *
+     * Validar si un slot está disponible
+     *
+     * Verifica en tiempo real si un horario específico está disponible para un doctor.
+     *
+     * @urlParam doctorId integer ID del doctor. Example: 1
+     * @bodyParam fecha date Fecha (YYYY-MM-DD). Example: 2025-10-10
+     * @bodyParam hora time Hora (HH:MM). Example: 09:00
+     *
+     * @response 200 {
+     *    "available": true
+     * }
+     */
+    public function validateSlot(Request $request, $doctorId)
+    {
+        $request->validate([
+            'fecha' => 'required|date',
+            'hora' => 'required|date_format:H:i'
+        ]);
+
+        $doctor = \App\Models\Doctores::find($doctorId);
+        if (!$doctor) {
+            return response()->json(['message' => 'Doctor no encontrado'], 404);
+        }
+
+        $dia = date('w', strtotime($request->fecha));
+
+        $slot = \App\Models\DoctorHorario::where('id_doctor', $doctorId)
+            ->where('dia', $dia)
+            ->where('hora_inicio', '<=', $request->hora)
+            ->where('hora_fin', '>', $request->hora)
+            ->where('status', 'available')
+            ->where('disponible', true)
+            ->first();
+
+        return response()->json(['available' => $slot ? true : false]);
     }
 }

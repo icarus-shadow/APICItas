@@ -230,6 +230,7 @@ class HorariosController extends Controller
                     'hora_inicio' => $start->format('H:i'),
                     'hora_fin' => $end->format('H:i'),
                     'disponible' => true,
+                    'status' => 'available',
                 ]);
 
                 $createdDoctorHorarios[] = $doctorHorario;

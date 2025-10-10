@@ -28,10 +28,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Pacientes y Doctores
     Route::get('/doctores/especialidad/{id}', [ConsultaController::class, 'doctoresPorEspecialidad']);
     Route::get('/doctor/{id}/disponibilidad', [ConsultaController::class, 'disponibilidadDoctor']);
+    Route::get('/doctores/{doctorId}/slots', [CitasController::class, 'getAvailableSlots']);
+    Route::post('/doctores/{doctorId}/validate-slot', [CitasController::class, 'validateSlot']);
 
     // Paciente autenticado
     Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
     Route::post('/citas', [CitasController::class, 'store']);
+    Route::put('/citas/{id}', [CitasController::class, 'updateOwn']);
+    Route::delete('/citas/{id}', [CitasController::class, 'destroyOwn']);
 
 
 });

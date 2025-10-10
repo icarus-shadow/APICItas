@@ -17,7 +17,8 @@ class DoctorHorario extends Model
         'dia',
         'hora_inicio',
         'hora_fin',
-        'disponible'
+        'disponible',
+        'status'
     ];
 
     public function doctor()
@@ -28,5 +29,37 @@ class DoctorHorario extends Model
     public function horario()
     {
         return $this->belongsTo(Horarios::class, 'id_horario');
+    }
+
+    public static function rules()
+    {
+        return [
+            'id_horario' => 'required|exists:horarios,id',
+            'id_doctor' => 'required|exists:doctores,id',
+            'dia' => 'required|integer|between:0,6',
+            'hora_inicio' => 'required|string',
+            'hora_fin' => 'required|string',
+            'disponible' => 'boolean',
+            'status' => 'string|in:available,booked,cancelled',
+        ];
+    }
+
+    public function isAvailable()
+    {
+        return $this->status === 'available' && $this->disponible;
+    }
+
+    public function bookSlot()
+    {
+        $this->status = 'booked';
+        $this->disponible = false;
+        $this->save();
+    }
+
+    public function releaseSlot()
+    {
+        $this->status = 'available';
+        $this->disponible = true;
+        $this->save();
     }
 }

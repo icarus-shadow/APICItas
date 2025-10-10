@@ -26,16 +26,44 @@ class Doctores extends Model
 
     public function especialidad()
     {
-        return $this->belongsTo(Especialidad::class, 'id_especialidades');
+        return $this->belongsTo(Especialidades::class, 'id_especialidades');
     }
 
     public function citas()
     {
-        return $this->hasMany(Cita::class, 'id_doctor');
+        return $this->hasMany(Citas::class, 'id_doctor');
     }
 
     public function doctorHorarios()
     {
         return $this->hasMany(DoctorHorario::class, 'id_doctor');
+    }
+
+    public static function rules()
+    {
+        return [
+            'user_id' => 'required|exists:users,id',
+            'cedula' => 'required|string|unique:doctores,cedula',
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'id_especialidades' => 'required|exists:especialidades,id',
+            'horario' => 'nullable|string',
+            'lugar_trabajo' => 'nullable|string|max:255',
+        ];
+    }
+
+    public function getAvailableSlots($date)
+    {
+        $dayOfWeek = date('w', strtotime($date)); // 0=Sunday, 6=Saturday
+
+        return $this->doctorHorarios()
+            ->where('dia', $dayOfWeek)
+            ->where('status', 'available')
+            ->where('disponible', true)
+            ->get()
+            ->map(function ($slot) use ($date) {
+                $slot->fecha = $date;
+                return $slot;
+            });
     }
 }

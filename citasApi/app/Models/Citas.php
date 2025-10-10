@@ -26,4 +26,24 @@ class Citas extends Model
     {
         return $this->belongsTo(Pacientes::class, 'id_paciente');
     }
+
+    public static function rules()
+    {
+        return [
+            'fecha_cita' => 'required|date|after_or_equal:today',
+            'hora_cita' => 'required|string',
+            'lugar' => 'required|string|max:255',
+            'id_doctor' => 'required|exists:doctores,id',
+            'id_paciente' => 'required|exists:pacientes,id',
+        ];
+    }
+
+    public function isSlotAvailable()
+    {
+        return !self::where('id_doctor', $this->id_doctor)
+            ->where('fecha_cita', $this->fecha_cita)
+            ->where('hora_cita', $this->hora_cita)
+            ->where('id', '!=', $this->id ?? 0) // exclude self if updating
+            ->exists();
+    }
 }
