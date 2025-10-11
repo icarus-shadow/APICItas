@@ -10,6 +10,7 @@ use App\Http\Controllers\HorariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\authcontroller;
+use App\Http\Controllers\DoctorCitasController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -125,13 +126,26 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/doctor/{doctorId}/count-citas-proximas', [DoctoresController::class, 'countCitasProximas']);
     Route::get('/doctor/{doctorId}/count-pacientes-atendidos', [DoctoresController::class, 'countPacientesAtendidos']);
     Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);// Eliminar un bloque mío
+    Route::get('/doctor/pacientes', [PacientesController::class, 'index']);
 });
 
+Route::middleware(['auth:sanctum', 'admin_or_doctor'])->group(function () {
+    Route::post('/doctor/citas', [DoctorCitasController::class, 'storeDoctor']);
+    Route::put('/doctor/citas/{id}', [DoctorCitasController::class, 'updateDoctor']);
+    Route::delete('/doctor/citas/{id}', [DoctorCitasController::class, 'destroyDoctor']);
+    Route::get('/doctor/citas', [DoctorCitasController::class, 'listDoctor']);
+    Route::get('/doctor/pacientes-disponibles', [DoctorCitasController::class, 'getPacientesDoctor']);
+});
+
+Route::get('/admin/citas', [CitasController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/admin/countCitas', [CitasController::class, 'countCitas'])->middleware('auth:sanctum');
 Route::post('/login', [authController::class, 'login']);
 Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar doctores
 Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Listar
 Route::get('/especialidades/{id}', [EspecialidadesController::class, 'show']); // Ver detalle
 Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);
+Route::get('/support-admins', [AdministradoresController::class, 'getSupportAdmins']);
+
 
 
 

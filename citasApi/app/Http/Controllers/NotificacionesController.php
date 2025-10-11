@@ -285,7 +285,7 @@ class NotificacionesController extends Controller
             'fecha_solicitada' => 'required|date',
             'slots' => 'required|array',
             'slots.*.fecha' => 'required|date',
-            'slots.*.hora' => 'required|date_format:H:i',
+            'slots.*.hora' => 'required|string',
         ]);
 
         if ($validator->fails()) {

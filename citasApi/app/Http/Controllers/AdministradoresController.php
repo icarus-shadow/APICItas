@@ -293,4 +293,37 @@ class AdministradoresController extends Controller
         return response()->json($result);
     }
 
+    /**
+     * @group Gestión de Usuarios
+     * @subgroup Administrators
+     *
+     * Get support admins
+     *
+     * Retrieves a list of administrators available for support.
+     *
+     * @response 200 [
+     *   {
+     *     "id": 1,
+     *     "nombres": "Carlos",
+     *     "apellidos": "Pérez",
+     *     "email": "carlos@example.com"
+     *   }
+     * ]
+     */
+    public function getSupportAdmins()
+    {
+        $admins = Administradores::with('user:id,email')->get(['id', 'nombres', 'apellidos', 'user_id']);
+
+        $result = $admins->map(function($admin) {
+            return [
+                'id' => $admin->id,
+                'nombres' => $admin->nombres,
+                'apellidos' => $admin->apellidos,
+                'email' => $admin->user->email,
+            ];
+        });
+
+        return response()->json($result);
+    }
+
 }

@@ -23,6 +23,10 @@ class User extends Authenticatable
         'remember_token'
     ];
 
+    protected $casts = [
+        'id_rol' => 'integer',
+    ];
+
 
     public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
