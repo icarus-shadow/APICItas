@@ -71,9 +71,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/horarios', [HorariosController::class, 'index']); // Listar plantillas de horario
     Route::get('/horarios/{id}', [HorariosController::class, 'show']);    // Ver un horario
     Route::post('/horarios', [HorariosController::class, 'store']);       // Crear plantilla de horario
-    Route::post('/asignar-horario', [HorariosController::class, 'assignToDoctor']); // Asignar horario a doctor
-    Route::post('/desasignar-horario', [HorariosController::class, 'unassignFromDoctor']); // Desasignar horario de doctor
-    Route::post('/verificar-conflicto-horario', [HorariosController::class, 'checkConflict']); // Verificar conflictos antes de asignar
     Route::put('/horarios/{id}', [HorariosController::class, 'update']);  // Editar un bloque específico
     Route::delete('/horarios/{id}', [HorariosController::class, 'destroy']); // Eliminar un bloque
     Route::get('/horarios-doctor/{id_doctor}', [HorariosController::class, 'listByDoctor']); // Listar por doctor
@@ -88,7 +85,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/citas/{id}', [CitasController::class, 'show']); // Ver una cita
     Route::delete('/citas/{id}', [CitasController::class, 'destroy']); // Eliminar cualquier cita
     Route::put('/citas/{id}', [CitasController::class, 'update']);// Editar cualquier cita
-    Route::get('/countCitas', [CitasController::class, 'countCitas']);
 
     Route::get('/administradores', [AdministradoresController::class, 'index']);
     Route::get('/administradores/{id}', [AdministradoresController::class, 'show']);
@@ -125,16 +121,25 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/doctor/{doctorId}/count-citas-asignadas', [DoctoresController::class, 'countCitasAsignadas']);
     Route::get('/doctor/{doctorId}/count-citas-proximas', [DoctoresController::class, 'countCitasProximas']);
     Route::get('/doctor/{doctorId}/count-pacientes-atendidos', [DoctoresController::class, 'countPacientesAtendidos']);
-    Route::get('/doctor/mis-pacientes', [ConsultaController::class, 'pacientesPorDoctor']);// Eliminar un bloque mío
-    Route::get('/doctor/pacientes', [PacientesController::class, 'index']);
+
+    Route::get('/doctorPacientes', [PacientesController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'admin_or_doctor'])->group(function () {
-    Route::post('/doctor/citas', [DoctorCitasController::class, 'storeDoctor']);
-    Route::put('/doctor/citas/{id}', [DoctorCitasController::class, 'updateDoctor']);
-    Route::delete('/doctor/citas/{id}', [DoctorCitasController::class, 'destroyDoctor']);
-    Route::get('/doctor/citas', [DoctorCitasController::class, 'listDoctor']);
-    Route::get('/doctor/pacientes-disponibles', [DoctorCitasController::class, 'getPacientesDoctor']);
+    Route::post('/doctorCitas', [DoctorCitasController::class, 'storeDoctor']);
+    Route::put('/doctorCitas/{id}', [DoctorCitasController::class, 'updateDoctor']);
+    Route::delete('/doctorCitas/{id}', [DoctorCitasController::class, 'destroyDoctor']);
+    Route::get('/doctorCitas', [DoctorCitasController::class, 'listDoctor']);
+
+    Route::post('/verificar-conflicto-horario', [HorariosController::class, 'checkConflict']); // Verificar conflictos antes de asignar
+    Route::post('/asignar-horario', [HorariosController::class, 'assignToDoctor']); // Asignar horario a doctor
+    Route::post('/desasignar-horario', [HorariosController::class, 'unassignFromDoctor']); // Desasignar horario de doctor
+
+    Route::get('/countCitas', [CitasController::class, 'countCitas']);
+
+
+
+
 });
 
 Route::get('/admin/citas', [CitasController::class, 'index'])->middleware('auth:sanctum');
