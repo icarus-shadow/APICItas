@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\authcontroller;
 use App\Http\Controllers\DoctorCitasController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -38,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/citas/paciente/{id}', [CitasController::class, 'updateOwn']);
     Route::delete('/citas/paciente/{id}', [CitasController::class, 'destroyOwn']);
 
+    Route::get('/users/{id}', [UserController::class, 'show']);
 
 });
 
@@ -123,6 +125,9 @@ Route::middleware(['auth:sanctum', 'doctor'])->group(function () {
     Route::get('/doctor/{doctorId}/count-pacientes-atendidos', [DoctoresController::class, 'countPacientesAtendidos']);
 
     Route::get('/doctorPacientes', [PacientesController::class, 'index']);
+    Route::get('/doctorSlots', [DoctorCitasController::class, 'getDoctorSlots']);
+
+    Route::post('/doctor-validate-slot', [DoctorCitasController::class, 'validateDoctorSlot']);
 });
 
 Route::middleware(['auth:sanctum', 'admin_or_doctor'])->group(function () {

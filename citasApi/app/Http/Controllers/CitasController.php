@@ -569,7 +569,12 @@ class CitasController extends Controller
      */
     public function countCitas()
     {
-        $total = Citas::count();
+        $user = auth()->user();
+        if ($user->id_rol == 3) {
+            $total = Citas::count();
+        } else {
+            $total = Citas::where('id_doctor', $user->doctor->id)->count();
+        }
         return response()->json(['total' => $total]);
     }
 

@@ -52,19 +52,32 @@ class Doctores extends Model
         ];
     }
 
-    public function getAvailableSlots($date)
+    public function getAvailableSlots($startDate, $endDate = null)
     {
-        $dayOfWeek = date('w', strtotime($date)); // 0=Sunday, 6=Saturday
-        if ($dayOfWeek == 0) $dayOfWeek = 7; // Adjust Sunday to 7
+        $slots = collect();
 
-        return $this->doctorHorarios()
-            ->where('dia', $dayOfWeek)
-            ->where('status', 'available')
-            ->where('disponible', true)
-            ->get()
-            ->map(function ($slot) use ($date) {
-                $slot->fecha = $date;
-                return $slot;
-            });
+        $currentDate = $startDate;
+        $end = $endDate ?: $startDate;
+
+        while ($currentDate <= $end) {
+            $dayOfWeek = date('w', strtotime($currentDate)); // 0=Sunday, 6=Saturday
+            if ($dayOfWeek == 0) $dayOfWeek = 7; // Adjust Sunday to 7
+
+            $daySlots = $this->doctorHorarios()
+                ->where('dia', $dayOfWeek)
+                ->where('status', 'available')
+                ->where('disponible', true)
+                ->get()
+                ->map(function ($slot) use ($currentDate) {
+                    $slot->fecha = $currentDate;
+                    return $slot;
+                });
+
+            $slots = $slots->merge($daySlots);
+
+            $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+        }
+
+        return $slots;
     }
 }

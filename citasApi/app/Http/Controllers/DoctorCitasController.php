@@ -29,7 +29,7 @@ class DoctorCitasController extends Controller
      * @response 200 [
      *   {
      *     "id": 1,
-     *     "id_paciente": 3,
+     *     "paciente": "Juan Pérez",
      *     "id_doctor": 2,
      *     "fecha_cita": "2025-10-01",
      *     "hora_cita": "14:30:00",
@@ -44,11 +44,28 @@ class DoctorCitasController extends Controller
     public function listDoctor()
     {
         $user = auth()->user();
-        if ($user->id_rol === 3) { // Administrador
-            $citas = Citas::all();
-        } else { // Doctor
-            $citas = Citas::where('id_doctor', $user->doctor->id)->get();
+        if ($user->id_rol !== 3 && !$user->doctor) {
+            return response()->json(['message' => 'Doctor not found'], 404);
         }
+
+        $query = Citas::select('citas.*', DB::raw("CONCAT(pacientes.nombres, ' ', pacientes.apellidos) as paciente_nombre"), DB::raw("CONCAT(doctores.nombres, ' ', doctores.apellidos) as doctor_nombre"))
+            ->leftJoin('pacientes', 'citas.id_paciente', '=', 'pacientes.id')
+            ->leftJoin('doctores', 'citas.id_doctor', '=', 'doctores.id');
+
+        if ($user->id_rol === 3) { // Administrador
+            $citas = $query->get();
+        } else { // Doctor
+            $citas = $query->where('id_doctor', $user->doctor->id)->get();
+        }
+
+        $citas = $citas->map(function($cita) {
+            $data = $cita->toArray();
+            $data['paciente'] = $data['paciente_nombre'] ?: 'Paciente no encontrado';
+            $data['doctor'] = $data['doctor_nombre'] ?: 'Doctor no encontrado';
+            unset($data['id_paciente'], $data['paciente_nombre'], $data['doctor_nombre']);
+            return $data;
+        });
+
         return response()->json($citas);
     }
 
@@ -342,5 +359,76 @@ class DoctorCitasController extends Controller
             \Log::error('Error obteniendo pacientes para doctor', ['error' => $e->getMessage()]);
             return response()->json(['message' => 'Error interno del servidor'], 500);
         }
+    }
+    /**
+     * @group Citas
+     * @subgroup Doctor
+     *
+     * Get available slots for doctor
+     *
+     * Retrieves available time slots for the authenticated doctor within the specified date range.
+     *
+     * @authenticated
+     *
+     * @queryParam startDate date required The start date (YYYY-MM-DD). Example: 2025-10-01
+     * @queryParam endDate date required The end date (YYYY-MM-DD). Example: 2025-10-07
+     *
+     * @response 200 [
+     *   {
+     *     "date": "2025-10-01",
+     *     "slots": ["09:00", "09:30", "10:00"]
+     *   }
+     * ]
+     * @response 400 {"message": "Doctor no encontrado"}
+     * @response 401 {"message": "Unauthenticated."}
+     */
+    public function getDoctorSlots(Request $request)
+    {
+        $user = auth()->user();
+        $doctor = $user->doctor;
+
+        if (!$doctor) {
+            return response()->json(['message' => 'Doctor no encontrado'], 400);
+        }
+
+        $startDate = $request->query('startDate');
+        $endDate = $request->query('endDate');
+
+        $slots = $doctor->getAvailableSlots($startDate, $endDate);
+
+        return response()->json($slots);
+    }
+
+    public function validateDoctorSlot(Request $request)
+    {
+        $user = auth()->user();
+        $doctor = $user->doctor;
+
+        if (!$doctor) {
+            return response()->json(['available' => false]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'fecha' => 'required|date',
+            'hora' => 'required|date_format:H:i',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['available' => false]);
+        }
+
+        $fecha = $request->fecha;
+        $hora = date('H:i:s', strtotime($request->hora));
+        $dia = date('N', strtotime($request->fecha));
+
+        $available = DoctorHorario::where('id_doctor', $doctor->id)
+            ->where('dia', $dia)
+            ->where('hora_inicio', '<=', $hora)
+            ->where('hora_fin', '>', $hora)
+            ->where('status', 'available')
+            ->where('disponible', true)
+            ->exists();
+
+        return response()->json(['available' => $available]);
     }
 }
