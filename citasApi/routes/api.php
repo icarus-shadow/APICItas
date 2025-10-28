@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\authcontroller;
 use App\Http\Controllers\DoctorCitasController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EmailVerificationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -160,6 +161,10 @@ Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Li
 Route::get('/especialidades/{id}', [EspecialidadesController::class, 'show']); // Ver detalle
 Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);
 Route::get('/support-admins', [AdministradoresController::class, 'getSupportAdmins']);
+
+// Email verification routes
+Route::post('/send-verification-code', [EmailVerificationController::class, 'sendVerificationCode']);
+Route::post('/verify-code', [EmailVerificationController::class, 'verifyCode']);
 
 
 
