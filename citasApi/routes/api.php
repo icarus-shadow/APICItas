@@ -32,6 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor/{id}/disponibilidad', [ConsultaController::class, 'disponibilidadDoctor']);
     Route::get('/doctores/{doctorId}/slots', [CitasController::class, 'getAvailableSlots']);
     Route::post('/doctores/{doctorId}/validate-slot', [CitasController::class, 'validateSlot']);
+    Route::get('/doctores/{doctorId}/slots-by-date', [CitasController::class, 'getAvailableSlotsByDate']);
+    Route::post('/create-reservation', [CitasController::class, 'createReservation']);
+    Route::post('/check-slot-availability', [CitasController::class, 'checkSlotAvailability']);
 
     // Paciente autenticado
     Route::get('/citas/mis-citas', [ConsultaController::class, 'misCitas']);
@@ -149,6 +152,8 @@ Route::middleware(['auth:sanctum', 'admin_or_doctor'])->group(function () {
 
 Route::get('/admin/citas', [CitasController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/admin/countCitas', [CitasController::class, 'countCitas'])->middleware('auth:sanctum');
+Route::put('/admin/citas/{id}', [CitasController::class, 'update'])->middleware(['auth:sanctum', 'admin']);
+Route::delete('/admin/citas/{id}', [CitasController::class, 'destroy'])->middleware(['auth:sanctum', 'admin']);
 Route::post('/login', [authController::class, 'login']);
 Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar doctores
 Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Listar

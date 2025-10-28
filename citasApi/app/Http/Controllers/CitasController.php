@@ -125,34 +125,25 @@ class CitasController extends Controller
 
         $dia = date('w', strtotime($request->fecha_cita));
 
-        DB::transaction(function () use ($request, $dia) {
-            // Find the available slot
-            $slot = DoctorHorario::where('id_doctor', $request->id_doctor)
-                ->where('dia', $dia)
-                ->where('hora_inicio', '<=', $request->hora_cita)
-                ->where('hora_fin', '>=', $request->hora_cita)
-                ->where('status', 'available')
-                ->where('disponible', true)
-                ->first();
-
-            if (!$slot) {
-                \Log::warning('Slot no disponible', ['doctor' => $request->id_doctor, 'dia' => $dia, 'hora' => $request->hora_cita]);
-                throw new \Exception('Slot no disponible');
-            }
-
-            // Book the slot
-            $slot->bookSlot();
-            \Log::info('Slot reservado', ['slot_id' => $slot->id]);
-
-            // Create the cita
-            $cita = Citas::create([
+        DB::transaction(function () use ($request) {
+            // Create cita instance to check availability
+            $cita = new Citas([
                 'id_paciente' => $request->id_paciente,
                 'id_doctor' => $request->id_doctor,
                 'fecha_cita' => $request->fecha_cita,
                 'hora_cita' => $request->hora_cita,
                 'lugar' => $request->lugar,
+                'tipo' => 'appointment' // Default to appointment
             ]);
 
+            // Check if slot is available using the model's method
+            if (!$cita->isSlotAvailable()) {
+                \Log::warning('Slot no disponible', ['doctor' => $request->id_doctor, 'fecha' => $request->fecha_cita, 'hora' => $request->hora_cita]);
+                throw new \Exception('Slot no disponible');
+            }
+
+            // Create the cita
+            $cita->save();
             \Log::info('Cita creada', ['cita_id' => $cita->id]);
         });
 
@@ -292,49 +283,32 @@ class CitasController extends Controller
                 $slotChanged = ($oldDoctorId != $newDoctorId) || ($oldFecha != $newFecha) || ($oldHora != $newHora);
 
                 if ($slotChanged) {
-                    // Release old slot
-                    $oldDia = date('w', strtotime($oldFecha));
-                    if ($oldDia == 0) $oldDia = 7;
-                    \Log::info('Liberando slot antiguo', ['oldDoctorId' => $oldDoctorId, 'oldDia' => $oldDia, 'oldHora' => $oldHora]);
-                    $oldSlot = DoctorHorario::where('id_doctor', $oldDoctorId)
-                        ->where('dia', $oldDia)
-                        ->where('hora_inicio', '<=', $oldHora)
-                        ->where('hora_fin', '>=', $oldHora)
-                        ->first();
+                    // Create temporary cita instance to check old slot availability
+                    $tempOldCita = new Citas([
+                        'id_doctor' => $oldDoctorId,
+                        'fecha_cita' => $oldFecha,
+                        'hora_cita' => $oldHora,
+                        'tipo' => $cita->tipo ?? 'appointment'
+                    ]);
 
-                    if ($oldSlot) {
-                        $oldSlot->releaseSlot();
-                        \Log::info('Slot antiguo liberado en updateOwn', ['slot_id' => $oldSlot->id]);
-                    } else {
-                        \Log::warning('Slot antiguo no encontrado para liberar', ['oldDoctorId' => $oldDoctorId, 'oldDia' => $oldDia, 'oldHora' => $oldHora]);
+                    // Check if old slot can be released (should be available after removing this cita)
+                    $tempOldCita->id = $cita->id; // Set ID to exclude self
+                    if (!$tempOldCita->isSlotAvailable()) {
+                        \Log::warning('No se puede liberar slot antiguo - conflicto de disponibilidad', ['oldDoctorId' => $oldDoctorId, 'oldFecha' => $oldFecha, 'oldHora' => $oldHora]);
                     }
 
-                    // Check if new slot is available
-                    $newDia = date('w', strtotime($newFecha));
-                    if ($newDia == 0) $newDia = 7;
-                    \Log::info('Buscando nuevo slot', ['newDoctorId' => $newDoctorId, 'newDia' => $newDia, 'newHora' => $newHora]);
-                    $newSlot = DoctorHorario::where('id_doctor', $newDoctorId)
-                        ->where('dia', $newDia)
-                        ->where('hora_inicio', '<=', $newHora)
-                        ->where('hora_fin', '>=', $newHora)
-                        ->where('status', 'available')
-                        ->where('disponible', true)
-                        ->first();
+                    // Create temporary cita instance to check new slot availability
+                    $tempNewCita = new Citas([
+                        'id_doctor' => $newDoctorId,
+                        'fecha_cita' => $newFecha,
+                        'hora_cita' => $newHora,
+                        'tipo' => $cita->tipo ?? 'appointment'
+                    ]);
 
-                    \Log::info('Resultado búsqueda nuevo slot', ['found' => $newSlot ? true : false, 'slot_id' => $newSlot ? $newSlot->id : null]);
-
-                    if (!$newSlot) {
-                        // Log all available slots for this doctor and dia
-                        $allSlots = DoctorHorario::where('id_doctor', $newDoctorId)
-                            ->where('dia', $newDia)
-                            ->get();
-                        \Log::info('Todos los slots para doctor y dia', ['doctor' => $newDoctorId, 'dia' => $newDia, 'slots' => $allSlots->toArray()]);
+                    if (!$tempNewCita->isSlotAvailable()) {
+                        \Log::warning('Nuevo slot no disponible', ['newDoctorId' => $newDoctorId, 'newFecha' => $newFecha, 'newHora' => $newHora]);
                         throw new \Exception('El nuevo horario no está disponible');
                     }
-
-                    // Reserve new slot
-                    $newSlot->bookSlot();
-                    \Log::info('Nuevo slot reservado en updateOwn', ['slot_id' => $newSlot->id]);
                 }
 
                 // Update cita
@@ -466,36 +440,32 @@ class CitasController extends Controller
                 $slotChanged = ($oldDoctorId != $newDoctorId) || ($oldFecha != $newFecha) || ($oldHora != $newHora);
 
                 if ($slotChanged) {
-                    // Release old slot
-                    $oldDia = date('w', strtotime($oldFecha));
-                    $oldSlot = DoctorHorario::where('id_doctor', $oldDoctorId)
-                        ->where('dia', $oldDia)
-                        ->where('hora_inicio', '<=', $oldHora)
-                        ->where('hora_fin', '>=', $oldHora)
-                        ->first();
+                    // Create temporary cita instance to check old slot availability
+                    $tempOldCita = new Citas([
+                        'id_doctor' => $oldDoctorId,
+                        'fecha_cita' => $oldFecha,
+                        'hora_cita' => $oldHora,
+                        'tipo' => $cita->tipo ?? 'appointment'
+                    ]);
 
-                    if ($oldSlot) {
-                        $oldSlot->releaseSlot();
-                        \Log::info('Slot antiguo liberado', ['slot_id' => $oldSlot->id]);
+                    // Check if old slot can be released (should be available after removing this cita)
+                    $tempOldCita->id = $cita->id; // Set ID to exclude self
+                    if (!$tempOldCita->isSlotAvailable()) {
+                        \Log::warning('No se puede liberar slot antiguo - conflicto de disponibilidad', ['oldDoctorId' => $oldDoctorId, 'oldFecha' => $oldFecha, 'oldHora' => $oldHora]);
                     }
 
-                    // Check if new slot is available
-                    $newDia = date('w', strtotime($newFecha));
-                    $newSlot = DoctorHorario::where('id_doctor', $newDoctorId)
-                        ->where('dia', $newDia)
-                        ->where('hora_inicio', '<=', $newHora)
-                        ->where('hora_fin', '>=', $newHora)
-                        ->where('status', 'available')
-                        ->where('disponible', true)
-                        ->first();
+                    // Create temporary cita instance to check new slot availability
+                    $tempNewCita = new Citas([
+                        'id_doctor' => $newDoctorId,
+                        'fecha_cita' => $newFecha,
+                        'hora_cita' => $newHora,
+                        'tipo' => $cita->tipo ?? 'appointment'
+                    ]);
 
-                    if (!$newSlot) {
+                    if (!$tempNewCita->isSlotAvailable()) {
+                        \Log::warning('Nuevo slot no disponible', ['newDoctorId' => $newDoctorId, 'newFecha' => $newFecha, 'newHora' => $newHora]);
                         throw new \Exception('El nuevo horario no está disponible');
                     }
-
-                    // Reserve new slot
-                    $newSlot->bookSlot();
-                    \Log::info('Nuevo slot reservado', ['slot_id' => $newSlot->id]);
                 }
 
                 // Update cita
@@ -660,5 +630,147 @@ class CitasController extends Controller
             ->first();
 
         return response()->json(['available' => $slot ? true : false]);
+    }
+
+    /**
+     * @group Citas
+     * @subgroup General
+     *
+     * Get available slots by specific date
+     *
+     * Returns the available time slots for scheduling appointments for a specific doctor on a given date.
+     *
+     * @urlParam doctorId integer required The ID of the doctor. Example: 1
+     * @queryParam date date required The specific date (YYYY-MM-DD). Example: 2025-10-10
+     *
+     * @response 200 [
+     *   {
+     *     "hora_inicio": "09:00",
+     *     "hora_fin": "10:00",
+     *     "disponible": true
+     *   }
+     * ]
+     * @response 404 {"message": "Doctor no encontrado"}
+     * @response 400 {"message": "Fecha requerida"}
+     */
+    public function getAvailableSlotsByDate(Request $request, $doctorId)
+    {
+        $doctor = \App\Models\Doctores::find($doctorId);
+        if (!$doctor) {
+            return response()->json(['message' => 'Doctor no encontrado'], 404);
+        }
+
+        $date = $request->query('date');
+        if (!$date) {
+            return response()->json(['message' => 'Fecha requerida'], 400);
+        }
+
+        $slots = $doctor->getAvailableSlotsByDate($date);
+
+        return response()->json($slots);
+    }
+
+    /**
+     * @group Citas
+     * @subgroup General
+     *
+     * Create reservation
+     *
+     * Creates a temporary reservation for a time slot to hold it for future appointment creation.
+     *
+     * @bodyParam id_doctor integer required The ID of the doctor. Example: 2
+     * @bodyParam fecha_cita date required The appointment date (YYYY-MM-DD). Example: 2025-10-01
+     * @bodyParam hora_cita time required The appointment time (HH:MM). Example: 14:30
+     * @bodyParam lugar string optional The appointment location. Example: Consultorio 101
+     *
+     * @response 201 {"message": "Reserva creada con éxito"}
+     * @response 422 {"errors": {"fecha_cita": ["The fecha cita field is required."]}}
+     */
+    public function createReservation(Request $request)
+    {
+        $rules = [
+            'fecha_cita' => 'required|date|after_or_equal:today',
+            'hora_cita' => 'required|string',
+            'id_doctor' => 'required|exists:doctores,id',
+            'lugar' => 'sometimes|string|max:255',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        DB::transaction(function () use ($request) {
+            // Create reservation instance to check availability
+            $reservation = new Citas([
+                'id_doctor' => $request->id_doctor,
+                'fecha_cita' => $request->fecha_cita,
+                'hora_cita' => $request->hora_cita,
+                'tipo' => 'reservation',
+                'lugar' => $request->lugar ?? 'Reserva temporal'
+            ]);
+
+            // Check if slot is available using the model's method
+            if (!$reservation->isSlotAvailable()) {
+                throw new \Exception('Slot no disponible para reserva');
+            }
+
+            // Create the reservation
+            $reservation->save();
+        });
+
+        return response()->json(['message' => 'Reserva creada con éxito'], 201);
+    }
+
+    /**
+     * @group Citas
+     * @subgroup General
+     *
+     * Check slot availability
+     *
+     * Checks if a specific time slot is available for a doctor on a given date and time, considering both appointments and reservations.
+     *
+     * @bodyParam id_doctor integer required The ID of the doctor. Example: 2
+     * @bodyParam fecha date required The date (YYYY-MM-DD). Example: 2025-10-10
+     * @bodyParam hora time required The time (HH:MM). Example: 09:00
+     *
+     * @response 200 {"available": true}
+     * @response 422 {"errors": {"fecha": ["The fecha field is required."]}}
+     */
+    public function checkSlotAvailability(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_doctor' => 'required|exists:doctores,id',
+            'fecha' => 'required|date',
+            'hora' => 'required|date_format:H:i'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $dia = date('w', strtotime($request->fecha));
+
+        $slot = \App\Models\DoctorHorario::where('id_doctor', $request->id_doctor)
+            ->where('dia', $dia)
+            ->where('hora_inicio', '<=', $request->hora)
+            ->where('hora_fin', '>', $request->hora)
+            ->where('status', 'available')
+            ->where('disponible', true)
+            ->first();
+
+        $available = $slot ? true : false;
+
+        // Additional check for existing appointments/reservations
+        if ($available) {
+            $existing = Citas::where('id_doctor', $request->id_doctor)
+                ->where('fecha_cita', $request->fecha)
+                ->where('hora_cita', $request->hora)
+                ->exists();
+            $available = !$existing;
+        }
+
+        return response()->json(['available' => $available]);
     }
 }

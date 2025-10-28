@@ -78,6 +78,41 @@ class Doctores extends Model
             $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
         }
 
+  return $slots;
+    }
+
+    public function getAvailableSlotsByDate($date)
+    {
+        $dayOfWeek = date('w', strtotime($date)); // 0=Sunday, 6=Saturday
+        if ($dayOfWeek == 0) $dayOfWeek = 7; // Adjust Sunday to 7
+
+        $slots = $this->doctorHorarios()
+            ->where('dia', $dayOfWeek)
+            ->where('status', 'available')
+            ->where('disponible', true)
+            ->where(function ($query) use ($date) {
+                $query->whereNull('fecha')
+                      ->orWhere('fecha', $date);
+            })
+            ->get()
+            ->filter(function ($slot) use ($date) {
+                // Check if slot is not occupied by any appointment or reservation
+                return !\App\Models\Citas::where('id_doctor', $this->id)
+                    ->where('fecha_cita', $date)
+                    ->where('hora_cita', $slot->hora_inicio)
+                    ->exists();
+            })
+            ->map(function ($slot) use ($date) {
+                return [
+                    'id' => $slot->id,
+                    'fecha' => $date,
+                    'hora_inicio' => $slot->hora_inicio,
+                    'hora_fin' => $slot->hora_fin,
+                    'disponible' => true
+                ];
+            })
+            ->values();
+
         return $slots;
     }
 }

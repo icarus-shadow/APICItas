@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // Eliminar duplicados antes de agregar la restricción única
-        DB::statement('DELETE t1 FROM citas t1 INNER JOIN citas t2 WHERE t1.id > t2.id AND t1.id_doctor = t2.id_doctor AND t1.fecha_cita = t2.fecha_cita AND t1.hora_cita = t2.hora_cita');
+        DB::delete('DELETE FROM citas WHERE id IN (SELECT t1.id FROM citas t1 INNER JOIN citas t2 ON t1.id > t2.id WHERE t1.id_doctor = t2.id_doctor AND t1.fecha_cita = t2.fecha_cita AND t1.hora_cita = t2.hora_cita)');
 
         Schema::table('citas', function (Blueprint $table) {
             $table->unique(['id_doctor', 'fecha_cita', 'hora_cita']);

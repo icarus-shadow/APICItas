@@ -142,25 +142,30 @@ class NotificacionesController extends Controller
             $notificacion->admin_id = auth()->user()->administrador->id;
             $notificacion->save();
 
-            // Apartar slots
+            // Crear reservas temporales
             if (!$notificacion->slots || !is_array($notificacion->slots)) {
                 throw new \Exception('Los slots de la notificación están vacíos o no son válidos');
             }
 
             foreach ($notificacion->slots as $slot) {
-                $dia = date('w', strtotime($slot['fecha']));
                 $hora_start = explode('-', $slot['hora'])[0]; // Extraer hora de inicio del rango
-                $doctorHorario = DoctorHorario::where('id_doctor', $notificacion->doctor->id)
-                    ->where('dia', $dia)
-                    ->where('hora_inicio', '<=', $hora_start)
-                    ->where('hora_fin', '>', $hora_start)
-                    ->where('status', 'available')
-                    ->where('disponible', true)
-                    ->first();
 
-                if ($doctorHorario) {
-                    $doctorHorario->bookSlot();
+                // Crear cita de tipo 'reservation' para apartar el slot
+                $reservation = new \App\Models\Citas([
+                    'id_doctor' => $notificacion->doctor->id,
+                    'fecha_cita' => $slot['fecha'],
+                    'hora_cita' => $hora_start,
+                    'tipo' => 'reservation',
+                    'lugar' => 'Reserva temporal' // Placeholder
+                ]);
+
+                // Verificar que el slot esté disponible para reserva
+                if (!$reservation->isSlotAvailable()) {
+                    throw new \Exception("El slot {$slot['fecha']} {$slot['hora']} no está disponible para reserva");
                 }
+
+                $reservation->save();
+                \Log::info('Reserva temporal creada', ['reservation_id' => $reservation->id, 'doctor' => $notificacion->doctor->id, 'fecha' => $slot['fecha'], 'hora' => $hora_start]);
             }
         });
 
@@ -207,7 +212,7 @@ class NotificacionesController extends Controller
      *
      * Eliminar historial de notificaciones
      *
-     * Elimina permanentemente todo el historial de notificaciones aprobadas y rechazadas.
+     * Elimina permanentemente tdo el historial de notificaciones aprobadas y rechazadas.
      *
      * @authenticated
      *
@@ -255,9 +260,9 @@ class NotificacionesController extends Controller
      * @group Gestión del Sistema
      * @subgroup Notificaciones
      *
-     * Crear solicitud de notificación
+     * Crear solicitud de notificación para reservas temporales
      *
-     * Permite a un doctor crear una nueva solicitud de notificación para apartar slots en su agenda.
+     * Permite a un doctor crear una nueva solicitud de notificación para apartar slots en su agenda mediante reservas temporales.
      *
      * @authenticated
      *
@@ -290,6 +295,25 @@ class NotificacionesController extends Controller
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Validar que los slots solicitados estén disponibles para reserva
+        foreach ($request->slots as $slot) {
+            $hora_start = explode('-', $slot['hora'])[0];
+            $tempReservation = new \App\Models\Citas([
+                'id_doctor' => auth()->user()->doctor->id,
+                'fecha_cita' => $slot['fecha'],
+                'hora_cita' => $hora_start,
+                'tipo' => 'reservation'
+            ]);
+
+            if (!$tempReservation->isSlotAvailable()) {
+                return response()->json([
+                    'errors' => [
+                        'slots' => ["El slot {$slot['fecha']} {$slot['hora']} no está disponible para reserva"]
+                    ]
+                ], 422);
+            }
         }
 
         $notificacion = Notificaciones::create([

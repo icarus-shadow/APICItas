@@ -13,6 +13,7 @@ class Citas extends Model
         'fecha_cita',
         'hora_cita',
         'lugar',
+        'tipo',
         'id_doctor',
         'id_paciente'
     ];
@@ -33,6 +34,7 @@ class Citas extends Model
             'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|string',
             'lugar' => 'required|string|max:255',
+            'tipo' => 'required|in:appointment,reservation',
             'id_doctor' => 'required|exists:doctores,id',
             'id_paciente' => 'required|exists:pacientes,id',
         ];
@@ -40,10 +42,27 @@ class Citas extends Model
 
     public function isSlotAvailable()
     {
-        return !self::where('id_doctor', $this->id_doctor)
-            ->where('fecha_cita', $this->fecha_cita)
-            ->where('hora_cita', $this->hora_cita)
-            ->where('id', '!=', $this->id ?? 0) // exclude self if updating
-            ->exists();
+        // Para citas reales ('appointment'), verificar que no haya ninguna cita (appointment o reservation) en ese slot
+        if ($this->tipo === 'appointment') {
+            return !self::where('id_doctor', $this->id_doctor)
+                ->where('fecha_cita', $this->fecha_cita)
+                ->where('hora_cita', $this->hora_cita)
+                ->where('id', '!=', $this->id ?? 0) // exclude self if updating
+                ->exists();
+        }
+
+        // Para reservas temporales ('reservation'), verificar que no haya citas reales en ese slot
+        // Las reservas pueden coexistir con otras reservas, pero no con citas reales
+        if ($this->tipo === 'reservation') {
+            return !self::where('id_doctor', $this->id_doctor)
+                ->where('fecha_cita', $this->fecha_cita)
+                ->where('hora_cita', $this->hora_cita)
+                ->where('tipo', 'appointment') // solo verificar contra citas reales
+                ->where('id', '!=', $this->id ?? 0) // exclude self if updating
+                ->exists();
+        }
+
+        // Si el tipo no es válido, considerar no disponible
+        return false;
     }
 }
