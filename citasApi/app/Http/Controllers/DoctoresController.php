@@ -295,7 +295,14 @@ class DoctoresController extends Controller
      */
     public function countCitasAsignadas($doctorId)
     {
-        $total = \App\Models\Citas::where('id_doctor', $doctorId)->count();
+        \Log::info('[DoctoresController::countCitasAsignadas] Iniciando conteo para doctorId', ['doctorId' => $doctorId]);
+        $query = \App\Models\Citas::where('id_doctor', $doctorId)->where('tipo', 'appointment');
+        $citas = $query->get();
+        \Log::info('[DoctoresController::countCitasAsignadas] Citas encontradas', ['citas' => $citas->map(function($cita) {
+            return ['id' => $cita->id, 'estado' => $cita->estado, 'fecha_cita' => $cita->fecha_cita, 'hora_cita' => $cita->hora_cita];
+        })->toArray()]);
+        $total = $citas->count();
+        \Log::info('[DoctoresController::countCitasAsignadas] Total citas asignadas (sin filtro de estado)', ['total' => $total]);
         return response()->json(['total' => $total]);
     }
 
@@ -316,9 +323,19 @@ class DoctoresController extends Controller
      */
     public function countCitasProximas($doctorId)
     {
-        $total = \App\Models\Citas::where('id_doctor', $doctorId)
+        \Log::info('[DoctoresController::countCitasProximas] Iniciando conteo para doctorId', ['doctorId' => $doctorId]);
+        $query = \App\Models\Citas::where('id_doctor', $doctorId)
+            ->where('tipo', 'appointment')
             ->whereRaw("CONCAT(fecha_cita, ' ', hora_cita) > NOW()")
-            ->count();
+            ->where('estado', 'pendiente');
+
+        $citas = $query->get();
+        \Log::info('[DoctoresController::countCitasProximas] Citas futuras con estado pendiente encontradas', ['citas' => $citas->map(function($cita) {
+            return ['id' => $cita->id, 'estado' => $cita->estado, 'fecha_cita' => $cita->fecha_cita, 'hora_cita' => $cita->hora_cita];
+        })->toArray()]);
+        $total = $citas->count();
+        \Log::info('[DoctoresController::countCitasProximas] Total citas próximas (futuras y pendientes)', ['total' => $total]);
+
         return response()->json(['total' => $total]);
     }
 
@@ -339,10 +356,19 @@ class DoctoresController extends Controller
      */
     public function countPacientesAtendidos($doctorId)
     {
-        $total = \App\Models\Citas::where('id_doctor', $doctorId)
+        \Log::info('[DoctoresController::countPacientesAtendidos] Iniciando conteo para doctorId', ['doctorId' => $doctorId]);
+
+        $query = \App\Models\Citas::where('id_doctor', $doctorId)
+            ->where('tipo', 'appointment')
             ->whereRaw("CONCAT(fecha_cita, ' ', hora_cita) < NOW()")
-            ->distinct('id_paciente')
-            ->count('id_paciente');
+            ->where('estado', 'completada');
+
+        $citas = $query->get();
+        \Log::info('[DoctoresController::countPacientesAtendidos] Citas encontradas', ['citas' => $citas->toArray()]);
+
+        $total = $citas->unique('id_paciente')->count();
+        \Log::info('[DoctoresController::countPacientesAtendidos] Total pacientes únicos atendidos', ['total' => $total]);
+
         return response()->json(['total' => $total]);
     }
 

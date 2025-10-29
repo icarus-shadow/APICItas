@@ -58,6 +58,9 @@ class DoctorCitasController extends Controller
             $citas = $query->where('id_doctor', $user->doctor->id)->get();
         }
 
+        \Log::info('[DoctorCitasController::listDoctor] Total citas obtenidas: ' . $citas->count());
+        \Log::info('[DoctorCitasController::listDoctor] Filtros aplicados: id_doctor=' . ($user->id_rol === 3 ? 'todos' : $user->doctor->id) . ' (sin filtros adicionales por tipo o estado)');
+
         $citas = $citas->map(function($cita) {
             $data = $cita->toArray();
             $data['paciente'] = $data['paciente_nombre'] ?: 'Paciente no encontrado';
@@ -141,6 +144,16 @@ class DoctorCitasController extends Controller
                 'hora_cita' => $request->hora_cita,
                 'lugar' => $request->lugar,
                 'motivo' => $request->motivo ?? null,
+                'estado' => 'pendiente', // Estado por defecto para nuevas citas
+                'tipo' => 'appointment',
+            ]);
+
+            \Log::info('[DoctorCitasController::storeDoctor] Nueva cita creada:', [
+                'id' => $cita->id,
+                'estado' => $cita->estado,
+                'tipo' => $cita->tipo,
+                'fecha_cita' => $cita->fecha_cita,
+                'hora_cita' => $cita->hora_cita
             ]);
 
             \Log::info('Cita creada por doctor', ['cita_id' => $cita->id]);
