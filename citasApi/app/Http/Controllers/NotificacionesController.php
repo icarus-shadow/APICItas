@@ -156,7 +156,8 @@ class NotificacionesController extends Controller
                     'fecha_cita' => $slot['fecha'],
                     'hora_cita' => $hora_start,
                     'tipo' => 'reservation',
-                    'lugar' => 'Reserva temporal' // Placeholder
+                    'lugar' => 'Reserva temporal', // Placeholder
+                    'id_paciente' => null // Valor temporal ya que las reservas no están asociadas a un paciente específico
                 ]);
 
                 // Verificar que el slot esté disponible para reserva

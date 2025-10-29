@@ -103,13 +103,7 @@ class CitasController extends Controller
         \Log::info('Intentando crear cita', ['request' => $request->all()]);
 
         // Custom validation rules for store method
-        $rules = [
-            'fecha_cita' => 'required|date|after_or_equal:today',
-            'hora_cita' => 'required|string',
-            'lugar' => 'required|string|max:255',
-            'id_doctor' => 'required|exists:doctores,id',
-            'id_paciente' => 'sometimes|exists:pacientes,id',
-        ];
+        $rules = Citas::rules();
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -261,7 +255,8 @@ class CitasController extends Controller
             'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|date_format:H:i',
             'lugar' => 'required|string|max:255',
-            'motivo' => 'required|string|max:255'
+            'motivo' => 'required|string|max:255',
+            'id_paciente' => 'sometimes|nullable|exists:pacientes,id'
         ]);
 
         if ($validator->fails()) {
@@ -414,13 +409,7 @@ class CitasController extends Controller
             return response()->json(['message' => 'Cita no encontrada'], 404);
         }
 
-        $validator = Validator::make($request->all(), [
-            'id_paciente' => 'required|exists:pacientes,id',
-            'id_doctor' => 'required|exists:doctores,id',
-            'fecha_cita' => 'required|date|after_or_equal:today',
-            'hora_cita' => 'required|date_format:H:i',
-            'lugar' => 'required|string|max:255',
-        ]);
+        $validator = Validator::make($request->all(), Citas::rules());
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -469,7 +458,11 @@ class CitasController extends Controller
                 }
 
                 // Update cita
-                                $cita->update($request->only(['id_paciente', 'id_doctor', 'fecha_cita', 'hora_cita', 'lugar']));
+                $updateData = $request->only(['id_doctor', 'fecha_cita', 'hora_cita', 'lugar']);
+                if ($request->has('id_paciente')) {
+                    $updateData['id_paciente'] = $request->id_paciente;
+                }
+                $cita->update($updateData);
                 \Log::info('Cita actualizada', ['cita_id' => $cita->id]);
             });
 
@@ -688,12 +681,7 @@ class CitasController extends Controller
      */
     public function createReservation(Request $request)
     {
-        $rules = [
-            'fecha_cita' => 'required|date|after_or_equal:today',
-            'hora_cita' => 'required|string',
-            'id_doctor' => 'required|exists:doctores,id',
-            'lugar' => 'sometimes|string|max:255',
-        ];
+        $rules = Citas::rulesForReservation();
 
         $validator = Validator::make($request->all(), $rules);
 

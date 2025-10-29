@@ -243,16 +243,19 @@ class DoctoresController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombres' => 'string|max:255',
-            'apellidos' => 'string|max:255',
-            'telefono' => 'string|max:255'
+            'nombres' => 'sometimes|string|max:255',
+            'apellidos' => 'sometimes|string|max:255',
+            'telefono' => 'sometimes|string|max:255'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $doctor->update($validator->validated());
+        $data = $validator->validated();
+        if (!empty($data)) {
+            $doctor->update($data);
+        }
 
         return response()->json($doctor);
     }

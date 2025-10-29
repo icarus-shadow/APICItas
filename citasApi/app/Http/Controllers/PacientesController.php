@@ -12,9 +12,9 @@ class PacientesController extends Controller
      * @group Gestión de Usuarios
      * @subgroup Pacientes
      *
-     * Listar todos los pacientes
+     * Listar pacientes
      *
-     * Devuelve la lista completa de pacientes registrados en el sistema.
+     * Devuelve la lista de todos los pacientes registrados en el sistema.
      *
      * @authenticated
      *
@@ -148,7 +148,10 @@ class PacientesController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $paciente->update($validator->validated());
+        $data = $validator->validated();
+        if (!empty($data)) {
+            $paciente->update($data);
+        }
 
         return response()->json($paciente);
     }
@@ -254,11 +257,11 @@ class PacientesController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombres' => 'string|max:255',
-            'apellidos' => 'string|max:255',
-            'telefono' => 'string|max:255',
-            'alergias' => 'nullable|string|max:255',
-            'comentarios' => 'nullable|string',
+            'nombres' => 'sometimes|string|max:255',
+            'apellidos' => 'sometimes|string|max:255',
+            'telefono' => 'sometimes|string|max:255',
+            'alergias' => 'sometimes|nullable|string|max:255',
+            'comentarios' => 'sometimes|nullable|string',
         ]);
 
         if ($validator->fails()) {

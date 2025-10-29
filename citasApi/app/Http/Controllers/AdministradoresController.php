@@ -121,7 +121,10 @@ class AdministradoresController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $admin->update($validator->validated());
+        $data = $validator->validated();
+        if (!empty($data)) {
+            $admin->update($data);
+        }
 
         return response()->json($admin);
     }
@@ -223,10 +226,10 @@ class AdministradoresController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombres' => 'string|max:255',
-            'apellidos' => 'string|max:255',
-            'cedula' => 'string|max:20|unique:administradores,cedula,' . $admin->id,
-            'telefono' => 'string|max:20'
+            'nombres' => 'sometimes|string|max:255',
+            'apellidos' => 'sometimes|string|max:255',
+            'cedula' => 'sometimes|string|max:20|unique:administradores,cedula,' . $admin->id,
+            'telefono' => 'sometimes|string|max:20'
         ]);
 
         if ($validator->fails()) {

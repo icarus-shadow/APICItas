@@ -93,4 +93,12 @@ class DoctorHorario extends Model
         $this->update(['status' => 'available']);
     }
 
+    /**
+     * Reserva el slot cambiando su status a 'reserved'.
+     */
+    public function bookSlot()
+    {
+        $this->update(['status' => 'reserved']);
+    }
+
 }

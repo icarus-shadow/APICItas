@@ -97,7 +97,7 @@ class DoctorCitasController extends Controller
             'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|string',
             'lugar' => 'required|string|max:255',
-            'id_paciente' => 'required|exists:pacientes,id',
+            'id_paciente' => 'nullable|exists:pacientes,id',
         ];
 
         $user = auth()->user();
@@ -135,7 +135,7 @@ class DoctorCitasController extends Controller
             \Log::info('Slot reservado en storeDoctor', ['slot_id' => $slot->id]);
 
             $cita = Citas::create([
-                'id_paciente' => $request->id_paciente,
+                'id_paciente' => $request->id_paciente ?? null,
                 'id_doctor' => $id_doctor,
                 'fecha_cita' => $request->fecha_cita,
                 'hora_cita' => $request->hora_cita,

@@ -215,7 +215,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">Citas App</div>
+            <div class="logo">Citas Ala de angel</div>
             <div class="subtitle">Sistema de Gestión de Citas Médicas</div>
         </div>
 
@@ -253,13 +253,13 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-content">
-                <div class="footer-title">Citas App</div>
+                <div class="footer-title">Citas Ala de angel</div>
                 <div class="footer-text">
                     Tu compañero confiable para gestionar citas médicas de manera eficiente y segura.
                 </div>
                 <div class="contact-info">
-                    Soporte: soporte@citasapp.com<br>
-                    Teléfono: +57 123 456 7890
+                    Soporte: citasaladeangel@gmail.com<br>
+                    Teléfono: +57 302 669 6723
                 </div>
             </div>
         </div>

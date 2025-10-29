@@ -25,7 +25,7 @@ class Citas extends Model
 
     public function paciente(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Pacientes::class, 'id_paciente');
+        return $this->belongsTo(Pacientes::class, 'id_paciente')->nullable();
     }
 
     public static function rules()
@@ -36,7 +36,19 @@ class Citas extends Model
             'lugar' => 'required|string|max:255',
             'tipo' => 'required|in:appointment,reservation',
             'id_doctor' => 'required|exists:doctores,id',
-            'id_paciente' => 'required|exists:pacientes,id',
+            'id_paciente' => 'nullable|exists:pacientes,id',
+        ];
+    }
+
+    public static function rulesForReservation()
+    {
+        return [
+            'fecha_cita' => 'required|date|after_or_equal:today',
+            'hora_cita' => 'required|string',
+            'lugar' => 'sometimes|string|max:255',
+            'tipo' => 'required|in:appointment,reservation',
+            'id_doctor' => 'required|exists:doctores,id',
+            'id_paciente' => 'nullable|exists:pacientes,id',
         ];
     }
 

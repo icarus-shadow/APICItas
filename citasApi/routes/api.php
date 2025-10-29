@@ -55,7 +55,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/registrar-administrador', [authController::class, 'registerAdministrador']);
 
     // CRUD de pacientes
-    Route::get('/pacientes', [PacientesController::class, 'index']);           // Listar todos los pacientes
     Route::get('/pacientes/{id}', [PacientesController::class, 'show']);      // Ver un paciente específico
     Route::put('/pacientes/{id}', [PacientesController::class, 'update']);    // Actualizar un paciente
     Route::delete('/pacientes/{id}', [PacientesController::class, 'destroy']); // Eliminar un paciente
@@ -145,6 +144,7 @@ Route::middleware(['auth:sanctum', 'admin_or_doctor'])->group(function () {
     Route::post('/desasignar-horario', [HorariosController::class, 'unassignFromDoctor']); // Desasignar horario de doctor
 
     Route::get('/countCitas', [CitasController::class, 'countCitas']);
+    Route::get('/pacientes', [PacientesController::class, 'index']);           // Listar todos los pacientes
 
 
 
