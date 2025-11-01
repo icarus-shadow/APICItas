@@ -10,6 +10,7 @@ use App\Models\Pacientes;
 use App\Models\Administradores;
 use App\Models\Citas;
 use App\Models\DoctorHorario;
+use App\Models\DeviceToken;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;

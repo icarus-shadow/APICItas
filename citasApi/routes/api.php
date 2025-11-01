@@ -19,9 +19,9 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [authController::class, 'logout']);
-    Route::post('/change-password', [authController::class, 'changePassword']);
-    Route::delete('/delete-account', [authController::class, 'deleteAccount']);
+    Route::post('/logout', [authcontroller::class, 'logout']);
+    Route::post('/change-password', [authcontroller::class, 'changePassword']);
+    Route::delete('/delete-account', [authcontroller::class, 'deleteAccount']);
 
 
     // CRUD para pacientes (solo puede acceder a su propia información)
@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/citas/paciente/{id}', [CitasController::class, 'destroyOwn']);
 
     Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::post('/register-device-token', [UserController::class, 'registerDeviceToken']);
 
 });
 
@@ -51,8 +52,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/mi-perfil-admin', [AdministradoresController::class, 'showOwn']);
     Route::put('/mi-perfil-admin', [AdministradoresController::class, 'updateOwn']);
 
-    Route::post('/registrar-doctor', [authController::class, 'registerDoctor']);
-    Route::post('/registrar-administrador', [authController::class, 'registerAdministrador']);
+    Route::post('/registrar-doctor', [authcontroller::class, 'registerDoctor']);
+    Route::post('/registrar-administrador', [authcontroller::class, 'registerAdministrador']);
 
     // CRUD de pacientes
     Route::get('/pacientes/{id}', [PacientesController::class, 'show']);      // Ver un paciente específico
@@ -155,12 +156,13 @@ Route::get('/admin/citas', [CitasController::class, 'index'])->middleware('auth:
 Route::get('/admin/countCitas', [CitasController::class, 'countCitas'])->middleware('auth:sanctum');
 Route::put('/admin/citas/{id}', [CitasController::class, 'update'])->middleware(['auth:sanctum', 'admin']);
 Route::delete('/admin/citas/{id}', [CitasController::class, 'destroy'])->middleware(['auth:sanctum', 'admin']);
-Route::post('/login', [authController::class, 'login']);
+Route::post('/login', [authcontroller::class, 'login']);
 Route::get('/doctores', [DoctoresController::class, 'index']);       // Listar doctores
 Route::get('/especialidades', [EspecialidadesController::class, 'index']); // Listar
 Route::get('/especialidades/{id}', [EspecialidadesController::class, 'show']); // Ver detalle
-Route::post('/registrar-paciente', [authController::class, 'registerPaciente']);
+Route::post('/registrar-paciente', [authcontroller::class, 'registerPaciente']);
 Route::get('/support-admins', [AdministradoresController::class, 'getSupportAdmins']);
+Route::post('/test-notification', [\App\Http\Controllers\NotificacionesController::class, 'testNotification']);
 
 // Email verification routes
 Route::post('/send-verification-code', [EmailVerificationController::class, 'sendVerificationCode']);

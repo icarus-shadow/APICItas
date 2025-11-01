@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Notificaciones;
 use App\Models\DoctorHorario;
+use App\Models\DeviceToken;
 use App\Enums\EstadoNotificacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class NotificacionesController extends Controller
 {
@@ -324,6 +326,9 @@ class NotificacionesController extends Controller
             'estado' => EstadoNotificacion::PENDIENTE,
         ]);
 
+        // Enviar notificación push a administradores
+        $this->sendPushNotificationToAdmins($notificacion);
+
         return response()->json($notificacion, 201);
     }
 
@@ -400,6 +405,118 @@ class NotificacionesController extends Controller
             return $this->aprobar($id);
         } elseif ($request->estado === 'rechazada') {
             return $this->rechazar($id);
+        }
+    }
+
+    /**
+     * Enviar notificación push a administradores
+     */
+    private function sendPushNotificationToAdmins($notificacion)
+    {
+        // Obtener tokens de dispositivos de administradores
+        $adminTokens = DeviceToken::whereHas('user', function ($query) {
+            $query->whereHas('role', function ($roleQuery) {
+                $roleQuery->where('nombre', 'Administrador');
+            });
+        })->pluck('token')->toArray();
+
+        \Log::info('Tokens de administradores encontrados:', ['count' => count($adminTokens), 'tokens' => $adminTokens]);
+
+        if (empty($adminTokens)) {
+            \Log::info('No hay tokens de administradores registrados para enviar notificaciones push');
+            return;
+        }
+
+        $message = [
+            'title' => 'Nueva solicitud de horario',
+            'body' => "El doctor {$notificacion->doctor->nombres} {$notificacion->doctor->apellidos} ha solicitado apartar slots para el {$notificacion->fecha_solicitada}",
+            'data' => [
+                'type' => 'horario_request',
+                'notificacion_id' => $notificacion->id,
+                'doctor_id' => $notificacion->doctor_id,
+                'fecha_solicitada' => $notificacion->fecha_solicitada,
+            ],
+        ];
+
+        $this->sendExpoPushNotification($adminTokens, $message);
+    }
+
+    /**
+     * Enviar notificación de prueba (para debugging)
+     */
+    public function testNotification()
+    {
+        // Obtener el primer token de administrador para prueba
+        $token = DeviceToken::whereHas('user', function ($query) {
+            $query->whereHas('role', function ($roleQuery) {
+                $roleQuery->where('nombre', 'Administrador');
+            });
+        })->first();
+
+        if (!$token) {
+            return response()->json(['error' => 'No hay tokens de administrador registrados'], 404);
+        }
+
+        $message = [
+            'title' => 'Notificación de prueba',
+            'body' => 'Esta es una notificación de prueba',
+            'data' => ['test' => true],
+        ];
+
+        $this->sendExpoPushNotification([$token->token], $message);
+
+        return response()->json(['message' => 'Notificación de prueba enviada']);
+    }
+
+    /**
+     * Enviar notificación push usando Expo
+     */
+    private function sendExpoPushNotification($tokens, $message)
+    {
+        \Log::info('Enviando notificación push', [
+            'tokens' => $tokens,
+            'message' => $message
+        ]);
+
+        foreach ($tokens as $token) {
+            try {
+                $payload = [
+                    'to' => $token,
+                    'title' => $message['title'],
+                    'body' => $message['body'],
+                    'data' => $message['data'],
+                    'sound' => 'default',
+                    'priority' => 'default',
+                ];
+
+                \Log::info('Payload para Expo (token individual):', $payload);
+
+                $response = Http::post('https://api.expo.dev/v2/push/send', $payload);
+
+                \Log::info('Respuesta de Expo:', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+
+                if ($response->successful()) {
+                    \Log::info('Notificación push enviada exitosamente', [
+                        'token' => $token,
+                        'response' => $response->json()
+                    ]);
+                } else {
+                    \Log::error('Error al enviar notificación push', [
+                        'token' => $token,
+                        'status' => $response->status(),
+                        'response' => $response->body()
+                    ]);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Excepción al enviar notificación push', [
+                    'token' => $token,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
         }
     }
 }

@@ -65,7 +65,7 @@ class DoctorCitasController extends Controller
             $data = $cita->toArray();
             $data['paciente'] = $data['paciente_nombre'] ?: 'Paciente no encontrado';
             $data['doctor'] = $data['doctor_nombre'] ?: 'Doctor no encontrado';
-            unset($data['id_paciente'], $data['paciente_nombre'], $data['doctor_nombre']);
+            unset($data['paciente_nombre'], $data['doctor_nombre']);
             return $data;
         });
 
